@@ -14,6 +14,9 @@ def load_configuration_entries(directory, pattern, check_entry):
         Moreover, it CANNOT have other fields other than 'id', 
         required_fields, optional_fields. 
     '''
+    if not os.path.exists(directory):
+        msg = 'Directory %r does not exist.' % directory
+        raise ValueError(msg)
     
     def enumerate_entries():
         for filename in locate_files(directory, pattern):

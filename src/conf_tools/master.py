@@ -51,8 +51,8 @@ class ConfigMaster:
     def load(self, directory=None):
         if directory is None:
             directory = self.get_default_dir()
+        logger.debug('Loading config from %r.' % directory)
 
-        logger.debug('Reading %s' % directory)
         self.loaded = True
         found = []
         for spec in self.specs.values():
