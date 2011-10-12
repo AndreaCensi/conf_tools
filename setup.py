@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = "0.1"
+version = "1.0"
 
 description = """"""
 
@@ -30,7 +30,7 @@ setup(name='ConfTools',
       
       package_dir={'':'src'},
       packages=find_packages('src'),
-      install_requires=[ 'PyYAML', 'PyContracts'],
+      install_requires=[ 'PyYAML', 'PyContracts>=1.2,<2'],
       tests_require=['nose'],
       entry_points={},
 )
