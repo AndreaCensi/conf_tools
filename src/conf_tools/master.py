@@ -1,4 +1,4 @@
-from . import load_configuration_entries, logger
+from . import load_configuration_entries, logger 
 from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract
@@ -32,9 +32,10 @@ class ObjectSpec(IterableUserDict):
 
 class ConfigMaster:
     
-    def __init__(self):
+    def __init__(self, logger=None): # XXX
         self.loaded = False
         self.specs = {}
+#        self.logger = conf_tools_logger # XXX: cannot pickle logger 
         
     def add_class(self, name, pattern, check=None, instance=None):
         self.specs[name] = ObjectSpec(name, pattern, check, instance, self)
@@ -64,6 +65,6 @@ class ConfigMaster:
             # TODO: check redudancy
             spec.data.update(entries)
             
-        lists = ', '.join('%d %s(s)' % (b, a) for (a, b) in found) 
+        lists = ', '.join('%s: %d' % (a, b) for (a, b) in found) 
         message = 'Found ' + lists + '.'
         logger.debug(message)
