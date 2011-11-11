@@ -32,10 +32,10 @@ class ObjectSpec(IterableUserDict):
 
 class ConfigMaster:
     
-    def __init__(self, logger=None): # XXX
+    def __init__(self, name=None):
         self.loaded = False
         self.specs = {}
-#        self.logger = conf_tools_logger # XXX: cannot pickle logger 
+        self.prefix = "%s: " % name if name else "" 
         
     def add_class(self, name, pattern, check=None, instance=None):
         self.specs[name] = ObjectSpec(name, pattern, check, instance, self)
@@ -52,7 +52,7 @@ class ConfigMaster:
     def load(self, directory=None):
         if directory is None:
             directory = self.get_default_dir()
-        logger.debug('Loading config from %r.' % directory)
+        logger.debug('%sLoading config from %r.' % (self.prefix, directory))
 
         self.loaded = True
         found = []
@@ -67,4 +67,4 @@ class ConfigMaster:
             
         lists = ', '.join('%s: %d' % (a, b) for (a, b) in found) 
         message = 'Found ' + lists + '.'
-        logger.debug(message)
+        logger.debug('%s%s' % (self.prefix, message))

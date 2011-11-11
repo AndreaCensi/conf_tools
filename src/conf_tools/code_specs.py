@@ -1,6 +1,8 @@
 from . import BadConfig, instantiate
-from contracts import check, contract
+from contracts import contract
+from contracts import new_contract
 
+@new_contract
 def check_valid_code_spec(x):
     if not isinstance(x, list):
         raise BadConfig(x, 'A code spec must be a list.')
@@ -16,14 +18,14 @@ def check_valid_code_spec(x):
         raise BadConfig(x, 'The code params be given as a dictionary.')
 
 
-@contract(code_spec='seq[2]')
+@contract(code_spec='check_valid_code_spec')
 def instantiate_spec(code_spec):
     ''' code_spec must be a sequence  [string, dictionary], giving
         the python function (or class) to instantiate, along
         with its parameters. '''
     function_name = code_spec[0]
     parameters = code_spec[1]
-    check('str', function_name)
-    check('dict', parameters)
+    assert isinstance(function_name, str)
+    assert isinstance(parameters, dict)
     return instantiate(function_name, parameters)
     
