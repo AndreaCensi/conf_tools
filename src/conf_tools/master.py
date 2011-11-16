@@ -60,7 +60,7 @@ class ConfigMaster:
             pattern = spec.pattern
             check = spec.check
             entries = load_configuration_entries(directory, pattern=pattern,
-                                       check_entry=check)
+                                                 check_entry=check)
             found.append((spec.name, len(entries)))
             # TODO: check redudancy
             spec.data.update(entries)

@@ -10,9 +10,11 @@ def load_configuration_entries(directory, pattern, check_entry):
         Loads all .dynamics.yaml files recursively in the directory. 
         It is assumed that each file contains a list of dictionaries.
         Each dictionary MUST have the field 'id' and it must be unique.
-        Moreover, it MUST have other fields as specified in required_fields.
-        Moreover, it CANNOT have other fields other than 'id', 
-        required_fields, optional_fields. 
+        
+        If a field name starts with 'file:', it is processed to resolve
+        the relative filename.
+        
+        For example, {'file:data': 'data.pickle'}, we add {'data': '/path/data.pickle'}
     '''
     if not os.path.exists(directory):
         msg = 'Directory %r does not exist.' % directory
@@ -26,6 +28,7 @@ def load_configuration_entries(directory, pattern, check_entry):
                 if parsed is None:
                     raise Exception('Empty file %r.' % filename) 
                 check('list(dict)', parsed)
+                
                 if not parsed:
                     raise Exception('Empty file %r.' % filename) 
                 for num_entry, entry in enumerate(parsed): 
@@ -34,6 +37,18 @@ def load_configuration_entries(directory, pattern, check_entry):
     all_entries = {}
     for where, x in enumerate_entries():
         try: 
+            for key in list(x.keys()):
+                if key.startswith('file:'):
+                    nkey = key[5:]
+                    val = x[key]
+                    if not isinstance(val, str):
+                        raise Exception('Only strings can be used, not %s.' % val)
+                    if nkey in x:
+                        raise Exception('Key %r alread exists' % nkey)
+                    joined = os.path.join(os.path.dirname(where[0]), val)
+                    nval = os.path.realpath(joined)
+                    x[nkey] = nval
+                
             check_entry(x)
             # Warn about this?
             name = x['id']
@@ -43,6 +58,8 @@ def load_configuration_entries(directory, pattern, check_entry):
                                 (name, where[0], where[1],
                                   name2where[name][0], name2where[name][1]))
                 raise Exception(msg)
+             
+                
             name2where[name] = where
             all_entries[name] = x
         except Exception as e:
