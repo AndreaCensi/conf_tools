@@ -1,15 +1,16 @@
 from . import BadConfig, instantiate
-from contracts import contract
-from contracts import new_contract
+from contracts import contract, new_contract
+
 
 @new_contract
 def check_valid_code_spec(x):
     if not isinstance(x, list):
         raise BadConfig(x, 'A code spec must be a list.')
-    
+
     if len(x) != 2:
-        raise BadConfig(x, 'A code spec must be a list of exactly two elements.')
-    
+        raise BadConfig(x,
+                        'A code spec must be a list of exactly two elements.')
+
     name = x[0]
     params = x[1]
     if not isinstance(name, str):
@@ -28,4 +29,4 @@ def instantiate_spec(code_spec):
     assert isinstance(function_name, str)
     assert isinstance(parameters, dict)
     return instantiate(function_name, parameters)
-    
+
