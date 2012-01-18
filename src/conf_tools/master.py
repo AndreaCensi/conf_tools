@@ -1,4 +1,4 @@
-from . import load_configuration_entries, logger
+from . import logger, load_entries_from_file, locate_files
 from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract
@@ -37,6 +37,7 @@ class ConfigMaster:
         self.loaded = False
         self.specs = {}
         self.prefix = "%s: " % name if name else ""
+        self.files_read = set()
 
     def add_class(self, name, pattern, check=None, instance=None):
         self.specs[name] = ObjectSpec(name, pattern, check, instance, self)
@@ -55,19 +56,40 @@ class ConfigMaster:
     def load(self, directory=None):
         if directory is None:
             directory = self.get_default_dir()
-        logger.debug('%sLoading config from %r.' % (self.prefix, directory))
+        self.debug('Loading config from %r.' % directory)
 
         self.loaded = True
         found = []
         for spec in self.specs.values():
             pattern = spec.pattern
             check = spec.check
-            entries = load_configuration_entries(directory, pattern=pattern,
-                                                 check_entry=check)
-            found.append((spec.name, len(entries)))
+
+            nfound = 0
+
+            for filename in locate_files(directory, pattern):
+                self.debug('Considering %r' % filename)
+                if filename in self.files_read:
+                    self.debug('Skipping %r' % filename)
+                    continue
+
+                self.files_read.add(filename)
+
+                entries = load_entries_from_file(filename, check_entry=check)
+
+                for entry in entries:
+                    if entry in spec.data:
+                        msg = 'Entry %r already found.' % entry
+                        raise ValueError(msg)
+
+                spec.data.update(entries)
+
+                nfound += len(entries)
+
+            found.append((spec.name, nfound))
             # TODO: check redudancy
-            spec.data.update(entries)
 
         lists = ', '.join('%s: %d' % (a, b) for (a, b) in found)
-        message = 'Found ' + lists + '.'
-        logger.debug('%s%s' % (self.prefix, message))
+        self.debug('Found ' + lists + '.')
+
+    def debug(self, s):
+        logger.debug('%s%s' % (self.prefix, s))
