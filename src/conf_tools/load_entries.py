@@ -27,11 +27,15 @@ def load_configuration_entries(directory, pattern, check_entry):
             with open(filename) as f:
                 parsed = yaml.load(f)
                 if parsed is None:
-                    raise Exception('Empty file %r.' % filename)
-                check('list(dict)', parsed) # XXX
+                    logger.warning('Empty file %r.' % filename)
 
-                if not parsed:
-                    raise Exception('Empty file %r.' % filename)
+                if (not isinstance(parsed, list) or 
+                    not all(lambda x: isinstance(x, dict), parsed)):
+                    msg = 'Expect the file %r to contain a list of dicts.'
+                    raise Exception(msg)
+
+                # check('list(dict)', parsed) # XXX
+
                 for num_entry, entry in enumerate(parsed):
                     yield (filename, num_entry), entry
     name2where = {}
@@ -91,14 +95,19 @@ def load_entries_from_file(filename, check_entry):
         with open(filename) as f:
             parsed = yaml.load(f)
             if parsed is None:
-                raise Exception('Empty file %r.' % filename)
-            check('list(dict)', parsed) # XXX
-
-            if not parsed:
                 logger.warning('Empty file %r.' % filename)
+            else:
+                if (not isinstance(parsed, list) or 
+                    not all([isinstance(x, dict) for x in parsed])):
+                    msg = ('Expect the file %r to contain a list of dicts.' %
+                            filename)
+                    raise Exception(msg)
 
-            for num_entry, entry in enumerate(parsed):
-                yield (filename, num_entry), entry
+                if not parsed:
+                    logger.warning('Empty file %r.' % filename)
+
+                for num_entry, entry in enumerate(parsed):
+                    yield (filename, num_entry), entry
 
     name2where = {}
     all_entries = {}

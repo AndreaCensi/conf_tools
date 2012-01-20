@@ -41,6 +41,7 @@ class ConfigMaster:
 
     def add_class(self, name, pattern, check=None, instance=None):
         self.specs[name] = ObjectSpec(name, pattern, check, instance, self)
+        self.__dict__[name] = self.specs[name]
 
     @abstractmethod
     def get_default_dir(self):
@@ -67,9 +68,9 @@ class ConfigMaster:
             nfound = 0
 
             for filename in locate_files(directory, pattern):
-                self.debug('Considering %r' % filename)
+                #self.debug('Considering %r' % filename)
                 if filename in self.files_read:
-                    self.debug('Skipping %r' % filename)
+                    #self.debug('Skipping %r' % filename)
                     continue
 
                 self.files_read.add(filename)
