@@ -55,7 +55,7 @@ class ConfigMaster:
             self.load(None)
 
     def load(self, directory=None):
-        if directory is None:
+        if directory is None or directory == 'default':
             directory = self.get_default_dir()
         self.debug('Loading config from %r.' % directory)
 
