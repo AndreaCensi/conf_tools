@@ -1,23 +1,28 @@
-  
+
+
 #screen_columns = None
 def get_screen_columns():
 #    m = sys.modules['compmake.utils.visualization'] # FIXME
 #    if m.screen_columns is None:
-    max_x, max_y = getTerminalSize() #@UnusedVariable
+    max_x, max_y = getTerminalSize()  # @UnusedVariable
 #        m.screen_columns = max_x
     return max_x
 #    return m.screen_columns
+
 
 def getTerminalSize():
     '''
     max_x, max_y = getTerminalSize()
     '''
     import os
+
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl, termios, struct
+            import fcntl
+            import termios
+            import struct
             cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
-        '1234'))
+                                                 '1234'))
         except:
             return None
         return cr
@@ -37,4 +42,4 @@ def getTerminalSize():
             cr = (25, 80)
     return int(cr[1]), int(cr[0])
 
-    
+
