@@ -1,14 +1,14 @@
 __version__ = '1.0'
 
 from .utils import *
-import logging;  logging.basicConfig()
+logging.basicConfig()
 
 logger = logging.getLogger("ConfTools")
 logger.setLevel(logging.DEBUG)
 
 from contracts import check, contract
 from pprint import pformat
-import yaml 
+import yaml
 
 from .exceptions import *
 from .locate_files import *
