@@ -1,4 +1,4 @@
-__version__ = '1.0'
+__version__ = '1.1'
 
 from .utils import *
 logging.basicConfig()
@@ -6,7 +6,11 @@ logging.basicConfig()
 logger = logging.getLogger("ConfTools")
 logger.setLevel(logging.DEBUG)
 
-from contracts import check, contract
+from contracts import check, contract, new_contract
+
+
+new_contract("id_or_spec", "dict|str")
+
 from pprint import pformat
 import yaml
 

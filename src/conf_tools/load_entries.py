@@ -1,7 +1,7 @@
-from . import locate_files
-from . import logger, check, contract, yaml
-import os
+from . import locate_files, logger, contract, yaml
 from pprint import pformat
+import os
+
 
 # Deprecated
 @contract(directory='str', pattern='str')
@@ -29,7 +29,7 @@ def load_configuration_entries(directory, pattern, check_entry):
                 if parsed is None:
                     logger.warning('Empty file %r.' % filename)
 
-                if (not isinstance(parsed, list) or 
+                if (not isinstance(parsed, list) or
                     not all(lambda x: isinstance(x, dict), parsed)):
                     msg = 'Expect the file %r to contain a list of dicts.'
                     raise Exception(msg)
@@ -97,7 +97,7 @@ def load_entries_from_file(filename, check_entry):
             if parsed is None:
                 logger.warning('Empty file %r.' % filename)
             else:
-                if (not isinstance(parsed, list) or 
+                if (not isinstance(parsed, list) or
                     not all([isinstance(x, dict) for x in parsed])):
                     msg = ('Expect the file %r to contain a list of dicts.' %
                             filename)
