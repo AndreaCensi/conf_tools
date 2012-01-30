@@ -1,8 +1,8 @@
 from . import logger, load_entries_from_file, locate_files
+from .patterns import is_pattern, pattern_matches, recursive_subst
 from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract, describe_value
-from conf_tools.patterns import is_pattern, pattern_matches, recursive_subst
 
 
 class ObjectSpec(IterableUserDict):
@@ -29,6 +29,9 @@ class ObjectSpec(IterableUserDict):
         # List of files already read        
         self.files_read = set()
 
+        # ID -> file where it was found
+        self.entry2file = {}
+
         IterableUserDict.__init__(self)
 
 
@@ -50,7 +53,6 @@ class ObjectSpec(IterableUserDict):
 
     def matches_any_pattern(self, key):
         for p in self.data:
-            print('is_pattern: %s %s' % (p, is_pattern(p)))
             if is_pattern(p) and pattern_matches(p, key):
                 return p
         return None
@@ -78,11 +80,11 @@ class ObjectSpec(IterableUserDict):
     def instance(self, id_object):
         """ Instances the entry with the given ID. """
         self.master.make_sure_loaded()
-        if not id_object in self.data:
+        if not id_object in self:
             msg = ('No %s %r known; I know %s'
                     % (self.name, id_object, self.data.keys()))
             raise ValueError(msg)
-        return self.instance_spec(self.data[id_object])
+        return self.instance_spec(self[id_object])
 
     @contract(spec='dict')
     def instance_spec(self, spec):
@@ -140,10 +142,14 @@ class ObjectSpec(IterableUserDict):
 
             for entry in entries:
                 if entry in self.data:
-                    msg = 'Entry %r already found.' % entry
+                    old_filename = self.entry2file[entry]
+                    msg = ('Found entry %r in\n   %s\n already found in\n   %s.'
+                           % (entry, filename, old_filename))
                     raise ValueError(msg)
 
             self.data.update(entries)
+            for entry in entries:
+                self.entry2file[entry] = filename
 
             nfound += len(entries)
         return nfound
@@ -188,7 +194,6 @@ class ConfigMaster:
         for spec in self.specs.values():
             nfound = spec.load_config_from_directory(directory)
             found.append((spec.name, nfound))
-            # TODO: check redudancy
 
         lists = ', '.join('%s: %d' % (a, b) for (a, b) in found)
         self.debug('Found ' + lists + '.')

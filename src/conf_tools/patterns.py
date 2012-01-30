@@ -4,7 +4,10 @@ from string import Template
 reg = '\$\{([^\}]*)\}'
 
 def is_pattern(s):
-    return len(re.findall(reg, s)) > 0
+    isa = len(re.findall(reg, s)) > 0
+#    if not isa:
+#        print('Not a pattern: %r' % s)
+    return isa
 
 def pattern_matches(pattern, string):
     """ 
@@ -28,6 +31,7 @@ def pattern_matches(pattern, string):
 
     m = re.match(pmatch, string)
     if m is None:
+        #print('Not matched: %r %r' % (pattern, string))
         return None
 
     data = {}
@@ -42,11 +46,12 @@ def recursive_subst(template, **matches):
     if isinstance(template, str):
         return Template(template).substitute(**matches)
     elif isinstance(template, list):
-        return [ recursive_subst(x, **matches) for x in list]
+        return [ recursive_subst(x, **matches) for x in template]
     elif isinstance(template, dict):
         return dict([ k, recursive_subst(v, **matches)]
                     for k, v in template.items())
-
+    else:
+        return template
 
 
 
