@@ -34,7 +34,6 @@ class ObjectSpec(IterableUserDict):
 
         IterableUserDict.__init__(self)
 
-
     def __contains__(self, key):
         return key in self.data or self.matches_any_pattern(key)
 
@@ -56,7 +55,6 @@ class ObjectSpec(IterableUserDict):
             if is_pattern(p) and pattern_matches(p, key):
                 return p
         return None
-
 
     def check(self, spec):
         """ 
@@ -143,7 +141,7 @@ class ObjectSpec(IterableUserDict):
             for entry in entries:
                 if entry in self.data:
                     old_filename = self.entry2file[entry]
-                    msg = ('Found entry %r in\n   %s\n already found in\n   %s.'
+                    msg = ('Found entry %r in\n  %s\n already found in\n  %s.'
                            % (entry, filename, old_filename))
                     raise ValueError(msg)
 
@@ -153,9 +151,6 @@ class ObjectSpec(IterableUserDict):
 
             nfound += len(entries)
         return nfound
-
-
-
 
 
 class ConfigMaster:
