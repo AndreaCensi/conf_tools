@@ -1,21 +1,23 @@
-from . import logger, load_entries_from_file, locate_files
-from .patterns import is_pattern, pattern_matches, recursive_subst
+from . import (is_pattern, pattern_matches, recursive_subst, logger,
+    load_entries_from_file, locate_files)
 from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract, describe_value
+from conf_tools.exceptions import SemanticMistake
 
 
 class ObjectSpec(IterableUserDict):
     """ 
         This is the class that knows how to instance entries. 
         
-        Users access it through ConfigMaster
+        Users access it through ConfigMaster.
     
     """
     def __init__(self, name, pattern, check, instance_method, master):
-
         """
-        
+            Initializes the structure.
+            
+            :param:name: Decorative name for these objects (e.g. "vehicles")
             :param:pattern: Pattern for filenames ("*.vehicles.yaml")
             :param:check: Function to check the validity of the entries.
             :param:master: References to a Master instance. 
@@ -40,7 +42,8 @@ class ObjectSpec(IterableUserDict):
     def __getitem__(self, key):
         # Check if it is available literally:
         if key in self.data:
-            return self.data[key]
+            # Note: we copy
+            return self.data[key].copy()
         else:
             pattern = self.matches_any_pattern(key)
             if pattern is None:
@@ -141,9 +144,9 @@ class ObjectSpec(IterableUserDict):
             for entry in entries:
                 if entry in self.data:
                     old_filename = self.entry2file[entry]
-                    msg = ('Found entry %r in\n  %s\n already found in\n  %s.'
+                    msg = ('Entry %r in\n  %s\n already found in\n  %s.'
                            % (entry, filename, old_filename))
-                    raise ValueError(msg)
+                    raise SemanticMistake(msg)
 
             self.data.update(entries)
             for entry in entries:

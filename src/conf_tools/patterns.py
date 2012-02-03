@@ -3,11 +3,13 @@ from string import Template
 
 reg = '\$\{([^\}]*)\}'
 
+
 def is_pattern(s):
     isa = len(re.findall(reg, s)) > 0
 #    if not isa:
 #        print('Not a pattern: %r' % s)
     return isa
+
 
 def pattern_matches(pattern, string):
     """ 
@@ -46,9 +48,9 @@ def recursive_subst(template, **matches):
     if isinstance(template, str):
         return Template(template).substitute(**matches)
     elif isinstance(template, list):
-        return [ recursive_subst(x, **matches) for x in template]
+        return [recursive_subst(x, **matches) for x in template]
     elif isinstance(template, dict):
-        return dict([ k, recursive_subst(v, **matches)]
+        return dict([k, recursive_subst(v, **matches)]
                     for k, v in template.items())
     else:
         return template

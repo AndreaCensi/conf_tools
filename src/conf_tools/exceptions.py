@@ -2,7 +2,7 @@ from pprint import pformat
 
 
 class BadConfig(Exception):
-    # XXX: this is repeated in Vehicles
+
     def __init__(self, structure, complaint):
         self.structure = structure
         self.complaint = str(complaint)
@@ -17,3 +17,23 @@ class BadConfig(Exception):
         for x in self.stack:
             s += '%s\n' % x
         return s
+
+
+class ConfToolsException(Exception):
+    """ Error in the configuration (either syntax or semantics) """
+    pass
+
+
+class SyntaxMistake(ConfToolsException):
+    """ For example, YAML mistakes, or file not containing dicts. """
+    pass
+
+
+class SemanticMistake(ConfToolsException):
+    """ For example, repeated entries, or missing files/directories. """
+    pass
+
+
+class ResourceNotFound(SemanticMistake):
+    """ For example,  missing files/directories. """
+    pass

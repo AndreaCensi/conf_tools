@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from conf_tools.patterns import pattern_matches
 
 test_cases = [
-              { 'config': {
+              {'config': {
                            'test.vehicles.yaml': '''
 # A vehicle with a top and a bottom.
 - id: "d-${top}-${bottom}"
@@ -26,6 +26,7 @@ def test_templating1():
         result = tc['result']
         check_case(config, query, result)
 
+
 def check_case(config, query, result):
     # Create files
     with create_tmp_dir() as dirname:
@@ -40,23 +41,22 @@ def check_case(config, query, result):
         master.load(dirname)
 
         if not query in  master.specs['vehicles']:
-            msg = 'Could not find %s in config. (%s)' % (query, master.specs.items())
+            msg = ('Could not find %s in config. (%s)' %
+                   (query, master.specs.items()))
             raise Exception(msg)
         spec = master.specs['vehicles'][query]
 
         print('Obtained: %s' % pformat(spec))
         assert spec == result
 
+
 @contextmanager
 def create_tmp_dir():
     dirname = tempfile.mkdtemp()
-    #os.makedirs(dirname)#
     try:
         yield dirname
     except:
-        print('Stuff left in %s' % dirname)
         raise
-
 
 
 def test_basic_templating():
