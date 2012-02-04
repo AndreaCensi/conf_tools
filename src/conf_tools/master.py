@@ -4,6 +4,7 @@ from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract, describe_value
 from conf_tools.exceptions import SemanticMistake
+import os
 
 
 class ObjectSpec(IterableUserDict):
@@ -130,6 +131,9 @@ class ObjectSpec(IterableUserDict):
             the pattern specified in the constructor.
             Returns the number of new entries found.
         """
+        if not os.path.exists(directory):
+            msg = 'Directory %r does not exist.' % directory
+            raise SemanticMistake(msg)
         nfound = 0
         for filename in locate_files(directory, self.pattern):
             #self.debug('Considering %r' % filename)
