@@ -3,8 +3,9 @@ from . import (is_pattern, pattern_matches, recursive_subst, logger,
 from UserDict import IterableUserDict
 from abc import abstractmethod
 from contracts import contract, describe_value
-from conf_tools.exceptions import SemanticMistake
+from . import SemanticMistake
 import os
+from conf_tools.exceptions import SemanticMistakeKeyNotFound
 
 
 class ObjectSpec(IterableUserDict):
@@ -48,7 +49,7 @@ class ObjectSpec(IterableUserDict):
         else:
             pattern = self.matches_any_pattern(key)
             if pattern is None:
-                raise ValueError('Key %r does not match any pattern.' % key)
+                raise SemanticMistakeKeyNotFound(key, self)
 
             spec_template = self.data[pattern]
             matches = pattern_matches(pattern, key)
@@ -82,10 +83,6 @@ class ObjectSpec(IterableUserDict):
     def instance(self, id_object):
         """ Instances the entry with the given ID. """
         self.master.make_sure_loaded()
-        if not id_object in self:
-            msg = ('No %s %r known; I know %s'
-                    % (self.name, id_object, self.data.keys()))
-            raise ValueError(msg)
         return self.instance_spec(self[id_object])
 
     @contract(spec='dict')
@@ -93,7 +90,7 @@ class ObjectSpec(IterableUserDict):
         """ Instances the given spec using the "instance_method" function. """
         self.master.make_sure_loaded()
         if self.instance_method is None:
-            msg = 'No instance method specified for %r' % self.name
+            msg = 'No instance method specified for %s.' % self.name
             raise ValueError(msg)
         return self.instance_method(spec)
 

@@ -34,6 +34,21 @@ class SemanticMistake(ConfToolsException):
     pass
 
 
+class SemanticMistakeKeyNotFound(SemanticMistake):
+    """ A spec has not been found. """
+    def __init__(self, name, object_spec):
+        from . import ObjectSpec
+        assert isinstance(object_spec, ObjectSpec)
+        things = object_spec.name
+        msg = ('The name %r does not match any %s '
+                       'or pattern.' % (name, things))
+        found = object_spec.keys()
+        msg += ' I know: %s.' % ", ".join(found)
+        # TODO: sort by similarity
+        # TODO: add "... and X others"
+        SemanticMistake.__init__(self, msg) # XXX: sure?
+
+
 class ResourceNotFound(SemanticMistake):
     """ For example,  missing files/directories. """
     pass
