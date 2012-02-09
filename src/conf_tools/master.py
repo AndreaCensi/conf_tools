@@ -158,6 +158,7 @@ class ObjectSpec(IterableUserDict):
 
 
 class ConfigMaster:
+    separator = ':'
 
     def __init__(self, name=None):
         """
@@ -187,6 +188,12 @@ class ConfigMaster:
         if directory is None or directory == 'default':
             directory = self.get_default_dir()
         self.debug('Loading config from %r.' % directory)
+
+        if ConfigMaster.separator in directory:
+            dirs = [x for x in directory.split(ConfigMaster.separator) if x]
+            for d in dirs:
+                self.load(d)
+            return
 
         self.loaded = True
         found = []
