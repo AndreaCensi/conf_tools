@@ -6,6 +6,7 @@ from contracts import contract, describe_value
 from . import SemanticMistake
 import os
 from conf_tools.exceptions import SemanticMistakeKeyNotFound
+from conf_tools.utils.friendly_paths import friendly_path
 
 
 class ObjectSpec(IterableUserDict):
@@ -36,6 +37,8 @@ class ObjectSpec(IterableUserDict):
         # ID -> file where it was found
         self.entry2file = {}
 
+        self.templates = {}
+
         IterableUserDict.__init__(self)
 
     def __contains__(self, key):
@@ -51,15 +54,27 @@ class ObjectSpec(IterableUserDict):
             if pattern is None:
                 raise SemanticMistakeKeyNotFound(key, self)
 
-            spec_template = self.data[pattern]
+            spec_template = self.templates[pattern]
             matches = pattern_matches(pattern, key)
             return recursive_subst(spec_template, **matches)
+#
+#    def get_normal_entries(self):
+#        """ Returns the entries that aren't templates. """
+#        return [x for x in self.data if not is_pattern(x)]
 
     def matches_any_pattern(self, key):
-        for p in self.data:
-            if is_pattern(p) and pattern_matches(p, key):
-                return p
-        return None
+        patterns = [p for p in self.templates
+                    if pattern_matches(p, key)]
+
+        if not patterns:
+            return None
+        if len(patterns) > 1:
+            msg = ('Warning, the key %r is ambiguous because it matches '
+                   'more than one pattern; specifically, it matches the '
+                   'patterns %s. Aborting because this might have *very* '
+                   'unpredictable results.' % (key, ', '.join(patterns)))
+            raise ValueError(msg)
+        return patterns[0]
 
     def check(self, spec):
         """ 
@@ -143,14 +158,18 @@ class ObjectSpec(IterableUserDict):
             entries = load_entries_from_file(filename, check_entry=self.check)
 
             for entry in entries:
-                if entry in self.data:
+                if entry in self.entry2file:
                     old_filename = self.entry2file[entry]
                     msg = ('Entry %r in\n  %s\n already found in\n  %s.'
-                           % (entry, filename, old_filename))
+                           % (entry, friendly_path(filename),
+                              friendly_path(old_filename)))
                     raise SemanticMistake(msg)
 
-            self.data.update(entries)
             for entry in entries:
+                if is_pattern(entry):
+                    self.templates[entry] = entries[entry]
+                else:
+                    self.data[entry] = entries[entry]
                 self.entry2file[entry] = filename
 
             nfound += len(entries)
@@ -179,7 +198,8 @@ class ConfigMaster:
 
     def make_sure_loaded(self):
         ''' 
-            If the configuration is not been loaded yet, load the default one. 
+            If the configuration is not been loaded yet, load the 
+            default one. 
         '''
         if not self.loaded:
             self.load(None)
@@ -187,7 +207,8 @@ class ConfigMaster:
     def load(self, directory=None):
         if directory is None or directory == 'default':
             directory = self.get_default_dir()
-        self.debug('Loading config from %r.' % directory)
+
+        #self.debug('Loading config from %r.' % friendly_path(directory))
 
         if ConfigMaster.separator in directory:
             dirs = [x for x in directory.split(ConfigMaster.separator) if x]
@@ -201,8 +222,10 @@ class ConfigMaster:
             nfound = spec.load_config_from_directory(directory)
             found.append((spec.name, nfound))
 
-        lists = ', '.join('%s: %d' % (a, b) for (a, b) in found)
-        self.debug('Found ' + lists + '.')
+        lists = ', '.join('%d %s' % (b, a) for (a, b) in found)
+
+        msg = 'Found ' + lists + ' in %s.' % friendly_path(directory)
+        self.debug(msg)
 
     def debug(self, s):
         logger.debug('%s%s' % (self.prefix, s))

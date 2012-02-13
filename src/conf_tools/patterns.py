@@ -29,7 +29,7 @@ def pattern_matches(pattern, string):
     if not keys:
         raise ValueError('Not a pattern: %r' % pattern)
 
-    pmatch = re.sub(reg, '(.*)', pattern)
+    pmatch = '\A' + re.sub(reg, '(.*)', pattern) + '\Z'
 
     m = re.match(pmatch, string)
     if m is None:

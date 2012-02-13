@@ -10,8 +10,10 @@ def instantiate(function_name, parameters):
         raise SemanticMistake(msg)
 
     try:
+        #XXX TypeError is too broad, we should bind the params explicitly
         return function(**parameters)
     except TypeError as e:
+        raise
         params = ', '.join(['%s=%r' % (k, v) for (k, v) in parameters.items()])
         msg = ('Could not call function %s(%s): %s' %
                (function_name, params, e))

@@ -62,11 +62,17 @@ def create_tmp_dir():
 def test_basic_templating():
 
     result = pattern_matches('r-${robot}', 'r-ciao')
-    assert result == dict(robot='ciao')
+    assert result == dict(robot='ciao'), result
 
     result = pattern_matches('r2-${robot}', 'r-ciao')
-    assert result == None
+    assert result == None, result
 
 
+def test_ignoring_partial1():
+    result = pattern_matches('${robot}-nuisance', 'myrobot-nuisance-other')
+    assert result == None, result
 
 
+def test_ignoring_partial2():
+    result = pattern_matches('nuisance-${robot}', 'other-nuisance-myrobot')
+    assert result == None, result
