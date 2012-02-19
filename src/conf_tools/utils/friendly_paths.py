@@ -1,6 +1,7 @@
 '''
     Utilities for writing compact file paths.
 '''
+__version__ = '1.0'
 import os
 
 # TODO: cache the results?
