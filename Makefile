@@ -1,11 +1,3 @@
-all: develop
-	
-develop:
-	python setup.py develop
+package=conf_tools
 
-install:
-	python setup.py install
-
-test:
-	nosetests
-	
+include pypackage.mk
