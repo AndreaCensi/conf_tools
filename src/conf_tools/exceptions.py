@@ -1,4 +1,4 @@
-from pprint import pformat
+from . import pformat
 
 
 class BadConfig(Exception):

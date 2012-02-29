@@ -1,5 +1,4 @@
-from . import is_pattern
-from . import SyntaxMistake
+from . import SyntaxMistake, is_pattern
 
 
 def check_valid_id_or_pattern(name):

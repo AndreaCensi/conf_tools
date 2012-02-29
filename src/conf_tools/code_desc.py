@@ -1,7 +1,5 @@
 from . import (BadConfig, check_necessary, wrap_check, check_valid_code_spec,
-    logger, instantiate_spec)
-from contracts import describe_value
-from pprint import pformat
+    logger, instantiate_spec, describe_value, pformat)
 
 
 def check_generic_code_desc(x, what):

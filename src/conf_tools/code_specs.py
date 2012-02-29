@@ -1,5 +1,4 @@
-from . import BadConfig, instantiate
-from contracts import contract, new_contract
+from . import BadConfig, instantiate, contract, new_contract
 
 
 @new_contract

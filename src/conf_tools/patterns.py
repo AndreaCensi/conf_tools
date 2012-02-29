@@ -1,13 +1,13 @@
 import re
 from string import Template
 
+__all__ = ['pattern_matches', 'recursive_subst', 'is_pattern']
+
 reg = '\$\{([^\}]*)\}'
 
 
 def is_pattern(s):
     isa = len(re.findall(reg, s)) > 0
-#    if not isa:
-#        print('Not a pattern: %r' % s)
     return isa
 
 

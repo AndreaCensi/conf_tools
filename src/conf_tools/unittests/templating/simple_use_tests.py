@@ -1,9 +1,7 @@
-import tempfile
-import os
 from conf_tools.master import ConfigMaster
 from pprint import pformat
-from contextlib import contextmanager
 from conf_tools.patterns import pattern_matches
+from conf_tools.unittests.utils import create_test_environment
 
 test_cases = [
               {'config': {
@@ -29,12 +27,7 @@ def test_templating1():
 
 def check_case(config, query, result):
     # Create files
-    with create_tmp_dir() as dirname:
-
-        for filename, contents in config.items():
-            with open(os.path.join(dirname, filename), 'w') as f:
-                f.write(contents)
-
+    with create_test_environment(config) as dirname:
         # Load configuration
         master = ConfigMaster()
         master.add_class('vehicles', '*.vehicles.yaml')
@@ -48,15 +41,6 @@ def check_case(config, query, result):
 
         print('Obtained: %s' % pformat(spec))
         assert spec == result
-
-
-@contextmanager
-def create_tmp_dir():
-    dirname = tempfile.mkdtemp()
-    try:
-        yield dirname
-    except:
-        raise
 
 
 def test_basic_templating():
