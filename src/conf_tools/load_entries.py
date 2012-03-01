@@ -1,14 +1,24 @@
 from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
     logger, yaml, check_valid_id_or_pattern, describe_type, contract, pformat)
+from .utils import locate_files
 from yaml import YAMLError
 import os
-from conf_tools.utils.locate_files import locate_files
+from .utils import friendly_path
 
 
 def load_entries_from_dir(dirname, pattern):
-    for filename in locate_files(dirname, pattern):
-        for x in load_entries_from_file(filename):
-            yield x
+    try:
+        filenames = list(locate_files(dirname, pattern))
+#        filenames = set(filenames)
+        # XXX: check what was going on here
+#        print('Found %s files in %r respecting %s.' %
+#               (filenames, dirname, pattern))
+        for filename in filenames:
+            for x in load_entries_from_file(filename):
+                yield x
+    except:
+        logger.error('Error while loading dir %r' % friendly_path(dirname))
+        raise
 
 
 def load_entries_from_file(filename):

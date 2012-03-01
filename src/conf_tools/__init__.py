@@ -1,10 +1,12 @@
 __version__ = '1.2'
 
-from .utils import *
+import logging
 logging.basicConfig()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+from .utils import *
 
 from contracts import (check, contract, new_contract,
                        describe_value, describe_type)

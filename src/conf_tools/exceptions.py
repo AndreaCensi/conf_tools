@@ -42,8 +42,18 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
         things = object_spec.name
         msg = ('The name %r does not match any %s '
                        'or pattern.' % (name, things))
+        msg += 'I know: '
         found = object_spec.keys()
-        msg += ' I know: %s.' % ", ".join(found)
+        if found:
+            msg += 'the entries %s' % ", ".join(found)
+        patterns = object_spec.templates.keys()
+        if patterns:
+            if found:
+                msg += ' and the'
+            else:
+                msg += ' the'
+            msg += ' templates %s.' % ", ".join(patterns)
+
         # TODO: sort by similarity
         # TODO: add "... and X others"
         SemanticMistake.__init__(self, msg) # XXX: sure?

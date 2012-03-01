@@ -1,6 +1,6 @@
 from . import (load_entries_from_dir, is_pattern, pattern_matches,
     recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
-    describe_value, ID_FIELD)
+    describe_value, ID_FIELD, logger)
 from .utils import friendly_path
 from UserDict import IterableUserDict
 import os
@@ -78,12 +78,13 @@ class ObjectSpec(IterableUserDict):
             a "id" field.
         """
         if not isinstance(spec, dict):
-            raise ValueError("I expect the spec to be a dict, not %s" %
-                             describe_value(spec))
+            msg = ("I expect the spec to be a dict, not %s" %
+                    describe_value(spec))
+            raise ValueError(msg)
 
         if not ID_FIELD in spec:
-            msg = ('I expect the spec to contain a field "id"; found %s' %
-                    describe_value(spec))
+            msg = ('I expect the spec to contain a field "%r; found %s' %
+                   (ID_FIELD, describe_value(spec)))
             raise ValueError(msg)
 
         if self.user_check is not None:
@@ -146,6 +147,7 @@ class ObjectSpec(IterableUserDict):
         files = set()
 
         for where, x in load_entries_from_dir(directory, self.pattern):
+            #logger.debug('loading %s:%s %s' % (where[0], where[1], x))
             filename = where[0]
             if filename in self.files_read:
                 continue

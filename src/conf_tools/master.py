@@ -23,6 +23,7 @@ class ConfigMaster:
 
 #    @abstractmethod
     def get_default_dir(self):
+        logger.warning('No default dir given, using current dir.')
         return "."
 #        pass
 
