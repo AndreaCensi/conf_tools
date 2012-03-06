@@ -1,6 +1,6 @@
 from . import (load_entries_from_dir, is_pattern, pattern_matches,
     recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
-    describe_value, ID_FIELD, logger)
+    describe_value, ID_FIELD)
 from .utils import friendly_path
 from UserDict import IterableUserDict
 import os

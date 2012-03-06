@@ -1,13 +1,8 @@
 
 
-#screen_columns = None
 def get_screen_columns():
-#    m = sys.modules['compmake.utils.visualization'] # FIXME
-#    if m.screen_columns is None:
     max_x, max_y = getTerminalSize()  # @UnusedVariable
-#        m.screen_columns = max_x
     return max_x
-#    return m.screen_columns
 
 
 def getTerminalSize():

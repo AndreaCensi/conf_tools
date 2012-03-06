@@ -7,8 +7,8 @@ def check_valid_code_spec(x):
         raise BadConfig(x, 'A code spec must be a list.')
 
     if len(x) != 2:
-        raise BadConfig(x,
-                        'A code spec must be a list of exactly two elements.')
+        msg = 'A code spec must be a list of exactly two elements.'
+        raise BadConfig(x, msg)
 
     name = x[0]
     params = x[1]
