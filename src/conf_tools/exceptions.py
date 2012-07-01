@@ -40,12 +40,13 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
         from . import ObjectSpec
         assert isinstance(object_spec, ObjectSpec)
         things = object_spec.name
-        msg = ('The name %r does not match any %s '
-                       'or pattern.' % (name, things))
-        msg += 'I know: '
+        msg = ('The name %r does not match any %s. ' % (name, things))
+        msg += 'I know '
         found = object_spec.keys()
         if found:
             msg += 'the entries %s' % ", ".join(found)
+        else:
+            msg += '0 entries'
         patterns = object_spec.templates.keys()
         if patterns:
             if found:
@@ -53,7 +54,8 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
             else:
                 msg += ' the'
             msg += ' templates %s.' % ", ".join(patterns)
-
+        else:
+            msg += ' and 0 templates.'
         # TODO: sort by similarity
         # TODO: add "... and X others"
         SemanticMistake.__init__(self, msg) # XXX: sure?

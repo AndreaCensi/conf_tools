@@ -18,8 +18,10 @@ class ConfigMaster:
         self.prefix = "%s: " % name if name else ""
 
     def add_class(self, name, pattern, check=None, instance=None):
-        self.specs[name] = ObjectSpec(name, pattern, check, instance, self)
-        self.__dict__[name] = self.specs[name]
+        spec = ObjectSpec(name, pattern, check, instance, self)
+        self.specs[name] = spec
+        self.__dict__[name] = spec
+        return spec
 
 #    @abstractmethod
     def get_default_dir(self):

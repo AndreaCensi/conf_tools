@@ -34,12 +34,13 @@ def friendly_path(path, use_environment=True):
                 rules.append(('$%s' % k, v))
 
     # apply longest first
-    rules.sort(key=lambda x:-len(x[1]))
+    rules.sort(key=lambda x: (-len(x[1])))
     path = replace_variables(path, rules)
 
     options.append(path)
 
     weight_doubledot = 5
+
     def score(s):
         # penalize '..' a lot
         s = s.replace('..', '*' * weight_doubledot)
