@@ -14,7 +14,28 @@ test_cases = [
                 'query': 'd-TOP-BOTTOM',
                 'result': dict(id="d-TOP-BOTTOM",
                                desc='TOP / BOTTOM', code='code')
-               }]
+               }
+              ]
+
+test_cases.append(dict(
+                       config={'test.vehicles.yaml': """
+- id: "s_rf_f${fov}n${n}d${disp}_n${noiselevel}"
+  desc: Range-finder with ${disp|U=uniform,R=random} disposition.
+  code: 
+      - "vehicles.library.sensors.${disp|U=RangefinderUniform,R=RangefinderRandom}"
+      - num_sensels: "${n}"
+        fov_deg:     "${fov}"
+        noise: 
+            - vehicles.library.noises.AdditiveGaussian
+            - std_dev: "${noiselevel|0=0,1=0.1,2=0.5}"
+"""}, 
+    query="s_rf_f180n180dU_n2",
+    result=dict(id='s_rf_f180n180dU_n2',
+            desc="Range-finder with uniform disposition.",
+            code=["vehicles.library.sensors.RangefinderUniform",
+                  dict(num_sensels=180, fov_deg=180,
+                       noise=["vehicles.library.noises.AdditiveGaussian",
+                              dict(std_dev=0.5)])])))
 
 
 def test_templating1():
@@ -33,14 +54,17 @@ def check_case(config, query, result):
         master.add_class('vehicles', '*.vehicles.yaml')
         master.load(dirname)
 
-        if not query in  master.specs['vehicles']:
-            msg = ('Could not find %s in config. (%s)' %
-                   (query, master.specs.items()))
-            raise Exception(msg)
+#        if not query in  master.specs['vehicles']:
+#            msg = ('Could not find %s in config. (%s)' %
+#                   (query, master.specs.items()))
+#            raise Exception(msg)
         spec = master.specs['vehicles'][query]
 
-        print('Obtained: %s' % pformat(spec))
-        assert spec == result
+        
+        if spec != result:
+            print('Obtained:\n%s' % pformat(spec))
+            print(' Desired:\n%s' % pformat(result))
+            raise Exception('Wrong result')
 
 
 def test_basic_templating():
