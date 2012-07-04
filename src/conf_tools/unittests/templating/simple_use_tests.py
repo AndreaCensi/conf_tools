@@ -20,15 +20,15 @@ test_cases = [
 test_cases.append(dict(
                        config={'test.vehicles.yaml': """
 - id: "s_rf_f${fov}n${n}d${disp}_n${noiselevel}"
-  desc: Range-finder with ${disp|U=uniform,R=random} disposition.
+  desc: Range-finder with ${disp|U=uniform;R=random} disposition.
   code: 
-      - "vehicles.library.sensors.${disp|U=RangefinderUniform,R=RangefinderRandom}"
+      - "vehicles.library.sensors.${disp|U=RangefinderUniform;R=RangefinderRandom}"
       - num_sensels: "${n}"
         fov_deg:     "${fov}"
         noise: 
             - vehicles.library.noises.AdditiveGaussian
-            - std_dev: "${noiselevel|0=0,1=0.1,2=0.5}"
-"""}, 
+            - std_dev: "${noiselevel|0=0;1=0.1;2=0.5}"
+"""},
     query="s_rf_f180n180dU_n2",
     result=dict(id='s_rf_f180n180dU_n2',
             desc="Range-finder with uniform disposition.",
@@ -60,7 +60,6 @@ def check_case(config, query, result):
 #            raise Exception(msg)
         spec = master.specs['vehicles'][query]
 
-        
         if spec != result:
             print('Obtained:\n%s' % pformat(spec))
             print(' Desired:\n%s' % pformat(result))

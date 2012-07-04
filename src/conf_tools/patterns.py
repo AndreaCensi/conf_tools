@@ -1,5 +1,6 @@
 import re
 from contracts import contract
+from conf_tools.exceptions import SemanticMistake, SyntaxMistake
 
 __all__ = ['pattern_matches', 'recursive_subst', 'is_pattern']
 
@@ -22,16 +23,33 @@ def pattern_matches(pattern, string):
 
             pattern_matches('r2-${robot}', 'r-ciao')
             # -> None
+            
+        If the key contains 'id', it only matches [a-zA-Z]+\d*.
+        
+        For example:
+        
+            pattern_matches('Y${id_nuisance}${robot}', 'Yrp1R1')
+            # -> {'id_nuisance': 'rp1', ... }
+
     """
-    reg = '\$\{([^\}]*)\}'
+    # reg = '\$\{([^\}]*)\}'
+    reg = '\$\{([a-zA-Z_]\w*)\}'
     keys = re.findall(reg, pattern)
 
     if not keys:
         raise ValueError('Not a pattern: %r' % pattern)
 
     # The ? makes the match not greedy
-    pmatch = '\A' + re.sub(reg, '(.*?)', pattern) + '\Z'
-
+    def make_pattern(match):
+        key = match.group(1)
+        if 'id' in key:
+            # TODO: document this
+            return '([a-zA-Z]+\d*)'
+        else:
+            return '(.+?)'
+        
+    pmatch = '\A' + re.sub(reg, make_pattern, pattern) + '\Z'
+    
     m = re.match(pmatch, string)
     if m is None:
         #print('Not matched: %r %r' % (pattern, string))
@@ -49,7 +67,9 @@ def recursive_subst(template, **matches):
     if isinstance(template, str):
 #        return Template(template).substitute(**matches)
         #special case: "${x}" can be interpreted as a number
-        return trynum(substitute_strings(template, matches))
+        s = substitute_strings(template, matches)
+        s = s.strip() # TODO: only if substitution
+        return trynum(s)
     elif isinstance(template, list):
         return [recursive_subst(x, **matches) for x in template]
     elif isinstance(template, dict):
@@ -62,7 +82,8 @@ def recursive_subst(template, **matches):
 @contract(template='str', matches='dict(str:str)', returns='str')
 def substitute_strings(template, matches):
     """
-        Raises ValueError if key not found.
+        Raises SemanticMistake if key not found.
+        SyntaxMistake if invalid format.
     """
     def sub(x):
         s, = x.groups(0)
@@ -70,60 +91,67 @@ def substitute_strings(template, matches):
             key = s
             if not key in matches:
                 msg = 'Key %r not found (know %s)' % (key, matches.keys())
-                raise ValueError(msg)
+                raise SemanticMistake(msg)
             return matches[key]
         else:
             first = s.index('|')
             key = s[:first]
-            expr = s[first+1:]
+            expr = s[first + 1:]
             if not key in matches:
                 msg = 'Key %r not found (know %s)' % (key, matches.keys())
-                raise ValueError(msg)
-            
+                raise SemanticMistake(msg)
+
             value = trynum(matches[key])
             options = parse_options(expr)
             if not value in options:
-                msg = 'Could not find value %r in options %s' % (key, options.keys())
-                raise ValueError(msg)
-            
+                msg = ('Could not find value %r in options %s given for %r' % 
+                       (value, options.keys(), key))
+                raise SemanticMistake(msg)
+
             result = options[value]
 #            print('result: %r' % result)
             return str(result)
-            
+
     return re.sub(reg, sub, template)
-    
-    
+
+
 def trynum(x):
     """ Try to interpret x as a number """
     try:
         return int(x)
     except:
-        try: 
+        try:
             return float(x)
         except:
-            return x
-    
+            try:
+                if x[0] == '[':
+                    return eval(x) # FIXME: tmp
+                else:
+                    return x
+            except:
+                return x
+
 
 @contract(expr='str', returns='dict')
 def parse_options(expr):
     """
-        Parses a comma-separated list of a=b pair: ..
+        Parses a colon-separated list of a=b pair: ..
             
-            a=1,b=2,c=3
+            a=1;b=2;c=3
          
     """
     def invalid():
         msg = 'Invalid options %r' % expr
-        raise ValueError(msg)
-    pairs = [s.strip() for s in expr.split(',')]
+        raise SyntaxMistake(msg)
+    pairs = [s.strip() for s in expr.split(';')]
     options = {}
     for pair in pairs:
         if not '=' in pair:
             invalid()
-        tokens = pair.split('=')
+        tokens = [x.strip() for x in pair.split('=')]
         if len(tokens) != 2:
             invalid()
         options[trynum(tokens[0])] = trynum(tokens[1])
-    
+
     return options
 

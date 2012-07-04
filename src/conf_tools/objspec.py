@@ -4,6 +4,9 @@ from . import (load_entries_from_dir, is_pattern, pattern_matches,
 from .utils import friendly_path
 from UserDict import IterableUserDict
 import os
+from conf_tools.exceptions import SyntaxMistake, ConfToolsException
+from pprint import pformat
+from conf_tools.utils.indent_string import indent
 
 __all__ = ['ObjectSpec']
 
@@ -40,9 +43,11 @@ class ObjectSpec(IterableUserDict):
 
         IterableUserDict.__init__(self)
 
+    @contract(key='str')
     def __contains__(self, key):
         return key in self.data or self.matches_any_pattern(key)
 
+    @contract(key='str')
     def __getitem__(self, key):
         # Check if it is available literally:
         if key in self.data:
@@ -55,21 +60,64 @@ class ObjectSpec(IterableUserDict):
 
             spec_template = self.templates[pattern]
             matches = pattern_matches(pattern, key)
-            return recursive_subst(spec_template, **matches)
+            try:
+                return recursive_subst(spec_template, **matches)
+            except (SyntaxMistake, SemanticMistake)as e:
+                prefix = '    | '
+                msg = ('%s\nError obtained while instantiating %r.\nPattern:\n%s'
+                       '\nMatches:\n%s' %
+                       (e, pattern, 
+                        indent(pformat(spec_template), prefix), 
+                        indent(pformat(matches), prefix)
+                       ))
+                raise ConfToolsException(msg)
 
+    @contract(key='str', returns='None|str')
     def matches_any_pattern(self, key):
-        patterns = [p for p in self.templates
-                    if pattern_matches(p, key)]
-
-        if not patterns:
+        possibilities = []
+        # Look for the template that can match the longer
+        for template in self.templates:
+            matches = pattern_matches(template, key)
+            if matches:
+                score = -sum(len(x) for x in matches.values())
+                possibilities.append((score, template, matches))
+                
+        # no matches
+        if not possibilities:
             return None
-        if len(patterns) > 1:
-            msg = ('Warning, the key %r is ambiguous because it matches '
-                   'more than one pattern; specifically, it matches the '
-                   'patterns %s. Aborting because this might have *very* '
-                   'unpredictable results.' % (key, ', '.join(patterns)))
+        
+        # only one match
+        if len(possibilities) == 1:
+            return possibilities[0][1]
+        
+        # sort by score
+        possibilities.sort(key=lambda p: (-p[0]))
+
+        # Check if there is a tie
+        best = possibilities[0][0]
+        ties = [p[1] for p in possibilities if p[0] == best]
+    
+        if len(ties) >= 2:
+            msg = ('Detected a tie. Key %r matches with same score: %r' %
+                   (key, ties))
             raise ValueError(msg)
-        return patterns[0]
+        
+#        if len(possibilities) >= 2:
+#            for score, template, _ in possibilities:
+#                print(' score: %s template %s' % (score, template))
+#
+#            print('best: %r' % possibilities[0][1])
+#            
+        return possibilities[0][1]
+#        if not patterns:
+#            return None
+#        if len(patterns) > 1:
+#            msg = ('Warning, the key %r is ambiguous because it matches '
+#                   'more than one pattern; specifically, it matches the '
+#                   'patterns %s. Aborting because this might have *very* '
+#                   'unpredictable results.' % (key, ', '.join(patterns)))
+#            raise ValueError(msg)
+#        return patterns[0]
 
     def check(self, spec):
         """ 
@@ -174,7 +222,10 @@ class ObjectSpec(IterableUserDict):
                                % (name, friendly_path(filename)))
                         raise SemanticMistake(msg)
 
-                    x = self.__getitem__(name)
+                    try:
+                        x = self.__getitem__(name)
+                    except ConfToolsException:
+                        raise
 
                 try:
                     self.check(x)
