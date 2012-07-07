@@ -13,9 +13,8 @@ def instantiate(function_name, parameters):
         #XXX TypeError is too broad, we should bind the params explicitly
         return function(**parameters)
     except TypeError as e:
-        raise
         params = ', '.join(['%s=%r' % (k, v) for (k, v) in parameters.items()])
-        msg = ('Could not call function %s(%s): %s' %
+        msg = ('Could not call function %s(%s): %s' % 
                (function_name, params, e))
         raise SemanticMistake(msg)
 
@@ -39,7 +38,7 @@ def import_name(name):
             try:
                 module = __import__(module_name, fromlist=['dummy'])
             except ImportError as e:
-                msg = ('Cannot load %r (tried also with %r): %s.' %
+                msg = ('Cannot load %r (tried also with %r): %s.' % 
                        (name, module_name, e))
                 msg += '\n' + traceback.format_exc()
                 raise ValueError(msg)
