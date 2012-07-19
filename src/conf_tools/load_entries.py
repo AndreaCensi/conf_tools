@@ -6,6 +6,8 @@ import os
 
 
 def load_entries_from_dir(dirname, pattern):
+    """ calls load_entries_from_file for each file in dirname respecting
+        the pattern. """
     try:
         filenames = list(locate_files(dirname, pattern))
         for filename in filenames:
@@ -90,7 +92,7 @@ def substitute_special(entry, dirname):
 
 
 def enumerate_entries_from_file(filename):
-    ''' yields (filename, num_entry), entry '''
+    ''' Yields (filename, num_entry), entry '''
     with open(filename) as f:
         try:
             parsed = yaml.load(f)
@@ -99,7 +101,7 @@ def enumerate_entries_from_file(filename):
             raise SyntaxMistake(msg) # TODO: make UserError
 
         if parsed is None:
-            logger.warning('Empty file %r.' % filename)
+            logger.warning('Found an empty file %r.' % filename)
         else:
             if (not isinstance(parsed, list) or
                 not all([isinstance(x, dict) for x in parsed])):
@@ -108,7 +110,7 @@ def enumerate_entries_from_file(filename):
                 raise SyntaxMistake(msg)
 
             if not parsed:
-                logger.warning('Empty file %r.' % filename)
+                logger.warning('Found an empty file %r.' % filename)
 
             for num_entry, entry in enumerate(parsed):
                 yield (filename, num_entry), entry

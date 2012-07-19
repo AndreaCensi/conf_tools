@@ -6,7 +6,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-from .utils import *
+from . import utils
 
 from contracts import (check, contract, new_contract,
                        describe_value, describe_type)
@@ -18,8 +18,6 @@ ID_FIELD = 'id'
 
 from pprint import pformat
 import yaml
-
-from . import utils
 
 from .exceptions import *
 from .patterns import *

@@ -23,11 +23,9 @@ class ConfigMaster:
         self.__dict__[name] = spec
         return spec
 
-#    @abstractmethod
     def get_default_dir(self):
         logger.warning('No default dir given, using current dir.')
         return "."
-#        pass
 
     def make_sure_loaded(self):
         ''' 

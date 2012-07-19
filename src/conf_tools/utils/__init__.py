@@ -5,3 +5,4 @@ from .friendly_paths import *
 from .locate_files import *
 from .terminal_size import *
 
+from .indent_string import *

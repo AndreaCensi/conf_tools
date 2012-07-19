@@ -1,12 +1,12 @@
 from . import (load_entries_from_dir, is_pattern, pattern_matches,
     recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
-    describe_value, ID_FIELD)
-from .utils import friendly_path
+    describe_value, ID_FIELD, friendly_path, SyntaxMistake,
+    ConfToolsException)
+from .utils import indent
 from UserDict import IterableUserDict
-import os
-from conf_tools.exceptions import SyntaxMistake, ConfToolsException
 from pprint import pformat
-from conf_tools.utils.indent_string import indent
+import os
+
 
 __all__ = ['ObjectSpec']
 
@@ -65,9 +65,9 @@ class ObjectSpec(IterableUserDict):
             except (SyntaxMistake, SemanticMistake)as e:
                 prefix = '    | '
                 msg = ('%s\nError obtained while instantiating %r.\nPattern:\n%s'
-                       '\nMatches:\n%s' %
-                       (e, pattern, 
-                        indent(pformat(spec_template), prefix), 
+                       '\nMatches:\n%s' % 
+                       (e, pattern,
+                        indent(pformat(spec_template), prefix),
                         indent(pformat(matches), prefix)
                        ))
                 raise ConfToolsException(msg)
@@ -98,7 +98,7 @@ class ObjectSpec(IterableUserDict):
         ties = [p[1] for p in possibilities if p[0] == best]
     
         if len(ties) >= 2:
-            msg = ('Detected a tie. Key %r matches with same score: %r' %
+            msg = ('Detected a tie. Key %r matches with same score: %r' % 
                    (key, ties))
             raise ValueError(msg)
         
@@ -126,12 +126,12 @@ class ObjectSpec(IterableUserDict):
             a "id" field.
         """
         if not isinstance(spec, dict):
-            msg = ("I expect the spec to be a dict, not %s" %
+            msg = ("I expect the spec to be a dict, not %s" % 
                     describe_value(spec))
             raise ValueError(msg)
 
         if not ID_FIELD in spec:
-            msg = ('I expect the spec to contain a field "%r; found %s' %
+            msg = ('I expect the spec to contain a field "%r; found %s' % 
                    (ID_FIELD, describe_value(spec)))
             raise ValueError(msg)
 
@@ -177,7 +177,7 @@ class ObjectSpec(IterableUserDict):
             id_spec = spec[ID_FIELD]
             return id_spec, self.instance_spec(spec)
         else:
-            msg = ('Expected string or dict, found %s.' %
+            msg = ('Expected string or dict, found %s.' % 
                     describe_value(id_or_spec))
             raise ValueError(msg)
 
@@ -202,6 +202,9 @@ class ObjectSpec(IterableUserDict):
             files.add(filename)
 
             name = x[ID_FIELD]
+            #logger.debug('Found %s %r (%d concrete, %d patterns)' % 
+            #              (self.name, name, len(self.data), len(self.templates)))
+
             if name in self.entry2file:
                 old_filename = self.entry2file[name]
                 msg = ('Entry %r in\n  %s\n already found in\n  %s.'

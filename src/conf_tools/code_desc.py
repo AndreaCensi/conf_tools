@@ -6,11 +6,11 @@ def check_generic_code_desc(x, what):
     """ Checks that it has fields id,desc,code and code is a code spec. """
     if not isinstance(x, dict):
         raise BadConfig(x, 'A valid %s config must be a dictionary.' % what)
-    necessary = [
-                 ('id', str),
+    necessary = [ 
+                  ('id', str),
                   ('desc', str),
                   ('code', list),
-                  ]
+              ]
     check_necessary(x, necessary)
     wrap_check(x, 'checking "code" entry', check_valid_code_spec, x['code'])
 

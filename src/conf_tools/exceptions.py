@@ -37,16 +37,19 @@ class SemanticMistake(ConfToolsException):
 class SemanticMistakeKeyNotFound(SemanticMistake):
     """ A spec has not been found. """
     def __init__(self, name, object_spec):
+        # TODO: abbreviate
+        # TODO: sort by similarity
         from . import ObjectSpec
         assert isinstance(object_spec, ObjectSpec)
         things = object_spec.name
         msg = ('The name %r does not match any %s. ' % (name, things))
-        msg += 'I know '
-        found = object_spec.keys()
+        msg += '\nI know '
+        found = object_spec.data.keys()
         if found:
-            msg += 'the entries %s' % ", ".join(found)
+            msg += '%d entries (%s)' % (len(found), ", ".join(found))
         else:
             msg += '0 entries'
+        msg += '\n'
         patterns = object_spec.templates.keys()
         if patterns:
             if found:
