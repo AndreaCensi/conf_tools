@@ -24,6 +24,7 @@ from .patterns import *
 from .valid import *
 
 from .exceptions import *
+from .special_subst import *
 from .load_entries import *
 from .checks import *
 from .instantiate_utils import *

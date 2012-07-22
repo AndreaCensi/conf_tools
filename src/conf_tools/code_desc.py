@@ -38,6 +38,22 @@ class GenericInstance():
                                           expected_class=self.check_class)
 
 
+class GenericCall():
+    def __init__(self, check_function=None):
+        self.check_function = check_function
+        
+    def __call__(self, entry):
+        try:
+            instance = instantiate_spec(entry['code'])
+            if self.check_function is not None:
+                self.check_function(instance)
+            return instance
+        except:
+            logger.error('Error while trying to instantiate entry:\n%s'
+                         % (pformat(entry)))
+            raise
+         
+
 def check_type(entry, etype, obtained):
     if not isinstance(obtained, etype):
         msg = 'Error in instantiating code spec:\n\t%s\n' % entry['code']
