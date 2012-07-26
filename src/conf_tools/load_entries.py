@@ -1,9 +1,8 @@
 from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
-    logger, yaml, check_valid_id_or_pattern, pformat)
+    logger, yaml, check_valid_id_or_pattern, pformat, substitute_special)
 from .utils import friendly_path, locate_files
 from yaml import YAMLError
 import os
-from conf_tools.special_subst import substitute_special
 
 
 def load_entries_from_dir(dirname, pattern):
@@ -59,7 +58,9 @@ def load_entries_from_file(filename):
 
             if name in name2where and name2where[name] != where:
                 msg = ('Entry %r already know from:\n %s (entry #%d)' % 
-                        (name, name2where[name][0], name2where[name][1]))
+                        (name,
+                         friendly_path(name2where[name][0]),
+                         name2where[name][1]))
                 raise SemanticMistake(msg)
 
             name2where[name] = where
@@ -69,7 +70,7 @@ def load_entries_from_file(filename):
         except ConfToolsException as e:
             msg = ('Error while loading entry #%d '
                    ' from file\n   %r\n%s\nError: %s' % 
-                   (where[1] + 1, where[0], pformat(x), e))
+                   (where[1] + 1, friendly_path(where[0]), pformat(x), e))
             logger.error(msg)  # XXX
             raise
 
@@ -80,11 +81,11 @@ def enumerate_entries_from_file(filename):
         try:
             parsed = yaml.load(f)
         except YAMLError as e:
-            msg = 'Cannot parse YAML file %s:\n%s' % (filename, e)
+            msg = 'Cannot parse YAML file %s:\n%s' % (friendly_path(filename), e)
             raise SyntaxMistake(msg) # TODO: make UserError
 
         if parsed is None:
-            logger.warning('Found an empty file %r.' % filename)
+            logger.warning('Found an empty file %r.' % friendly_path(filename))
         else:
             if (not isinstance(parsed, list) or
                 not all([isinstance(x, dict) for x in parsed])):
@@ -93,7 +94,7 @@ def enumerate_entries_from_file(filename):
                 raise SyntaxMistake(msg)
 
             if not parsed:
-                logger.warning('Found an empty file %r.' % filename)
+                logger.warning('Found an empty file %r.' % friendly_path(filename))
 
             for num_entry, entry in enumerate(parsed):
                 yield (filename, num_entry), entry

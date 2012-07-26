@@ -7,13 +7,16 @@ import os
 # TODO: cache the results?
 __all__ = ['friendly_path']
 
+from . import logger
 
-def friendly_path(path, use_environment=True):
+def friendly_path(path, use_environment=True, debug=False):
     """ 
         Gets a friendly representation of the given path,
         using relative paths or environment variables
         (if use_environment = True).
     """
+    # TODO: send extra rules
+    
     original = path
     options = []
 
@@ -21,6 +24,8 @@ def friendly_path(path, use_environment=True):
 
     rules = []
     rules.append(('~', os.path.expanduser('~')))
+    rules.append(('.', os.getcwd()))
+    rules.append(('.', os.path.realpath(os.getcwd())))
 
     if use_environment:
         envs = dict(os.environ)
@@ -31,7 +36,8 @@ def friendly_path(path, use_environment=True):
 
         for k, v in envs.items():
             if v:
-                rules.append(('$%s' % k, v))
+                if v[0] == '/':
+                    rules.append(('$%s' % k, v))
 
     # apply longest first
     rules.sort(key=lambda x: (-len(x[1])))
@@ -48,16 +54,20 @@ def friendly_path(path, use_environment=True):
 
     options.sort(key=score)
 
-    if False:
-        print('Options for %s' % original)
+    if debug:
+        logger.debug('Rules:')
+        for k, v in rules:
+            logger.debug('- %10s = %s' % (k, v))
+
+        logger.debug('Options for %s' % original)
         for o in options:
-            print('- %4d %s' % (score(o), o))
+            logger.debug('- %4d %s' % (score(o), o))
 
     result = options[0]
 
     # print('Converted %s  => %s' % (original, result))
 
-    return result
+    return 'friendly:' + result
 
 
 def replace_variables(path, rules):
