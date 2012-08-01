@@ -16,6 +16,7 @@ def instantiate(function_name, parameters):
         params = ', '.join(['%s=%r' % (k, v) for (k, v) in parameters.items()])
         msg = ('Could not call function %s(%s): %s' % 
                (function_name, params, e))
+        msg += traceback.format_exc(e)
         raise SemanticMistake(msg)
 
 

@@ -67,8 +67,7 @@ def friendly_path(path, use_environment=True, debug=False):
 
     # print('Converted %s  => %s' % (original, result))
 
-    return 'friendly:' + result
-
+    return result
 
 def replace_variables(path, rules):
     for k, v in rules:

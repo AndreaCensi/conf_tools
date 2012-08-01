@@ -3,6 +3,7 @@ from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
 from .utils import friendly_path, locate_files
 from yaml import YAMLError
 import os
+from contracts.interface import describe_type
 
 
 def load_entries_from_dir(dirname, pattern):
@@ -40,7 +41,7 @@ def load_entries_from_file(filename):
             {'data': '/path/data.pickle'}
     '''
     if not os.path.exists(filename):
-        msg = 'File %r does not exist.' % filename
+        msg = 'File %r does not exist.' % friendly_path(filename)
         raise SemanticMistake(msg)
 
     name2where = {}
@@ -87,8 +88,13 @@ def enumerate_entries_from_file(filename):
         if parsed is None:
             logger.warning('Found an empty file %r.' % friendly_path(filename))
         else:
-            if (not isinstance(parsed, list) or
-                not all([isinstance(x, dict) for x in parsed])):
+            if not isinstance(parsed, list):
+                msg = ('Expect the file %r to contain a list of dicts,'
+                        ' found %s.' % (friendly_path(filename),
+                                         describe_type(parsed)))
+                raise SyntaxMistake(msg)
+                 
+            if  not all([isinstance(x, dict) for x in parsed]):
                 msg = ('Expect the file %r to contain a list of dicts.' % 
                         filename)
                 raise SyntaxMistake(msg)

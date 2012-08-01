@@ -244,3 +244,21 @@ class ObjectSpec(IterableUserDict):
         self.files_read.update(files)
 
         return nfound
+    
+    def summary_string_id_desc(self):
+        """ Assuming that the entries are dictionaries
+            with fields 'id' and 'desc', returns a summary string. 
+        """
+        s = ''
+        keys = sorted(self.keys())
+        if not keys:
+            return ' (0 objects found)'
+        for x in keys:
+            spec = self[x]
+            if isinstance(spec, dict) and ('id' in spec) and ('desc' in spec):
+                desc = spec['desc'].strip().replace('\n', ' ')
+                maxlen = max([len(y) for y in keys])
+                s += '- %s: %s\n' % (x.rjust(maxlen), desc)
+        return s 
+        
+    
