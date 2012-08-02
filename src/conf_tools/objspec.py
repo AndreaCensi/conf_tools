@@ -252,7 +252,7 @@ class ObjectSpec(IterableUserDict):
         s = ''
         keys = sorted(self.keys())
         if not keys:
-            return ' (0 objects found)'
+            return ' (0 objects found)\n'
         for x in keys:
             spec = self[x]
             if isinstance(spec, dict) and ('id' in spec) and ('desc' in spec):
