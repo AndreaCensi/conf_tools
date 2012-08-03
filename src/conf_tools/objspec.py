@@ -6,7 +6,8 @@ from .utils import indent
 from UserDict import IterableUserDict
 from pprint import pformat
 import os
-
+from .utils.pickling import can_be_pickled
+from . import logger
 
 __all__ = ['ObjectSpec']
 
@@ -31,6 +32,20 @@ class ObjectSpec(IterableUserDict):
         self.pattern = pattern
         self.user_check = check
         self.instance_method = instance_method
+        
+        if not can_be_pickled(check):
+            msg = 'Function %s passed as "check" cannot be pickled. ' % check
+            msg += 'This might create problems later but it is OK to continue.'
+            # TODO: add where (2 levels up) 
+            logger.warning(msg)
+
+        if not can_be_pickled(instance_method):
+            msg = ('Function %s passed as "instance_method" cannot be pickled. ' 
+                   % instance_method)
+            msg += 'This might create problems later but it is OK to continue.'
+            # TODO: add where (2 levels up)
+            logger.warning(msg)
+            
         self.master = master
 
         # List of files already read        

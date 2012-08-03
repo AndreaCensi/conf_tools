@@ -3,9 +3,8 @@ from .utils import friendly_path
 
 
 class ConfigMaster:
-#    __metaclass__ = ABCMeta
 
-    # used to separate directories
+    # used to separate directories in environment variable
     separator = ':'
 
     def __init__(self, name=None):
@@ -18,6 +17,14 @@ class ConfigMaster:
         self.prefix = "%s: " % name if name else ""
 
     def add_class(self, name, pattern, check=None, instance=None):
+        '''
+        Adds a type of objects.
+        
+        :param name:    Informative name
+        :param pattern: Pattern for filenames.
+        :param check:   spect -> {true, false} unction that checks whether a spec is correct 
+        :param instance: spec -> object function
+        '''
         spec = ObjectSpec(name, pattern, check, instance, self)
         self.specs[name] = spec
         self.__dict__[name] = spec
@@ -55,7 +62,7 @@ class ConfigMaster:
 
         lists = ', '.join('%d %s' % (b, a) for (a, b) in found)
 
-        msg = 'Found ' + lists + ' in %s.' % friendly_path(directory)
+        msg = 'Found ' + lists + ' in %r.' % friendly_path(directory)
         self.debug(msg)
 
     def debug(self, s):
