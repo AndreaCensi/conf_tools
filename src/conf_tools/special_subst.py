@@ -1,4 +1,5 @@
 from . import SyntaxMistake, contract, describe_type, logger
+from .utils import expand_environment
 import os
 
 
@@ -31,16 +32,20 @@ def substitute_special_keys(key, val, dirname):
         return key, val
     if key.startswith('file:'):
         nkey = key[5:]
-        nval = make_relative(val, dirname)
+        nval = intepret_as_filename(val, dirname)
         check_exists(key, nval)
         return nkey, nval
     elif key.startswith('file'):
-        nval = make_relative(val, dirname)
+        nval = intepret_as_filename(val, dirname)
         check_exists(key, nval)
         return key, nval
     else:
         return key, val
-    
+
+def intepret_as_filename(val, dirname):
+    # First expand
+    val = expand_environment(val)
+    return make_relative(val, dirname)
             
 def make_relative(val, dirname):
     if not isinstance(val, str):

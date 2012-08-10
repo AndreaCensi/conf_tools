@@ -3,7 +3,7 @@ from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
 from .utils import friendly_path, locate_files
 from yaml import YAMLError
 import os
-from contracts.interface import describe_type
+from contracts import describe_type
 
 
 def load_entries_from_dir(dirname, pattern):
