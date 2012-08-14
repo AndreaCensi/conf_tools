@@ -1,13 +1,11 @@
 from . import (load_entries_from_dir, is_pattern, pattern_matches,
     recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
-    describe_value, ID_FIELD, friendly_path, SyntaxMistake,
-    ConfToolsException)
-from .utils import indent
+    describe_value, ID_FIELD, friendly_path, SyntaxMistake, ConfToolsException,
+    logger)
+from .utils import can_be_pickled, expand_string, indent
 from UserDict import IterableUserDict
 from pprint import pformat
 import os
-from .utils.pickling import can_be_pickled
-from . import logger
 
 __all__ = ['ObjectSpec']
 
@@ -276,4 +274,41 @@ class ObjectSpec(IterableUserDict):
                 s += '- %s: %s\n' % (x.rjust(maxlen), desc)
         return s 
         
+        
+    @contract(names='str|list(str)', returns='list[str]')
+    def expand_names(self, names):
+        """ 
+            The most flexible expansion routine on the planet.
+        
+            Examples: ..
+            
+                config.widgets.expand_names('*')
+                config.widgets.expand_names('a,b*')
+                config.widgets.expand_names(['a','b*'])
+                
+            Note: does not use patterns yet (TODO)
+        """
+        
+        if len(self) == 0:
+            msg = 'No %s defined, cannot match names %s.' % (self.what, names)
+            raise SemanticMistake(msg)
+        
+        if isinstance(names, str):
+            names = [names]
+        assert isinstance(names, list)
+         
+        try:
+            options = self.keys()
+            # TODO: does not pick up patterns, yet.
+            expanded = expand_string(names, options)
+        except ValueError:
+            expanded = []
+            
+        if not expanded:
+            msg = 'Specified set %r of %s not found.' % (names, self.what)
+            msg += ' Available %s: %s' % (self.what, options)
+            msg += '\nNote that expand_names() does not use patterns, yet.'
+            raise SemanticMistake(msg)
     
+        return expanded
+
