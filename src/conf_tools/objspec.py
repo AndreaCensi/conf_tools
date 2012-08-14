@@ -275,7 +275,7 @@ class ObjectSpec(IterableUserDict):
         return s 
         
         
-    @contract(names='str|list(str)', returns='list[str]')
+    @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):
         """ 
             The most flexible expansion routine on the planet.
@@ -290,7 +290,7 @@ class ObjectSpec(IterableUserDict):
         """
         
         if len(self) == 0:
-            msg = 'No %s defined, cannot match names %s.' % (self.what, names)
+            msg = 'No %s defined, cannot match names %s.' % (self.name, names)
             raise SemanticMistake(msg)
         
         if isinstance(names, str):
@@ -305,8 +305,8 @@ class ObjectSpec(IterableUserDict):
             expanded = []
             
         if not expanded:
-            msg = 'Specified set %r of %s not found.' % (names, self.what)
-            msg += ' Available %s: %s' % (self.what, options)
+            msg = 'Specified set %r of %s not found.' % (names, self.name)
+            msg += ' Available %s: %s' % (self.name, options)
             msg += '\nNote that expand_names() does not use patterns, yet.'
             raise SemanticMistake(msg)
     
