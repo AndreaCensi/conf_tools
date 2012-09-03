@@ -6,6 +6,7 @@ from .utils import can_be_pickled, expand_string, indent
 from UserDict import IterableUserDict
 from pprint import pformat
 import os
+from conf_tools.utils.expansion import expand_environment
 
 __all__ = ['ObjectSpec']
 
@@ -200,6 +201,8 @@ class ObjectSpec(IterableUserDict):
             the pattern specified in the constructor.
             Returns the number of new entries found.
         """
+        directory = expand_environment(directory)
+
         if not os.path.exists(directory):
             msg = 'Directory %r does not exist.' % directory
             raise SemanticMistake(msg)
@@ -266,14 +269,25 @@ class ObjectSpec(IterableUserDict):
         keys = sorted(self.keys())
         if not keys:
             return ' (0 objects found)\n'
+        maxlen = max([len(y) for y in keys])
         for x in keys:
             spec = self[x]
             if isinstance(spec, dict) and ('id' in spec) and ('desc' in spec):
                 desc = spec['desc'].strip().replace('\n', ' ')
-                maxlen = max([len(y) for y in keys])
                 s += '- %s: %s\n' % (x.rjust(maxlen), desc)
         return s 
         
+    def summary_string_id_desc_patterns(self):
+        """ Assuming that the entries are dictionaries
+            with fields 'id' and 'desc', returns a summary string. 
+        """
+        s = self.summary_string_id_desc()        
+        maxlen = max([len(y) for y in self.pattern])
+        for x, spec in self.templates.items():
+            if isinstance(spec, dict) and ('id' in spec) and ('desc' in spec):
+                desc = spec['desc'].strip().replace('\n', ' ')
+                s += '- %s: %s\n' % (x.rjust(maxlen), desc)
+        return s 
         
     @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):
@@ -286,7 +300,7 @@ class ObjectSpec(IterableUserDict):
                 config.widgets.expand_names('a,b*')
                 config.widgets.expand_names(['a','b*'])
                 
-            Note: does not use patterns yet (TODO)
+            Note: does not use patterns yet (TODO).
         """
         
         if len(self) == 0:

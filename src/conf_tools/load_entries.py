@@ -3,12 +3,12 @@ from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
 from .utils import friendly_path, locate_files
 from yaml import YAMLError
 import os
-from contracts import describe_type
-
+from contracts import describe_type, contract
+ 
 
 def load_entries_from_dir(dirname, pattern):
     """ calls load_entries_from_file for each file in dirname respecting
-        the pattern. """
+        the pattern. Environment is not expanded. """
     try:
         filenames = list(locate_files(dirname, pattern))
         for filename in filenames:
@@ -104,3 +104,11 @@ def enumerate_entries_from_file(filename):
 
             for num_entry, entry in enumerate(parsed):
                 yield (filename, num_entry), entry
+
+@contract(entries='list(dict)')
+def write_entries(entries, filename_yaml):
+    # TODO: check that we can read them back
+    logger.info('Writing to %r ' % friendly_path(filename_yaml))
+    with open(filename_yaml, 'w') as f:
+        yaml.dump(entries, f,
+                  default_flow_style=False, explicit_start=True)

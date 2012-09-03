@@ -1,6 +1,7 @@
 import os
+from contracts import contract
 
-
+@contract(s='str')
 def expand_environment(s):
     ''' Expands ~ and ${ENV} in the string. '''
     s = os.path.expandvars(s)

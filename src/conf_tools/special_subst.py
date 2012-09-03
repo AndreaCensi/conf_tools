@@ -31,11 +31,14 @@ def substitute_special_keys(key, val, dirname):
     if not isinstance(key, str):
         return key, val
     if key.startswith('file:'):
+        if not isinstance(val, str):
+            # XXX
+            pass 
         nkey = key[5:]
         nval = intepret_as_filename(val, dirname)
         check_exists(key, nval)
         return nkey, nval
-    elif key.startswith('file'):
+    elif key.startswith('file') and isinstance(val, str):
         nval = intepret_as_filename(val, dirname)
         check_exists(key, nval)
         return key, nval
