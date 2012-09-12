@@ -7,6 +7,7 @@ from UserDict import IterableUserDict
 from pprint import pformat
 import os
 from conf_tools.utils.expansion import expand_environment
+from conf_tools.special_subst import substitute_special
 
 __all__ = ['ObjectSpec']
 
@@ -32,18 +33,6 @@ class ObjectSpec(IterableUserDict):
         self.user_check = check
         self.instance_method = instance_method
         
-        if not can_be_pickled(check):
-            msg = 'Function %s passed as "check" cannot be pickled. ' % check
-            msg += 'This might create problems later but it is OK to continue.'
-            # TODO: add where (2 levels up) 
-            logger.warning(msg)
-
-        if not can_be_pickled(instance_method):
-            msg = ('Function %s passed as "instance_method" cannot be pickled. ' 
-                   % instance_method)
-            msg += 'This might create problems later but it is OK to continue.'
-            # TODO: add where (2 levels up)
-            logger.warning(msg)
             
         self.master = master
 
@@ -56,6 +45,21 @@ class ObjectSpec(IterableUserDict):
         self.templates = {}
 
         IterableUserDict.__init__(self)
+
+        if not can_be_pickled(check):
+            msg = 'Function %s passed as "check" cannot be pickled. ' % (check)
+            msg += 'This might create problems later but it is OK to continue.'
+            msg += ' Happened for %s/%s' % (master, self)
+            # TODO: add where (2 levels up) 
+            logger.warning(msg)
+
+        if not can_be_pickled(instance_method):
+            msg = ('Function %s passed as "instance_method" cannot be pickled. ' 
+                   % instance_method)
+            msg += 'This might create problems later but it is OK to continue.'
+            msg += ' Happened for %s/%s' % (master, self)
+            # TODO: add where (2 levels up)
+            logger.warning(msg)
 
     @contract(key='str')
     def __contains__(self, key):
@@ -75,8 +79,12 @@ class ObjectSpec(IterableUserDict):
             spec_template = self.templates[pattern]
             matches = pattern_matches(pattern, key)
             try:
-                return recursive_subst(spec_template, **matches)
-            except (SyntaxMistake, SemanticMistake)as e:
+                x = recursive_subst(spec_template, **matches)
+                # We didn't do it before...
+                dirname = os.path.dirname(self.entry2file[pattern])
+                x = substitute_special(x, dirname=dirname)
+                return x
+            except (SyntaxMistake, SemanticMistake) as e:
                 prefix = '    | '
                 msg = ('%s\nError obtained while instantiating %r.\nPattern:\n%s'
                        '\nMatches:\n%s' % 
@@ -303,7 +311,7 @@ class ObjectSpec(IterableUserDict):
             Note: does not use patterns yet (TODO).
         """
         
-        if len(self) == 0:
+        if len(self) == 0 and len(self.templates) == 0:
             msg = 'No %s defined, cannot match names %s.' % (self.name, names)
             raise SemanticMistake(msg)
         

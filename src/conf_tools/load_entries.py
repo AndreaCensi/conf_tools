@@ -4,6 +4,7 @@ from .utils import friendly_path, locate_files
 from yaml import YAMLError
 import os
 from contracts import describe_type, contract
+from conf_tools.patterns import is_pattern
  
 
 def load_entries_from_dir(dirname, pattern):
@@ -51,10 +52,15 @@ def load_entries_from_file(filename):
                 msg = 'Entry does not have the %r field' % ID_FIELD
                 raise SemanticMistake(msg)
 
-            x = substitute_special(x, dirname=os.path.dirname(where[0]))
+            name = x[ID_FIELD]
+
+            if not is_pattern(name):
+                # Otherwise it will complain of missing env variables
+                x = substitute_special(x, dirname=os.path.dirname(where[0]))
 
             # Warn about this?
-            name = x[ID_FIELD]
+
+                
             check_valid_id_or_pattern(name)
 
             if name in name2where and name2where[name] != where:
