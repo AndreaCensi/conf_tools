@@ -6,7 +6,7 @@ from .utils import can_be_pickled, expand_string, indent
 from UserDict import IterableUserDict
 from pprint import pformat
 import os
-from conf_tools.utils.expansion import expand_environment
+from conf_tools.utils import expand_environment
 from conf_tools.special_subst import substitute_special
 
 __all__ = ['ObjectSpec']
@@ -219,7 +219,7 @@ class ObjectSpec(IterableUserDict):
         files = set()
 
         for where, x in load_entries_from_dir(directory, self.pattern):
-            #logger.debug('loading %s:%s %s' % (where[0], where[1], x))
+#            logger.debug('loading %s:%s %s' % (where[0], where[1], x))
             filename = where[0]
             if filename in self.files_read:
                 continue
