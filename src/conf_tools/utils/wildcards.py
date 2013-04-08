@@ -20,9 +20,12 @@ def expand_string(x, options):
         if ',' in x:
             return flatten(expand_string(y, options) for y in x.split(','))
         elif '*' in x:
-            return list(expand_wildcard(x, options))
+            expanded = list(expand_wildcard(x, options))
+            return expanded
         else:
             return [x]
+    else:
+        assert False
 
 
 def wildcard_to_regexp(arg):
@@ -39,11 +42,17 @@ def expand_wildcard(wildcard, universe):
         :param universe: a list of strings
     '''
     assert wildcard.find('*') > -1
+    
     regexp = wildcard_to_regexp(wildcard)
     num_matches = 0
     for x in universe:
         if regexp.match(x):
             num_matches += 1
             yield x
+        else:
+            pass
+            # print('%r does not match %r %r' % (x, wildcard, regexp))
     if num_matches == 0:
-        raise ValueError('Could not find matches for pattern "%s".' % wildcard)
+        msg = 'Could not find matches for pattern %r in %s.' % (wildcard, universe)
+        print msg
+        raise ValueError(msg)

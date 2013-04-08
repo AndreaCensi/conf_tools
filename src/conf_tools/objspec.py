@@ -8,6 +8,8 @@ from pprint import pformat
 import os
 from conf_tools.utils import expand_environment
 from conf_tools.special_subst import substitute_special
+from compmake.utils.coloredterm import termcolor_colored
+from conf_tools.code_desc import ConfToolsGlobal
 
 __all__ = ['ObjectSpec']
 
@@ -226,7 +228,7 @@ class ObjectSpec(IterableUserDict):
             files.add(filename)
 
             name = x[ID_FIELD]
-            #logger.debug('Found %s %r (%d concrete, %d patterns)' % 
+            # logger.debug('Found %s %r (%d concrete, %d patterns)' % 
             #              (self.name, name, len(self.data), len(self.templates)))
 
             if name in self.entry2file:
@@ -308,7 +310,6 @@ class ObjectSpec(IterableUserDict):
                 config.widgets.expand_names('a,b*')
                 config.widgets.expand_names(['a','b*'])
                 
-            Note: does not use patterns yet (TODO).
         """
         
         if len(self) == 0 and len(self.templates) == 0:
@@ -321,7 +322,6 @@ class ObjectSpec(IterableUserDict):
          
         try:
             options = self.keys()
-            # TODO: does not pick up patterns, yet.
             expanded = expand_string(names, options)
         except ValueError:
             expanded = []
@@ -329,8 +329,52 @@ class ObjectSpec(IterableUserDict):
         if not expanded:
             msg = 'Specified set %r of %s not found.' % (names, self.name)
             msg += ' Available %s: %s' % (self.name, options)
-            msg += '\nNote that expand_names() does not use patterns, yet.'
             raise SemanticMistake(msg)
     
         return expanded
-
+    
+    def print_summary(self, stream, instance=False, raise_instance_error=False):
+        ConfToolsGlobal.log_instance_error = False  # XXX: find more elegant way # XXX: preserve
+        
+        stream.write('Spec %s:\n' % self.name)
+        
+        if self.files_read:
+            stream.write('* Found %d config files:\n' % len(self.files_read))
+            for filename in self.files_read:
+                stream.write('  - %s\n' % filename)        
+        else:
+            stream.write('* No config file found.\n')    
+        
+        if self.data:
+            stream.write('* Found %d objects: \n' % len(self.data))
+    #         ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
+    #         
+            for id_spec in self.data:
+                desc = self.data[id_spec].get('desc', '-') 
+                stream.write('  - %20s  %s\n' % (id_spec, desc))
+                if instance:
+                    try:
+                        x = self.instance(id_spec)
+                        xs = str(x)
+                        xs = termcolor_colored(indent(xs, '    '), color='blue')
+                    except Exception as e:  
+                        if raise_instance_error:
+                            raise
+                        else:
+                            xs = 'Could not instance: %s' % e
+                            xs = termcolor_colored(indent(xs, '    '), color='red')
+                            
+                    stream.write(xs + '\n')
+#                     stream.write(' desc.
+                # instance
+        else:
+            stream.write('* No objects found.\n')    
+            
+            
+        if self.templates:  
+            stream.write('* Found %d templates: \n' % len(self.templates))        
+            for id_template in self.templates:
+                stream.write('  - %s\n' % id_template)
+        else:
+            stream.write('* No templates found.\n')    
+        

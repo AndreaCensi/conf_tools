@@ -1,6 +1,9 @@
 from . import (BadConfig, check_necessary, wrap_check, check_valid_code_spec,
     logger, instantiate_spec, describe_value, pformat)
 
+class ConfToolsGlobal:
+    log_instance_error = True
+
 
 def check_generic_code_desc(x, what=""):
     """ Checks that it has fields id,desc,code and code is a code spec. """
@@ -19,7 +22,8 @@ def instance_generic_code_desc(entry, expected_class=None):
     try:
         instance = instantiate_spec(entry['code'])
     except:
-        logger.error('Error while trying to instantiate entry:\n%s'
+        if ConfToolsGlobal.log_instance_error:
+            logger.error('Error while trying to instantiate entry:\n%s'
                      % (pformat(entry)))
         raise
 
@@ -49,7 +53,8 @@ class GenericCall():
                 self.check_function(instance)
             return instance
         except:
-            logger.error('Error while trying to instantiate entry:\n%s'
+            if ConfToolsGlobal.log_instance_error:
+                logger.error('Error while trying to instantiate entry:\n%s'
                          % (pformat(entry)))
             raise
          

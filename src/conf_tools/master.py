@@ -29,6 +29,13 @@ class ConfigMaster:
         self.specs[name] = spec
         self.__dict__[name] = spec
         return spec
+    
+    def add_class_generic(self, name, pattern, object_class):
+        from .code_desc import GenericInstance
+
+                    
+        return self.add_class(name=name, pattern=pattern, check=GenericCodeDescCheck(name),
+                              instance=GenericInstance(object_class))
 
     def get_default_dir(self):
         logger.warning('No default dir given, using current dir.')
@@ -46,7 +53,10 @@ class ConfigMaster:
         if directory is None or directory == 'default':
             directory = self.get_default_dir()
 
-        #self.debug('Loading config from %r.' % friendly_path(directory))
+        if not isinstance(directory, str):
+            msg = 'Expected a string for directory argument, got %s.' % type(directory)
+            raise TypeError(msg)
+        # self.debug('Loading config from %r.' % friendly_path(directory))
 
         if ConfigMaster.separator in directory:
             dirs = [x for x in directory.split(ConfigMaster.separator) if x]
@@ -67,3 +77,29 @@ class ConfigMaster:
 
     def debug(self, s):
         logger.debug('%s%s' % (self.prefix, s))
+
+
+    def print_summary(self, stream, instance=False):
+        """ Create a summary of all the configuration we have. """
+        
+        ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
+        stream.write('Config has %d kinds of objects:\n ' % len(self.specs))
+        for id_spec, spec in ordered:
+            stream.write('%20s:  %d objects\n' % (id_spec, len(spec)))
+        
+        for id_spec, spec in ordered:
+            stream.write('\n--- ')
+            spec.print_summary(stream, instance=instance)    
+            
+             
+
+
+# TODO: move
+class GenericCodeDescCheck():
+    def __init__(self, name):
+        self.name = name
+    
+    def __call__(self, x):
+        from conf_tools.code_desc import check_generic_code_desc
+        return check_generic_code_desc(x, self.name)
+
