@@ -1,6 +1,6 @@
 from . import ObjectSpec, logger
 from .utils import friendly_path
-
+from conf_tools.utils.not_found import check_is_in
 
 class ConfigMaster:
 
@@ -30,6 +30,12 @@ class ConfigMaster:
         self.__dict__[name] = spec
         return spec
     
+    
+    def get_classes(self):
+        """ Returns a list of strings of the known classes of objects. """
+        # TODO: keep order
+        return list(self.specs.keys())  
+        
     def add_class_generic(self, name, pattern, object_class):
         from .code_desc import GenericInstance
 
@@ -79,19 +85,22 @@ class ConfigMaster:
         logger.debug('%s%s' % (self.prefix, s))
 
 
-    def print_summary(self, stream, instance=False):
+    def print_summary(self, stream, instance=False, only_type=None):
         """ Create a summary of all the configuration we have. """
-        
-        ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
-        stream.write('Config has %d kinds of objects:\n ' % len(self.specs))
-        for id_spec, spec in ordered:
-            stream.write('%20s:  %d objects\n' % (id_spec, len(spec)))
-        
-        for id_spec, spec in ordered:
-            stream.write('\n--- ')
-            spec.print_summary(stream, instance=instance)    
+        if only_type is None:
+            ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
             
-             
+            stream.write('Config has %d kinds of objects:\n ' % len(self.specs))
+            for id_spec, spec in ordered:
+                stream.write('%20s:  %d objects\n' % (id_spec, len(spec)))
+            
+            for id_spec, spec in ordered:
+                stream.write('\n--- ')
+                spec.print_summary(stream, instance=instance)    
+        else:
+            check_is_in('type', only_type, self.specs)
+            spec = self.specs[only_type]
+            spec.print_summary(stream, instance=instance)
 
 
 # TODO: move

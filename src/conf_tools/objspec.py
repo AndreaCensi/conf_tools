@@ -350,8 +350,10 @@ class ObjectSpec(IterableUserDict):
     #         ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
     #         
             for id_spec in self.data:
-                desc = self.data[id_spec].get('desc', '-') 
-                stream.write('  - %20s  %s\n' % (id_spec, desc))
+                desc = self.data[id_spec].get('desc', '') 
+                if desc == '':
+                    desc = termcolor_colored('(no desc available)', color='grey')
+                stream.write('  %40s:  %s\n' % (id_spec, desc))
                 if instance:
                     try:
                         x = self.instance(id_spec)
@@ -361,11 +363,12 @@ class ObjectSpec(IterableUserDict):
                         if raise_instance_error:
                             raise
                         else:
-                            xs = 'Could not instance: %s' % e
+                            xs = 'Could not instance object %r:\n' % id_spec
+                            xs += indent(str(e), '| ') 
                             xs = termcolor_colored(indent(xs, '    '), color='red')
                             
                     stream.write(xs + '\n')
-#                     stream.write(' desc.
+                #                     stream.write(' desc.
                 # instance
         else:
             stream.write('* No objects found.\n')    
