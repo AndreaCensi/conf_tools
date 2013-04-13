@@ -1,6 +1,7 @@
 from . import ObjectSpec, logger
 from .utils import friendly_path
 from conf_tools.utils.not_found import check_is_in
+from contracts import contract
 
 class ConfigMaster:
 
@@ -54,6 +55,12 @@ class ConfigMaster:
         '''
         if not self.loaded:
             self.load(None)
+
+    @contract(dirs='list(str)')
+    def load_dirs(self, dirs):
+        for dirname in dirs:
+            self.load(dirname)
+            
 
     def load(self, directory=None):
         if directory is None or directory == 'default':

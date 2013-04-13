@@ -1,5 +1,8 @@
 from . import BadConfig, instantiate, contract, new_contract
-
+from pprint import pformat
+from conf_tools.utils.indent_string import indent
+from conf_tools.exceptions import ConfToolsException
+import traceback
 
 @new_contract
 def check_valid_code_spec(x):
@@ -15,7 +18,7 @@ def check_valid_code_spec(x):
     if not isinstance(name, str):
         raise BadConfig(x, 'The code must be given as a string.')
     if not isinstance(params, dict):
-        raise BadConfig(x, 'The code params be given as a dictionary.')
+        raise BadConfig(x, 'The params must be given as a dictionary.')
 
 
 @contract(code_spec='check_valid_code_spec')
@@ -27,5 +30,11 @@ def instantiate_spec(code_spec):
     parameters = code_spec[1]
     assert isinstance(function_name, str)
     assert isinstance(parameters, dict)
-    return instantiate(function_name, parameters)
-
+    try:
+        return instantiate(function_name, parameters)
+    except Exception as e:
+        msg = 'Could not instance the spec:\n' 
+        msg += indent(pformat(code_spec), '| ')  
+        msg += '\nbecause of this error:\n'
+        msg += indent(traceback.format_exc(e).strip(), '> ')
+        raise ConfToolsException(msg)

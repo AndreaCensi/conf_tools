@@ -10,6 +10,7 @@ from conf_tools.utils import expand_environment
 from conf_tools.special_subst import substitute_special
 from compmake.utils.coloredterm import termcolor_colored
 from conf_tools.code_desc import ConfToolsGlobal
+import traceback
 
 __all__ = ['ObjectSpec']
 
@@ -35,7 +36,6 @@ class ObjectSpec(IterableUserDict):
         self.user_check = check
         self.instance_method = instance_method
         
-            
         self.master = master
 
         # List of files already read        
@@ -166,7 +166,18 @@ class ObjectSpec(IterableUserDict):
     def instance(self, id_object):
         """ Instances the entry with the given ID. """
         self.master.make_sure_loaded()
-        return self.instance_spec(self[id_object])
+        spec = self[id_object]
+        try:
+            return self.instance_spec(spec)
+        except Exception as e:
+            msg = 'Could not instance the object %r\n' % id_object
+            if id_object in self.entry2file:
+                msg += 'defined at %s\n' % self.entry2file[id_object]
+#             msg += 'whose spec evaluates as\n'
+#             msg += indent(pformat(spec), '| ') + '\n' 
+            msg += 'because of this error:\n'
+            msg += indent(traceback.format_exc(e).strip(), '> ')
+            raise ConfToolsException(msg)        
 
     @contract(spec='dict')
     def instance_spec(self, spec):
@@ -176,6 +187,7 @@ class ObjectSpec(IterableUserDict):
             msg = 'No instance method specified for %s.' % self.name
             raise ValueError(msg)
         return self.instance_method(spec)
+        
 
     @contract(id_or_spec='str|dict')
     def instance_smart(self, id_or_spec):
