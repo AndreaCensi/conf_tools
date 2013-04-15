@@ -4,10 +4,10 @@ from conf_tools.master import ConfigMaster
 import pickle
 from conf_tools.unittests.templating.simple_use_tests import test_cases
 
-def dummy_check(spec):
+def dummy_check(spec):  # @UnusedVariable
     return True
 
-def dummy_instance(spec):
+def dummy_instance(spec):  # @UnusedVariable
     return True
 
 def test_pickling():

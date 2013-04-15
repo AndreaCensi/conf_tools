@@ -1,6 +1,26 @@
 from conf_tools.master import ConfigMaster
 from pprint import pformat
 from conf_tools.unittests.utils import create_test_environment
+from abc import ABCMeta, abstractmethod
+
+
+class ConfGroup:
+    __abc__ = ABCMeta
+    
+    @abstractmethod
+    def evaluate(self, objspec):
+        pass
+    
+class BasicGroup:
+    
+    
+    @staticmethod
+    def from_yaml(self, entry):
+        assert isinstance(entry, dict)
+        assert 'id' in entry
+        assert 'desc' in entry
+        assert 'contains' in entry
+            
 
 test_cases = [
               {'config': {
@@ -19,12 +39,18 @@ test_cases = [
   code: code2
 
 
-- group: all-entries
+''',
+
+'test.vehicles-groups.yaml': 
+
+'''
+
+- id: all-entries
   desc: All entries
   contains: 
-  - *
+  - all
 
-- group: g2
+- id: g2
   desc: other
   contains: 
   - entry1
@@ -50,7 +76,7 @@ def check_group_case(config, query, expected):
         master.add_class('vehicles', '*.vehicles.yaml')
         master.load(dirname)
 
-        result = master.expand_names(query)
+        result = master.vehicles.expand_names(query)
 
         if set(expected) != set(result):
             print('Obtained:\n%s' % pformat(expected))
