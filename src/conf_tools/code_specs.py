@@ -4,7 +4,6 @@ from conf_tools.utils.indent_string import indent
 from conf_tools.exceptions import ConfToolsException
 import traceback
 
-@new_contract
 def check_valid_code_spec(x):
     if not isinstance(x, list):
         raise BadConfig(x, 'A code spec must be a list.')
@@ -20,6 +19,8 @@ def check_valid_code_spec(x):
     if not isinstance(params, dict):
         raise BadConfig(x, 'The params must be given as a dictionary.')
 
+new_contract('check_valid_code_spec', check_valid_code_spec)
+new_contract('code_spec', check_valid_code_spec)
 
 @contract(code_spec='check_valid_code_spec')
 def instantiate_spec(code_spec):
