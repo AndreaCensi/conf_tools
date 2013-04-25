@@ -8,7 +8,6 @@ from pprint import pformat
 import os
 from conf_tools.utils import expand_environment
 from conf_tools.special_subst import substitute_special
-from compmake.utils.coloredterm import termcolor_colored
 from conf_tools.code_desc import ConfToolsGlobal
 import traceback
 

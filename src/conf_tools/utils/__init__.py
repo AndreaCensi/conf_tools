@@ -11,3 +11,5 @@ from .expansion import *
 from .wildcards import *
 from .pickling import *
 from .not_found import *
+
+from .term_color import *
