@@ -10,6 +10,7 @@ from conf_tools.utils import expand_environment
 from conf_tools.special_subst import substitute_special
 from conf_tools.code_desc import ConfToolsGlobal
 import traceback
+from conf_tools.code_specs import check_valid_code_spec, instantiate_spec
 
 __all__ = ['ObjectSpec']
 
@@ -215,6 +216,25 @@ class ObjectSpec(IterableUserDict):
             msg = ('Expected string or dict, found %s.' % 
                     describe_value(id_or_spec))
             raise ValueError(msg)
+
+    @contract(id_or_spec='str|dict|code_spec')
+    def instance_smarter(self, id_or_spec_or_code):
+        """ 
+            Most flexible instantiation method. The parameter can be:
+            - a string => id of spec
+            - a spec (dict with fields: id, desc, and code) => it gets instantiated
+            - a code spec (list of string, dict) => it gets called 
+              In this case, the id returned is None.
+                
+        """
+        if isinstance(id_or_spec_or_code, (str, dict)):
+            id_or_spec = id_or_spec_or_code
+            return self.instance_smart(id_or_spec)
+        else:
+            code_spec = id_or_spec_or_code
+            check_valid_code_spec(code_spec) 
+            ob = instantiate_spec(code_spec)
+            return None, ob
 
     def load_config_from_directory(self, directory):
         """ 

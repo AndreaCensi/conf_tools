@@ -22,7 +22,7 @@ def check_valid_code_spec(x):
 new_contract('check_valid_code_spec', check_valid_code_spec)
 new_contract('code_spec', check_valid_code_spec)
 
-@contract(code_spec='check_valid_code_spec')
+@contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
     ''' code_spec must be a sequence  [string, dictionary], giving
         the python function (or class) to instantiate, along
