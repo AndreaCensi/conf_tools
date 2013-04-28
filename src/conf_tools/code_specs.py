@@ -35,7 +35,18 @@ def instantiate_spec(code_spec):
         return instantiate(function_name, parameters)
     except Exception as e:
         msg = 'Could not instance the spec:\n' 
-        msg += indent(pformat(code_spec), '| ')  
+        msg += indent(format_code_spec(code_spec), '  ')
         msg += '\nbecause of this error:\n'
-        msg += indent(traceback.format_exc(e).strip(), '> ')
+        if isinstance(e, ConfToolsException):
+            st = str(e)
+        else:
+            st = traceback.format_exc(e) 
+        msg += indent(st.strip(), '| ')
         raise ConfToolsException(msg)
+
+def format_code_spec(code_spec):
+    return format_yaml(code_spec)
+
+def format_yaml(ob):
+    import yaml
+    return yaml.dump(ob)

@@ -88,7 +88,8 @@ class ObjectSpec(IterableUserDict):
                 return x
             except (SyntaxMistake, SemanticMistake) as e:
                 prefix = '    | '
-                msg = ('%s\nError obtained while instantiating %r.\nPattern:\n%s'
+                msg = ('%s\nError obtained while instantiating %r.\n'
+                       'Pattern:\n%s'
                        '\nMatches:\n%s' % 
                        (e, pattern,
                         indent(pformat(spec_template), prefix),
@@ -176,8 +177,13 @@ class ObjectSpec(IterableUserDict):
 #             msg += 'whose spec evaluates as\n'
 #             msg += indent(pformat(spec), '| ') + '\n' 
             msg += 'because of this error:\n'
-            msg += indent(traceback.format_exc(e).strip(), '> ')
-            raise ConfToolsException(msg)        
+            if isinstance(e, ConfToolsException):
+                # More compact, without traceback
+                st = str(e)
+            else:  
+                st = traceback.format_exc(e)
+            msg += indent(st.strip(), '| ')
+            raise ConfToolsException(msg)
 
     @contract(spec='dict')
     def instance_spec(self, spec):
@@ -217,7 +223,7 @@ class ObjectSpec(IterableUserDict):
                     describe_value(id_or_spec))
             raise ValueError(msg)
 
-    @contract(id_or_spec='str|dict|code_spec')
+    @contract(id_or_spec_or_code='str|dict|code_spec')
     def instance_smarter(self, id_or_spec_or_code):
         """ 
             Most flexible instantiation method. The parameter can be:
