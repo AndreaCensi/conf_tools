@@ -2,15 +2,15 @@ from . import (load_entries_from_dir, is_pattern, pattern_matches,
     recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
     describe_value, ID_FIELD, friendly_path, SyntaxMistake, ConfToolsException,
     logger)
-from .utils import can_be_pickled, expand_string, indent
+from .code_desc import ConfToolsGlobal
+from .code_specs import check_valid_code_spec, instantiate_spec
+from .special_subst import substitute_special
+from .utils import (can_be_pickled, expand_string, indent, expand_environment,
+    termcolor_colored)
 from UserDict import IterableUserDict
 from pprint import pformat
 import os
-from conf_tools.utils import expand_environment
-from conf_tools.special_subst import substitute_special
-from conf_tools.code_desc import ConfToolsGlobal
 import traceback
-from conf_tools.code_specs import check_valid_code_spec, instantiate_spec
 
 __all__ = ['ObjectSpec']
 
@@ -174,11 +174,8 @@ class ObjectSpec(IterableUserDict):
             msg = 'Could not instance the object %r\n' % id_object
             if id_object in self.entry2file:
                 msg += 'defined at %s\n' % self.entry2file[id_object]
-#             msg += 'whose spec evaluates as\n'
-#             msg += indent(pformat(spec), '| ') + '\n' 
             msg += 'because of this error:\n'
             if isinstance(e, ConfToolsException):
-                # More compact, without traceback
                 st = str(e)
             else:  
                 st = traceback.format_exc(e)
@@ -258,7 +255,7 @@ class ObjectSpec(IterableUserDict):
         files = set()
 
         for where, x in load_entries_from_dir(directory, self.pattern):
-#            logger.debug('loading %s:%s %s' % (where[0], where[1], x))
+            # logger.debug('loading %s:%s %s' % (where[0], where[1], x))
             filename = where[0]
             if filename in self.files_read:
                 continue

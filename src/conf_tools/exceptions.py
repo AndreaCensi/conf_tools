@@ -46,6 +46,7 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
         msg += '\nI know '
         found = object_spec.data.keys()
         if found:
+            found = sorted(list(found))
             msg += '%d entries (%s)' % (len(found), ", ".join(found))
         else:
             msg += '0 entries'
@@ -61,7 +62,7 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
             msg += ' and 0 templates.'
         # TODO: sort by similarity
         # TODO: add "... and X others"
-        SemanticMistake.__init__(self, msg) # XXX: sure?
+        SemanticMistake.__init__(self, msg)  # XXX: sure?
 
 
 class ResourceNotFound(SemanticMistake):

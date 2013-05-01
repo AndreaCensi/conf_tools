@@ -1,6 +1,6 @@
 from . import contract, SemanticMistake
 import traceback
-from conf_tools.utils.indent_string import indent
+from conf_tools.utils import indent
 
 
 def instantiate(function_name, parameters):

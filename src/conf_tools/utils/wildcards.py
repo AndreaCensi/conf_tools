@@ -20,7 +20,8 @@ def expand_string(x, options):
         if ',' in x:
             return flatten(expand_string(y, options) for y in x.split(','))
         elif '*' in x:
-            expanded = list(expand_wildcard(x, options))
+            xx = expand_wildcard(x, options)
+            expanded = list(xx)
             return expanded
         else:
             return [x]
@@ -33,26 +34,41 @@ def wildcard_to_regexp(arg):
     return re.compile('\A' + arg.replace('*', '.*') + '\Z')
 
 
+def has_wildcard(s):
+    return s.find('*') > -1
+    
 @contract(wildcard='str', universe='list(str)')
 def expand_wildcard(wildcard, universe):
     ''' 
         Expands a wildcard expression against the given list.
+        Raises ValueError if none found.
         
         :param wildcard: string with '*' 
         :param universe: a list of strings
     '''
-    assert wildcard.find('*') > -1
+    if not has_wildcard(wildcard):
+        msg = 'No wildcards in %r.' % wildcard
+        raise ValueError(msg)
     
+    matches = list(get_wildcard_matches(wildcard, universe))
+        
+    if not matches:
+        msg = ('Could not find matches for pattern %r in %s.' % 
+                (wildcard, universe))
+        raise ValueError(msg)
+
+    return matches
+
+def get_wildcard_matches(wildcard, universe):
+    ''' 
+        Expands a wildcard expression against the given list.
+        Yields a sequence of strings.
+        
+        :param wildcard: string with '*' 
+        :param universe: a list of strings
+    '''     
     regexp = wildcard_to_regexp(wildcard)
-    num_matches = 0
     for x in universe:
         if regexp.match(x):
-            num_matches += 1
             yield x
-        else:
-            pass
-            # print('%r does not match %r %r' % (x, wildcard, regexp))
-    if num_matches == 0:
-        msg = 'Could not find matches for pattern %r in %s.' % (wildcard, universe)
-        print msg
-        raise ValueError(msg)
+

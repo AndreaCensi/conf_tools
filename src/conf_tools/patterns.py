@@ -52,7 +52,7 @@ def pattern_matches(pattern, string):
     
     m = re.match(pmatch, string)
     if m is None:
-        #print('Not matched: %r %r' % (pattern, string))
+        # print('Not matched: %r %r' % (pattern, string))
         return None
 
     data = {}
@@ -66,9 +66,9 @@ def recursive_subst(template, **matches):
     """ Recursive substitution """
     if isinstance(template, str):
 #        return Template(template).substitute(**matches)
-        #special case: "${x}" can be interpreted as a number
+        # special case: "${x}" can be interpreted as a number
         s = substitute_strings(template, matches)
-        s = s.strip() # TODO: only if substitution
+        s = s.strip()  # TODO: only if substitution
         return trynum(s)
     elif isinstance(template, list):
         return [recursive_subst(x, **matches) for x in template]
@@ -109,7 +109,6 @@ def substitute_strings(template, matches):
                 raise SemanticMistake(msg)
 
             result = options[value]
-#            print('result: %r' % result)
             return str(result)
 
     return re.sub(reg, sub, template)
@@ -125,7 +124,7 @@ def trynum(x):
         except:
             try:
                 if x[0] == '[':
-                    return eval(x) # FIXME: tmp
+                    return eval(x)  # FIXME: tmp
                 else:
                     return x
             except:
