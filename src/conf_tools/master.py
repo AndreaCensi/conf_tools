@@ -3,11 +3,55 @@ from .utils import friendly_path
 from conf_tools.utils.not_found import check_is_in
 from contracts import contract
 
+class GlobalConfig:
+    # A list 
+    # str -> ConfigMaster
+    _masters = {}
+    
+    # Directories previously loaded (in case somebody registers later)
+    _dirs = []
+    
+    @staticmethod
+    def register_master(name, master):
+        """ Register a master so that we can keep track of them,
+            and load configuration in all of them at the same time. """ 
+        GlobalConfig._masters[name] = master
+        for dirname in GlobalConfig._dirs:
+            master.load(dirname) 
+    
+    @staticmethod
+    def global_load_dirs(config_dirs):
+        for c in config_dirs:
+            GlobalConfig.global_load_dir(c)
+        
+    @staticmethod
+    def global_load_dir(config_dir):
+        """ Load the configuration for all the different masters. 
+            This could be a list of dirs separated by ":".
+        """
+        masters = GlobalConfig._masters
+        if not masters:
+            pass
+#             msg = 'No masters defined'
+#             raise Exception(msg) 
+        for master in masters.values():
+            master.load(config_dir)
+            
+        GlobalConfig._dirs.append(config_dir)
+    
+    @staticmethod
+    def get_global_state():
+        return GlobalConfig._masters
+    
+    @staticmethod
+    def set_global_state(self, state):
+        raise NotImplemented()
+
+
+
+
 class ConfigMaster:
-
-    # used to separate directories in environment variable
-    separator = ':'
-
+    
     def __init__(self, name=None):
         """
         
@@ -16,6 +60,13 @@ class ConfigMaster:
         self.loaded = False
         self.specs = {}
         self.prefix = "%s: " % name if name else ""
+        self.name = name
+
+        # all the dirs that were passed to load(), in case we miss any
+        self._dirs = []
+
+        GlobalConfig.register_master(name, self)
+        
 
     def add_class(self, name, pattern, check=None, instance=None):
         '''
@@ -29,6 +80,10 @@ class ConfigMaster:
         spec = ObjectSpec(name, pattern, check, instance, self)
         self.specs[name] = spec
         self.__dict__[name] = spec
+        
+        for dirname in self._dirs:
+            spec.load_config_from_directory(dirname)
+
         return spec
     
     
@@ -61,7 +116,6 @@ class ConfigMaster:
         for dirname in dirs:
             self.load(dirname)
             
-
     def load(self, directory=None):
         if directory is None or directory == 'default':
             directory = self.get_default_dir()
@@ -77,16 +131,19 @@ class ConfigMaster:
                 self.load(d)
             return
 
+        self._dirs.append(directory)
+
         self.loaded = True
-        found = []
+        # found = []
         for spec in self.specs.values():
-            nfound = spec.load_config_from_directory(directory)
-            found.append((spec.name, nfound))
+            # nfound = 
+            spec.load_config_from_directory(directory)
+            # found.append((spec.name, nfound))
 
-        lists = ', '.join('%d %s' % (b, a) for (a, b) in found)
+        # lists = ', '.join('%d %s' % (b, a) for (a, b) in found)
 
-        msg = 'Found ' + lists + ' in %r.' % friendly_path(directory)
-        self.debug(msg)
+        # msg = 'Found ' + lists + ' in %r.' % friendly_path(directory)
+        # self.debug(msg)
 
     def debug(self, s):
         logger.debug('%s%s' % (self.prefix, s))
@@ -108,6 +165,10 @@ class ConfigMaster:
             check_is_in('type', only_type, self.specs)
             spec = self.specs[only_type]
             spec.print_summary(stream, instance=instance)
+
+    # used to separate directories in environment variable
+    separator = ':'
+
 
 
 # TODO: move

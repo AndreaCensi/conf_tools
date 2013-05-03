@@ -1,7 +1,7 @@
 from contracts import contract
 import re
 
-__all__ = ['expand_string']
+__all__ = ['expand_string', 'get_wildcard_matches']
 
 
 def flatten(seq):

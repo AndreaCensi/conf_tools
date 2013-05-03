@@ -192,7 +192,7 @@ class ObjectSpec(IterableUserDict):
         return self.instance_method(spec)
         
 
-    @contract(id_or_spec='str|dict')
+    @contract(id_or_spec='str|dict', returns='tuple(str|None,*)')
     def instance_smart(self, id_or_spec):
         """ 
             Flexible instantiation method. The parameter can be either a 
@@ -220,7 +220,7 @@ class ObjectSpec(IterableUserDict):
                     describe_value(id_or_spec))
             raise ValueError(msg)
 
-    @contract(id_or_spec_or_code='str|dict|code_spec')
+    @contract(id_or_spec_or_code='str|dict|code_spec', returns='tuple(str|None,*)')
     def instance_smarter(self, id_or_spec_or_code):
         """ 
             Most flexible instantiation method. The parameter can be:
