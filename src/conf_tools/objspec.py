@@ -379,12 +379,18 @@ class ObjectSpec(IterableUserDict):
         else:
             stream.write('* No config file found.\n')    
         
+        # if any entry defined...
         if self.data:
             stream.write('* Found %d objects: \n' % len(self.data))
     #         ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
     #         
             for id_spec in self.data:
-                desc = self.data[id_spec].get('desc', '') 
+                desc = self.data[id_spec].get('desc', '')
+                
+                # TODO: use first sentence
+                # Get first line
+                desc = desc.strip().split('\n')[0]
+                 
                 if desc == '':
                     desc = termcolor_colored('(no desc available)', color='grey')
                 stream.write('  %40s:  %s\n' % (id_spec, desc))

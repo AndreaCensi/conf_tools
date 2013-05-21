@@ -1,56 +1,63 @@
-from . import ObjectSpec, logger
-from .utils import friendly_path
-from conf_tools.utils.not_found import check_is_in
-from contracts import contract
+from . import ObjectSpec, logger, contract
+from .utils import check_is_in
+
 
 class GlobalConfig:
     # A list 
     # str -> ConfigMaster
     _masters = {}
     
+    # class -> instance
+    _singletons = {}
+    
     # Directories previously loaded (in case somebody registers later)
     _dirs = []
     
     @staticmethod
     def register_master(name, master):
-        """ Register a master so that we can keep track of them,
-            and load configuration in all of them at the same time. """ 
+        """ 
+            Register a master so that we can keep track of them,
+            and load configuration in all of them at the same time. 
+        """ 
         GlobalConfig._masters[name] = master
         for dirname in GlobalConfig._dirs:
             master.load(dirname) 
     
     @staticmethod
+    @contract(config_dirs='list(str)')
     def global_load_dirs(config_dirs):
         for c in config_dirs:
             GlobalConfig.global_load_dir(c)
         
     @staticmethod
     def global_load_dir(config_dir):
-        """ Load the configuration for all the different masters. 
+        """ 
+            Load the configuration for all the different masters. 
             This could be a list of dirs separated by ":".
         """
         masters = GlobalConfig._masters
-        if not masters:
-            pass
-#             msg = 'No masters defined'
-#             raise Exception(msg) 
+
         for master in masters.values():
             master.load(config_dir)
             
         GlobalConfig._dirs.append(config_dir)
     
     @staticmethod
-    def get_global_state():
-        return GlobalConfig._masters
+    def get_state():
+        state = dict(masters=GlobalConfig._masters,
+                     singletons=GlobalConfig._singletons,
+                     dirs=GlobalConfig._dirs)
+        return state 
     
     @staticmethod
-    def set_global_state(self, state):
-        raise NotImplemented()
+    def set_state(state):
+        GlobalConfig._masters = state['masters']
+        GlobalConfig._dirs = state['dirs']
+        GlobalConfig._singletons = state['singletons']
+        # raise NotImplemented()
 
 
-
-
-class ConfigMaster:
+class ConfigMaster(object):
     
     def __init__(self, name=None):
         """
@@ -94,8 +101,7 @@ class ConfigMaster:
         
     def add_class_generic(self, name, pattern, object_class):
         from .code_desc import GenericInstance
-
-                    
+  
         return self.add_class(name=name, pattern=pattern, check=GenericCodeDescCheck(name),
                               instance=GenericInstance(object_class))
 
@@ -168,8 +174,17 @@ class ConfigMaster:
 
     # used to separate directories in environment variable
     separator = ':'
+    
+    @classmethod
+    def get_singleton(cls):
+        if not cls in GlobalConfig._singletons:
+            GlobalConfig._singletons[cls] = cls()
+        return GlobalConfig._singletons[cls]
 
-
+    @classmethod
+    def set_singleton(cls, single):
+        GlobalConfig._singletons[cls] = single
+        
 
 # TODO: move
 class GenericCodeDescCheck():
