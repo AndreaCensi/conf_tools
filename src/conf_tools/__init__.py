@@ -30,7 +30,7 @@ from .checks import *
 from .instantiate_utils import *
 from .code_specs import *
 from .code_desc import *
-from .objspec import ObjectSpec
+from .objspec import *
 from .master import *
 
 

@@ -2,7 +2,7 @@ from .. import logger
 
 from .col_logging import *
 from .friendly_paths import *
-from .locate_files import *
+from .locate_files_imp import *
 from .terminal_size import *
 
 from .indent_string import *

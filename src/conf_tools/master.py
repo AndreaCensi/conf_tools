@@ -3,6 +3,18 @@ from .utils import check_is_in
 
 
 class GlobalConfig:
+    """
+    
+        To correctly restore configuration with compmake: ::
+        
+        
+            comp(f, GlobalConfig.get_state(), param=2)
+        
+            def f(config_state, param):
+                GlobalConfig.set_state(config_state)
+        
+        
+    """
     # A list 
     # str -> ConfigMaster
     _masters = {}

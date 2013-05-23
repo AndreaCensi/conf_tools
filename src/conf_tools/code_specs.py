@@ -1,6 +1,7 @@
-from . import BadConfig, instantiate, contract, new_contract
-from pprint import pformat
-from conf_tools.utils.indent_string import indent
+from . import BadConfig, instantiate 
+
+from contracts import contract, new_contract
+from conf_tools.utils import indent
 from conf_tools.exceptions import ConfToolsException
 import traceback
 
