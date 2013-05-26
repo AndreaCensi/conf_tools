@@ -40,6 +40,7 @@ class ObjectSpec(IterableUserDict):
 
         # List of files already read        
         self.files_read = set()
+        self.dirs_read = []
 
         # ID -> file where it was found
         self.entry2file = {}
@@ -245,6 +246,10 @@ class ObjectSpec(IterableUserDict):
             the pattern specified in the constructor.
             Returns the number of new entries found.
         """
+        if directory in self.dirs_read:
+            return
+        self.dirs_read.append(directory)
+        
         directory = expand_environment(directory)
 
         if not os.path.exists(directory):
@@ -293,7 +298,12 @@ class ObjectSpec(IterableUserDict):
                 try:
                     self.check(x)
                 except Exception as e:
-                    raise SemanticMistake(e)
+                    msg = ("Error while checking the entry %r: %s" % 
+                           (name, e))
+                    msg += '\nEntry:\n' + indent(pformat(x), '  ')
+                    msg += '\nException:\n' 
+                    msg += indent(traceback.format_exc(e), '> ')
+                    raise SemanticMistake(msg)
 
                 self.data[name] = x
 
@@ -332,6 +342,24 @@ class ObjectSpec(IterableUserDict):
                 desc = spec['desc'].strip().replace('\n', ' ')
                 s += '- %s: %s\n' % (x.rjust(maxlen), desc)
         return s 
+    
+    def _formatted_list_of_directories(self):
+        def dirs():
+            if not self.dirs_read:
+                return '\nNo dirs read.'
+            s = '\nDirs read:'
+            for d in self.dirs_read:
+                s += '\n- %s' % d
+            return s
+        
+        def files():
+            if not self.files_read:
+                return '\nNo files read (pattern: %s).' % self.pattern
+            s = '\nFiles read:'
+            for d in self.files_read:
+                s += '\n- %s' % d
+            return s
+        return dirs() + files()
         
     @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):
@@ -348,6 +376,7 @@ class ObjectSpec(IterableUserDict):
         
         if len(self) == 0 and len(self.templates) == 0:
             msg = 'No %s defined, cannot match names %s.' % (self.name, names)
+            msg += self._formatted_list_of_directories()
             raise SemanticMistake(msg)
         
         if isinstance(names, str):

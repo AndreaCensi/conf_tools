@@ -1,8 +1,9 @@
 from . import ObjectSpec, logger, contract
 from .utils import check_is_in
+from numpy.testing.decorators import deprecated
 
 
-class GlobalConfig:
+class GlobalConfig(object):
     """
     
         To correctly restore configuration with compmake: ::
@@ -11,7 +12,9 @@ class GlobalConfig:
             comp(f, GlobalConfig.get_state(), param=2)
         
             def f(config_state, param):
-                GlobalConfig.set_state(config_state)
+                config_state.restore()
+                
+                # old: GlobalConfig.set_state(config_state)
         
         
     """
@@ -56,18 +59,26 @@ class GlobalConfig:
     
     @staticmethod
     def get_state():
-        state = dict(masters=GlobalConfig._masters,
-                     singletons=GlobalConfig._singletons,
-                     dirs=GlobalConfig._dirs)
-        return state 
+        return ConfigState() 
     
     @staticmethod
     def set_state(state):
-        GlobalConfig._masters = state['masters']
-        GlobalConfig._dirs = state['dirs']
-        GlobalConfig._singletons = state['singletons']
-        # raise NotImplemented()
+        state.restore()
 
+
+class ConfigState(object):
+    
+    def __init__(self):
+        self.masters = GlobalConfig._masters
+        self.singletons = GlobalConfig._singletons
+        self.dirs = GlobalConfig._dirs
+    
+    def restore(self):
+        GlobalConfig._masters = self.masters
+        GlobalConfig._dirs = self.dirs
+        GlobalConfig._singletons = self.singletons
+        
+        
 
 class ConfigMaster(object):
     

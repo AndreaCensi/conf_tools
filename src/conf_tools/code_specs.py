@@ -28,11 +28,12 @@ def instantiate_spec(code_spec):
     ''' code_spec must be a sequence  [string, dictionary], giving
         the python function (or class) to instantiate, along
         with its parameters. '''
-    function_name = code_spec[0]
-    parameters = code_spec[1]
-    assert isinstance(function_name, str)
-    assert isinstance(parameters, dict)
     try:
+        function_name = code_spec[0]
+        parameters = code_spec[1]
+        assert isinstance(function_name, str)
+        assert isinstance(parameters, dict)
+
         return instantiate(function_name, parameters)
     except Exception as e:
         msg = 'Could not instance the spec:\n' 
