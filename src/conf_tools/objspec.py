@@ -349,7 +349,7 @@ class ObjectSpec(IterableUserDict):
                 return '\nNo dirs read.'
             s = '\nDirs read:'
             for d in self.dirs_read:
-                s += '\n- %s' % d
+                s += '\n- %s' % friendly_path(d)
             return s
         
         def files():
@@ -357,7 +357,7 @@ class ObjectSpec(IterableUserDict):
                 return '\nNo files read (pattern: %s).' % self.pattern
             s = '\nFiles read:'
             for d in self.files_read:
-                s += '\n- %s' % d
+                s += '\n- %s' % friendly_path(d)
             return s
         return dirs() + files()
         
@@ -395,6 +395,13 @@ class ObjectSpec(IterableUserDict):
             raise SemanticMistake(msg)
     
         return expanded
+    
+    @contract(id_spec='str', desc='str', code='code_spec')
+    def add_spec(self, id_spec, desc, code):
+        """ Adds manually one spec. """
+        spec = dict(id=id_spec, desc=desc, code=code)
+        assert not id_spec in self
+        self[spec['id']] = spec
     
     def print_summary(self, stream, instance=False, raise_instance_error=False):
         ConfToolsGlobal.log_instance_error = False  # XXX: find more elegant way # XXX: preserve

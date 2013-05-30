@@ -60,6 +60,8 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
             msg += ' templates %s.' % ", ".join(patterns)
         else:
             msg += ' and 0 templates.'
+        
+        msg += object_spec._formatted_list_of_directories()
         # TODO: sort by similarity
         # TODO: add "... and X others"
         SemanticMistake.__init__(self, msg)  # XXX: sure?

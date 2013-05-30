@@ -1,7 +1,6 @@
 from . import ObjectSpec, logger, contract
 from .utils import check_is_in
-from numpy.testing.decorators import deprecated
-
+ 
 
 class GlobalConfig(object):
     """
@@ -22,7 +21,7 @@ class GlobalConfig(object):
     # str -> ConfigMaster
     _masters = {}
     
-    # class -> instance
+    # class -> instance of ObjSpec
     _singletons = {}
     
     # Directories previously loaded (in case somebody registers later)
@@ -34,6 +33,9 @@ class GlobalConfig(object):
             Register a master so that we can keep track of them,
             and load configuration in all of them at the same time. 
         """ 
+        if name in GlobalConfig._masters:
+            msg = 'Name %r already present.' % name
+            raise ValueError(msg)
         GlobalConfig._masters[name] = master
         for dirname in GlobalConfig._dirs:
             master.load(dirname) 
@@ -123,6 +125,8 @@ class ConfigMaster(object):
         return list(self.specs.keys())  
         
     def add_class_generic(self, name, pattern, object_class):
+        if not '.yaml' in pattern or not '*' in pattern:
+            logger.warning('suspicious pattern %r' % pattern)
         from .code_desc import GenericInstance
   
         return self.add_class(name=name, pattern=pattern, check=GenericCodeDescCheck(name),

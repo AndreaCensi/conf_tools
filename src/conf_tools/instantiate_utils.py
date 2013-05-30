@@ -1,7 +1,7 @@
-from . import contract, SemanticMistake
+from .exceptions import SemanticMistake
+from .utils import indent
+from contracts import contract
 import traceback
-from conf_tools.utils import indent
-
 
 def instantiate(function_name, parameters):
     try:
@@ -77,8 +77,8 @@ def import_name(name):
                 else:
                     return f
                 
-                 
         else:
-            msg = 'Cannot import name %r, and cannot split: %s' % (name, e)
+            msg = 'Cannot import name %r.' % (name)
+            msg += indent(traceback.format_exc(e), '> ')
             raise ValueError(msg)
 
