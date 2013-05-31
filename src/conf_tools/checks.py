@@ -1,4 +1,6 @@
-from . import BadConfig, contract, describe_type, pformat
+from .exceptions import BadConfig
+from contracts import contract, describe_type
+from pprint import pformat
 
 
 def wrap_check(x, what, function, *arg, **args):
@@ -15,7 +17,7 @@ def check_necessary(x, necessary):
         if not f in x:
             raise BadConfig(x, 'Field %r missing.' % f)
         if not isinstance(x[f], types):
-            msg = ('Field %r must be one of %s, instead of %s.' %
+            msg = ('Field %r must be one of %s, instead of %s.' % 
                    (f, types, describe_type(x[f])))
             raise BadConfig(x, msg)
 
@@ -26,12 +28,12 @@ def check_has_exactly_one(x, alternatives):
         if f in x:
             found.append(f)
             if not isinstance(x[f], types):
-                msg = ('Field %r must be one of %s, instead of %s.' %
+                msg = ('Field %r must be one of %s, instead of %s.' % 
                        (f, types, describe_type(x[f])))
                 raise BadConfig(x, msg)
 
     if not found:
-        msg = ('The entry must have at least one in %r.' %
+        msg = ('The entry must have at least one in %r.' % 
                          [ft[0] for ft in alternatives])
         raise BadConfig(x, msg)
 

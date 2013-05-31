@@ -27,12 +27,23 @@ class GlobalConfig(object):
     # Directories previously loaded (in case somebody registers later)
     _dirs = []
     
+    
+    @staticmethod
+    def clear_for_tests():
+        """ Resets the state by unregistering everything; useful for tests. """
+        GlobalConfig._masters = {}
+        GlobalConfig._singletons = {}
+        GlobalConfig._dirs = []
+        
     @staticmethod
     def register_master(name, master):
         """ 
             Register a master so that we can keep track of them,
             and load configuration in all of them at the same time. 
-        """ 
+        """
+        if not isinstance(name, str):
+            raise ValueError('Required a string, got %s.' % name.__repr__())
+         
         if name in GlobalConfig._masters:
             msg = 'Name %r already present.' % name
             raise ValueError(msg)
@@ -84,7 +95,8 @@ class ConfigState(object):
 
 class ConfigMaster(object):
     
-    def __init__(self, name=None):
+    @contract(name='str')
+    def __init__(self, name):
         """
         
             :param:name: Name to use for logging messages. 

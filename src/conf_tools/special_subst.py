@@ -1,6 +1,9 @@
-from . import SyntaxMistake, contract, describe_type, logger
+from .exceptions import SyntaxMistake
 from .utils import expand_environment
+from conf_tools import logger
+from contracts import contract, describe_type
 import os
+
 
 
 # TODO: put it somewhere
@@ -23,7 +26,7 @@ def substitute_special(entry, dirname):
     ''' Special stuff for "file:" and "file*" entries. '''
     function = lambda k, v: substitute_special_keys(k, v, dirname)
     newentry = recursive_subst_keys(entry, function)
-    #logger.warn('from:\n%s\nto\n%s' % (pformat(entry), pformat(newentry)))
+    # logger.warn('from:\n%s\nto\n%s' % (pformat(entry), pformat(newentry)))
     return newentry
 
         

@@ -2,22 +2,19 @@ __version__ = '1.4dev1'
 
 import logging
 logging.basicConfig()
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 from . import utils
 
-from contracts import (check, contract, new_contract,
-                       describe_value, describe_type)
-
-
+from contracts import (new_contract)
+                    
 new_contract("id_or_spec", "dict|str")
 
 ID_FIELD = 'id'
 
-from pprint import pformat
-import yaml
+class ConfToolsGlobal:
+    log_instance_error = True
 
 from .exceptions import *
 from .patterns import *

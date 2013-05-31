@@ -14,7 +14,7 @@ def test_pickling():
     # Create files
     with create_test_environment(test_cases[0]['config']) as dirname:
         # Load configuration
-        master = ConfigMaster()
+        master = ConfigMaster('veh')
         master.add_class('vehicles', '*.vehicles.yaml',
                          check=dummy_check,
                          instance=dummy_instance)

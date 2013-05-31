@@ -50,7 +50,7 @@ def check_case(config, query, result):
     # Create files
     with create_test_environment(config) as dirname:
         # Load configuration
-        master = ConfigMaster()
+        master = ConfigMaster('veh')
         master.add_class('vehicles', '*.vehicles.yaml')
         master.load(dirname)
 

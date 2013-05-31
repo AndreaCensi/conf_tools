@@ -1,10 +1,13 @@
-from . import (ConfToolsException, ID_FIELD, SyntaxMistake, SemanticMistake,
-    logger, yaml, check_valid_id_or_pattern, pformat, substitute_special)
+from . import ID_FIELD, check_valid_id_or_pattern, substitute_special
+from .exceptions import ConfToolsException, SyntaxMistake, SemanticMistake
+from .patterns import is_pattern
 from .utils import friendly_path, locate_files
+from conf_tools import logger
+from contracts import describe_type, contract
+from pprint import pformat
+import yaml
 from yaml import YAMLError
 import os
-from contracts import describe_type, contract
-from conf_tools.patterns import is_pattern
  
 
 def load_entries_from_dir(dirname, pattern):
@@ -89,7 +92,7 @@ def enumerate_entries_from_file(filename):
             parsed = yaml.load(f)
         except YAMLError as e:
             msg = 'Cannot parse YAML file %s:\n%s' % (friendly_path(filename), e)
-            raise SyntaxMistake(msg) # TODO: make UserError
+            raise SyntaxMistake(msg)  # TODO: make UserError
 
         if parsed is None:
             logger.warning('Found an empty file %r.' % friendly_path(filename))

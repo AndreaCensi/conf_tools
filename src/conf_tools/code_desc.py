@@ -1,8 +1,9 @@
-from . import (BadConfig, check_necessary, wrap_check, check_valid_code_spec,
-    logger, instantiate_spec, describe_value, pformat)
-
-class ConfToolsGlobal:
-    log_instance_error = True
+from . import (check_necessary, wrap_check, check_valid_code_spec,
+    instantiate_spec)
+from .exceptions import BadConfig
+from conf_tools import ConfToolsGlobal, logger
+from contracts import describe_value
+from pprint import pformat
 
 
 def check_generic_code_desc(x, what=""):

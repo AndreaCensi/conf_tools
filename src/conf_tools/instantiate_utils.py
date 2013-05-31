@@ -3,6 +3,9 @@ from .utils import indent
 from contracts import contract
 import traceback
 
+__all__ = ['import_name', 'instantiate']
+
+
 def instantiate(function_name, parameters):
     try:
         function = import_name(function_name)

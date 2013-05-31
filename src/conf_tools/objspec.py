@@ -1,16 +1,19 @@
-from . import (load_entries_from_dir, is_pattern, pattern_matches,
-    recursive_subst, SemanticMistake, SemanticMistakeKeyNotFound, contract,
-    describe_value, ID_FIELD, friendly_path, SyntaxMistake, ConfToolsException,
-    logger)
 from .code_desc import ConfToolsGlobal
 from .code_specs import check_valid_code_spec, instantiate_spec
+from .exceptions import (SyntaxMistake, ConfToolsException, SemanticMistake,
+    SemanticMistakeKeyNotFound)
+from .load_entries import load_entries_from_dir
+from .patterns import is_pattern, pattern_matches, recursive_subst
 from .special_subst import substitute_special
 from .utils import (can_be_pickled, expand_string, indent, expand_environment,
-    termcolor_colored)
+    termcolor_colored, friendly_path)
 from UserDict import IterableUserDict
+from conf_tools import logger, ID_FIELD
+from contracts import contract, describe_value
 from pprint import pformat
 import os
 import traceback
+
 
 __all__ = ['ObjectSpec']
 

@@ -71,7 +71,7 @@ def test_templating2_bad():
 def check_can_be_loaded(tc):
     # Create files
     with create_test_environment(tc['config']) as dirname:
-        master = ConfigMaster()
+        master = ConfigMaster('veh')
 
         def check_entry(entry):
             if not 'desc' in entry:
