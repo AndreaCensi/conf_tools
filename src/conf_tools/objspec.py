@@ -283,10 +283,13 @@ class ObjectSpec(IterableUserDict):
             if is_pattern(name):
                 self.templates[name] = x
             else:
-
+                DESC_FIELD = 'desc'
                 # If it only contains the "id" field, then we try
                 # to instantiate it
-                if len(x.keys()) == 1:
+                only_id = len(x.keys()) == 1
+                only_id_and_desc = set(x.keys()) == set([ID_FIELD, DESC_FIELD]) 
+                 
+                if only_id or only_id_and_desc:
                     if not self.matches_any_pattern(name):
                         msg = ('While trying to instantiate empty entry %r '
                                'in %s, I could not find any pattern matching.'
@@ -294,10 +297,15 @@ class ObjectSpec(IterableUserDict):
                         raise SemanticMistake(msg)
 
                     try:
-                        x = self.__getitem__(name)
+                        x2 = self.__getitem__(name)
                     except ConfToolsException:
                         raise
-
+                    assert x[ID_FIELD] == name
+                    
+                    if only_id_and_desc:
+                        x2[DESC_FIELD] = x[DESC_FIELD]  
+                    x = x2 
+                    
                 try:
                     self.check(x)
                 except Exception as e:

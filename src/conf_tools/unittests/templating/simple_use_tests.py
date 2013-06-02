@@ -53,11 +53,6 @@ def check_case(config, query, result):
         master = ConfigMaster('veh')
         master.add_class('vehicles', '*.vehicles.yaml')
         master.load(dirname)
-
-#        if not query in  master.specs['vehicles']:
-#            msg = ('Could not find %s in config. (%s)' %
-#                   (query, master.specs.items()))
-#            raise Exception(msg)
         spec = master.specs['vehicles'][query]
 
         if spec != result:
