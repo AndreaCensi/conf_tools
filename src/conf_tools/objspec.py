@@ -44,7 +44,8 @@ class ObjectSpec(IterableUserDict):
         # List of files already read        
         self.files_read = set()
         self.dirs_read = []
-
+        self.dirs_to_read = []
+        
         # ID -> file where it was found
         self.entry2file = {}
 
@@ -67,12 +68,35 @@ class ObjectSpec(IterableUserDict):
             # TODO: add where (2 levels up)
             logger.warning(msg)
 
+    def make_sure_everything_read(self):
+        """ Reads the rest of the directories that we need to read. """
+        while self.dirs_to_read:
+            d = self.dirs_to_read.pop(0)
+            self._actually_load(d)
+
+    def load_config_from_directory(self, directory):
+        """ 
+            Puts the directory in the list of directories to read.
+            It will be read only later, when triggered by make_sure_everything_read(). 
+        """
+        self.dirs_to_read.append(directory)
+             
+    def __iter__(self):
+        self.make_sure_everything_read()
+        return IterableUserDict.__iter__(self)
+        
+    def keys(self):
+        self.make_sure_everything_read()
+        return IterableUserDict.keys(self)
+        
     @contract(key='str')
     def __contains__(self, key):
+        self.make_sure_everything_read()
         return key in self.data or self.matches_any_pattern(key)
 
     @contract(key='str')
     def __getitem__(self, key):
+        self.make_sure_everything_read()
         # Check if it is available literally:
         if key in self.data:
             # Note: we copy
@@ -103,6 +127,8 @@ class ObjectSpec(IterableUserDict):
 
     @contract(key='str', returns='None|str')
     def matches_any_pattern(self, key):
+        self.make_sure_everything_read()
+
         possibilities = []
         # Look for the template that can match the longer
         for template in self.templates:
@@ -170,7 +196,8 @@ class ObjectSpec(IterableUserDict):
     @contract(id_object='str')
     def instance(self, id_object):
         """ Instances the entry with the given ID. """
-        self.master.make_sure_loaded()
+        self.make_sure_everything_read()
+
         spec = self[id_object]
         try:
             return self.instance_spec(spec)
@@ -189,7 +216,8 @@ class ObjectSpec(IterableUserDict):
     @contract(spec='dict')
     def instance_spec(self, spec):
         """ Instances the given spec using the "instance_method" function. """
-        self.master.make_sure_loaded()
+        self.make_sure_everything_read()
+
         if self.instance_method is None:
             msg = 'No instance method specified for %s.' % self.name
             raise ValueError(msg)
@@ -212,6 +240,8 @@ class ObjectSpec(IterableUserDict):
                 id_dog, dog = config.specs['dogs'].instance_smart(spec)
                 
         """
+        self.make_sure_everything_read()
+
         if isinstance(id_or_spec, str):
             return id_or_spec, self.instance(id_or_spec)
         elif isinstance(id_or_spec, dict):
@@ -243,7 +273,7 @@ class ObjectSpec(IterableUserDict):
             ob = instantiate_spec(code_spec)
             return None, ob
 
-    def load_config_from_directory(self, directory):
+    def _actually_load(self, directory):
         """ 
             Loads all files in the directory, recursively, using 
             the pattern specified in the constructor.
@@ -278,7 +308,12 @@ class ObjectSpec(IterableUserDict):
                 msg = ('Entry %r in\n  %s\n already found in\n  %s.'
                        % (name, friendly_path(filename),
                           friendly_path(old_filename)))
-                raise SemanticMistake(msg)
+                
+                if self.data[name] != x:
+                    raise SemanticMistake(msg)
+                else:
+                    msg += '\n(Ignoring because same)' 
+                    logger.warn(msg)
 
             if is_pattern(name):
                 self.templates[name] = x
@@ -330,6 +365,8 @@ class ObjectSpec(IterableUserDict):
         """ Assuming that the entries are dictionaries
             with fields 'id' and 'desc', returns a summary string. 
         """
+        self.make_sure_everything_read()
+
         s = ''
         keys = sorted(self.keys())
         if not keys:
@@ -355,11 +392,20 @@ class ObjectSpec(IterableUserDict):
         return s 
     
     def _formatted_list_of_directories(self):
+        
         def dirs():
             if not self.dirs_read:
                 return '\nNo dirs read.'
             s = '\nDirs read:'
             for d in self.dirs_read:
+                s += '\n- %s' % friendly_path(d)
+            return s
+
+        def dirs2():
+            if not self.dirs_to_read:
+                return '\nNo dirs to read.'
+            s = '\nDirs to read:'
+            for d in self.dirs_to_read:
                 s += '\n- %s' % friendly_path(d)
             return s
         
@@ -370,7 +416,8 @@ class ObjectSpec(IterableUserDict):
             for d in self.files_read:
                 s += '\n- %s' % friendly_path(d)
             return s
-        return dirs() + files()
+        
+        return dirs() + files() + dirs2()
         
     @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):
@@ -384,7 +431,8 @@ class ObjectSpec(IterableUserDict):
                 config.widgets.expand_names(['a','b*'])
                 
         """
-        
+        self.make_sure_everything_read()
+
         if len(self) == 0 and len(self.templates) == 0:
             msg = 'No %s defined, cannot match names %s.' % (self.name, names)
             msg += self._formatted_list_of_directories()
@@ -410,11 +458,16 @@ class ObjectSpec(IterableUserDict):
     @contract(id_spec='str', desc='str', code='code_spec')
     def add_spec(self, id_spec, desc, code):
         """ Adds manually one spec. """
+        self.make_sure_everything_read()
+
         spec = dict(id=id_spec, desc=desc, code=code)
         assert not id_spec in self
+        # TODO: check doesn't exist
         self[spec['id']] = spec
     
     def print_summary(self, stream, instance=False, raise_instance_error=False):
+        self.make_sure_everything_read()
+
         ConfToolsGlobal.log_instance_error = False  # XXX: find more elegant way # XXX: preserve
         
         stream.write('Spec %s:\n' % self.name)

@@ -1,6 +1,10 @@
-from . import ObjectSpec, logger, contract
+from .objspec import ObjectSpec
 from .utils import check_is_in
- 
+from conf_tools import logger
+from contracts import contract
+
+__all__ = ['ConfigMaster', 'GlobalConfig', 'ConfigState'] 
+
 
 class GlobalConfig(object):
     """
@@ -68,6 +72,7 @@ class GlobalConfig(object):
         for master in masters.values():
             master.load(config_dir)
             
+        logger.info('loaded global config dir %r' % config_dir)
         GlobalConfig._dirs.append(config_dir)
     
     @staticmethod

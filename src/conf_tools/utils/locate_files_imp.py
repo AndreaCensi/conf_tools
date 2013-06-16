@@ -11,6 +11,7 @@ __all__ = ['locate_files']
           pattern='str', followlinks='bool')
 def locate_files(directory, pattern, followlinks=True):
     filenames = []
+    
     for root, _, files in os.walk(directory, followlinks=followlinks):
         for f in files:
             if fnmatch.fnmatch(f, pattern):
@@ -21,7 +22,7 @@ def locate_files(directory, pattern, followlinks=True):
     for norm in filenames:
         real = os.path.realpath(norm)
         real2norm[real].append(norm)
-        #print('%s -> %s' % (real, norm))
+        # print('%s -> %s' % (real, norm))
 
     for k, v in real2norm.items():
         if len(v) > 1:

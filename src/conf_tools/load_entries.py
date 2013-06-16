@@ -13,6 +13,7 @@ import os
 def load_entries_from_dir(dirname, pattern):
     """ calls load_entries_from_file for each file in dirname respecting
         the pattern. Environment is not expanded. """
+    # logger.debug('Loading %r from %r' % (dirname, pattern))
     try:
         filenames = list(locate_files(dirname, pattern))
         for filename in filenames:

@@ -79,6 +79,7 @@ def check_can_be_loaded(tc):
 
         master.add_class('things', '*.things.yaml', check=check_entry)
         master.load(dirname)
+        master.specs['things'].make_sure_everything_read()
 
         should_have = tc.get('should_have', None)
         if should_have is not None:
