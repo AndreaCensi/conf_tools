@@ -68,6 +68,10 @@ class ObjectSpec(IterableUserDict):
             # TODO: add where (2 levels up)
             logger.warning(msg)
 
+    def __repr__(self):
+        return ('ObjectSpec(%s;fread:%s;dread:%s;dtoread:%s)' % 
+                (self.name, self.files_read, self.dirs_read, self.dirs_to_read))
+    
     def make_sure_everything_read(self):
         """ Reads the rest of the directories that we need to read. """
         while self.dirs_to_read:
@@ -211,6 +215,11 @@ class ObjectSpec(IterableUserDict):
             else:  
                 st = traceback.format_exc(e)
             msg += indent(st.strip(), '| ')
+
+            # from conf_tools.master import GlobalConfig
+
+            # msg += '\n the conf is %s' % self
+            
             raise ConfToolsException(msg)
 
     @contract(spec='dict')
@@ -223,7 +232,6 @@ class ObjectSpec(IterableUserDict):
             raise ValueError(msg)
         return self.instance_method(spec)
         
-
     @contract(id_or_spec='str|dict', returns='tuple(str|None,*)')
     def instance_smart(self, id_or_spec):
         """ 
@@ -264,6 +272,8 @@ class ObjectSpec(IterableUserDict):
               In this case, the id returned is None.
                 
         """
+        self.make_sure_everything_read()
+
         if isinstance(id_or_spec_or_code, (str, dict)):
             id_or_spec = id_or_spec_or_code
             return self.instance_smart(id_or_spec)
@@ -280,9 +290,11 @@ class ObjectSpec(IterableUserDict):
             Returns the number of new entries found.
         """
         if directory in self.dirs_read:
+            # print('skipping directory %r because already read' % directory)
             return
-        self.dirs_read.append(directory)
         
+        self.dirs_read.append(directory)
+        # print('actually loading directory %r for %s' % (directory, self.pattern))
         directory = expand_environment(directory)
 
         if not os.path.exists(directory):
@@ -309,7 +321,9 @@ class ObjectSpec(IterableUserDict):
                        % (name, friendly_path(filename),
                           friendly_path(old_filename)))
                 
-                if self.data[name] != x:
+                same_entry = (name in self.data and self.data[name] == x)
+                same_pattern = (name in self.templates and self.templates[name] == x)
+                if not (same_entry or same_pattern):
                     raise SemanticMistake(msg)
                 else:
                     msg += '\n(Ignoring because same)' 
@@ -383,6 +397,8 @@ class ObjectSpec(IterableUserDict):
         """ Assuming that the entries are dictionaries
             with fields 'id' and 'desc', returns a summary string. 
         """
+        self.make_sure_everything_read()
+
         s = self.summary_string_id_desc()        
         maxlen = max([len(y) for y in self.pattern])
         for x, spec in self.templates.items():
@@ -417,7 +433,12 @@ class ObjectSpec(IterableUserDict):
                 s += '\n- %s' % friendly_path(d)
             return s
         
-        return dirs() + files() + dirs2()
+        x = dirs() + files() + dirs2()
+        
+        # from conf_tools.master import GlobalConfig
+        # x += '\n GlobalConfig dirs: %s' % GlobalConfig._dirs
+        
+        return x
         
     @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):

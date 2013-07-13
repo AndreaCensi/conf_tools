@@ -3,6 +3,7 @@ from .utils import check_is_in
 from conf_tools import logger
 from contracts import contract
 
+
 __all__ = ['ConfigMaster', 'GlobalConfig', 'ConfigState'] 
 
 
@@ -16,9 +17,7 @@ class GlobalConfig(object):
         
             def f(config_state, param):
                 config_state.restore()
-                
-                # old: GlobalConfig.set_state(config_state)
-        
+                        
         
     """
     # A list 
@@ -51,8 +50,12 @@ class GlobalConfig(object):
         if name in GlobalConfig._masters:
             msg = 'Name %r already present.' % name
             raise ValueError(msg)
+        
         GlobalConfig._masters[name] = master
+        # print('registering %r' % name)
+        
         for dirname in GlobalConfig._dirs:
+            # print('Now deferred loading %r %r' % (name, dirname))
             master.load(dirname) 
     
     @staticmethod
@@ -69,7 +72,8 @@ class GlobalConfig(object):
         """
         masters = GlobalConfig._masters
 
-        for master in masters.values():
+        for name, master in masters.items():  # @UnusedVariable
+            # print('now loading %s / %s' % (name, config_dir))
             master.load(config_dir)
             
         logger.info('loaded global config dir %r' % config_dir)
@@ -92,6 +96,12 @@ class ConfigState(object):
         self.dirs = GlobalConfig._dirs
     
     def restore(self):
+#         print('Restoring config state')
+#         print('directories: %s' % self.dirs)
+#         print('masters: %s' % self.masters)
+#         print('singletons: %s' % self.singletons)
+#         
+      
         GlobalConfig._masters = self.masters
         GlobalConfig._dirs = self.dirs
         GlobalConfig._singletons = self.singletons
@@ -116,7 +126,9 @@ class ConfigMaster(object):
 
         GlobalConfig.register_master(name, self)
         
-
+    def __repr__(self):
+        return 'ConfigMaster(%s,dirs=%s,specs=%s)' % (self.name, self._dirs, self.specs)
+     
     def add_class(self, name, pattern, check=None, instance=None):
         '''
         Adds a type of objects.
