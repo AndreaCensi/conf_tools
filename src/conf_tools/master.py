@@ -31,12 +31,6 @@ class GlobalConfig(object):
     _dirs = []
     
     
-    @staticmethod
-    def clear_for_tests():
-        """ Resets the state by unregistering everything; useful for tests. """
-        GlobalConfig._masters = {}
-        GlobalConfig._singletons = {}
-        GlobalConfig._dirs = []
         
     @staticmethod
     def register_master(name, master):
@@ -87,7 +81,14 @@ class GlobalConfig(object):
     def set_state(state):
         state.restore()
 
-
+    @staticmethod
+    def clear_for_tests():
+        """ Resets the state by unregistering everything; useful for tests. """
+        GlobalConfig._masters = {}
+        GlobalConfig._singletons = {}
+        GlobalConfig._dirs = []
+    
+    
 class ConfigState(object):
     
     def __init__(self):

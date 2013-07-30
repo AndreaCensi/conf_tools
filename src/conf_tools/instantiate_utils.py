@@ -82,6 +82,6 @@ def import_name(name):
                 
         else:
             msg = 'Cannot import name %r.' % (name)
-            msg += indent(traceback.format_exc(e), '> ')
+            msg += '\n' + indent(traceback.format_exc(e), '> ')
             raise ValueError(msg)
 
