@@ -200,6 +200,8 @@ class ObjectSpec(IterableUserDict):
     @contract(id_object='str')
     def instance(self, id_object):
         """ Instances the entry with the given ID. """
+        if not isinstance(id_object, str):
+            raise ValueError('Expected string; got %r' % id_object)
         self.make_sure_everything_read()
 
         spec = self[id_object]

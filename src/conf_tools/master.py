@@ -180,6 +180,8 @@ class ConfigMaster(object):
             self.load(dirname)
             
     def load(self, directory=None):
+        if directory == '':
+            raise ValueError('Invalid directory name: %r' % directory)
         if directory is None or directory == 'default':
             directory = self.get_default_dir()
 
@@ -210,7 +212,6 @@ class ConfigMaster(object):
 
     def debug(self, s):
         logger.debug('%s%s' % (self.prefix, s))
-
 
     def print_summary(self, stream, instance=False, only_type=None):
         """ Create a summary of all the configuration we have. """
