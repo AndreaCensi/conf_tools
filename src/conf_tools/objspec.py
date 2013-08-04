@@ -211,6 +211,8 @@ class ObjectSpec(IterableUserDict):
             msg = 'Could not instance the object %r\n' % id_object
             if id_object in self.entry2file:
                 msg += 'defined at %s\n' % self.entry2file[id_object]
+            else:
+                msg += '(origin unknown)\n'
             msg += 'because of this error:\n'
             if isinstance(e, ConfToolsException):
                 st = str(e)
