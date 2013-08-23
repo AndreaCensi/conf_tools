@@ -11,10 +11,10 @@ def check_generic_code_desc(x, what=""):
     if not isinstance(x, dict):
         raise BadConfig(x, 'A valid %s config must be a dictionary.' % what)
     necessary = [ 
-                  ('id', str),
-                  ('desc', str),
-                  ('code', list),
-              ]
+      ('id', str),
+      ('desc', str),
+      ('code', list),
+    ]
     check_necessary(x, necessary)
     wrap_check(x, 'checking "code" entry', check_valid_code_spec, x['code'])
 
@@ -24,8 +24,8 @@ def instance_generic_code_desc(entry, expected_class=None):
         instance = instantiate_spec(entry['code'])
     except:
         if ConfToolsGlobal.log_instance_error:
-            logger.error('Error while trying to instantiate entry:\n%s'
-                     % (pformat(entry)))
+            msg = 'Error while trying to instantiate entry:\n' + pformat(entry)
+            logger.error(msg)
         raise
 
     if expected_class is not None:
@@ -34,16 +34,26 @@ def instance_generic_code_desc(entry, expected_class=None):
     return instance
 
 
-class GenericInstance():
+class GenericInstance(object):
     def __init__(self, check_class):
         self.check_class = check_class
 
     def __call__(self, entry):
-        return instance_generic_code_desc(entry,
-                                          expected_class=self.check_class)
+        return instance_generic_code_desc(entry, self.check_class)
 
 
-class GenericCall():
+class GenericIsinstance(object):
+    
+    def __init__(self, check_class):
+        self.check_class = check_class
+        
+    def __call__(self, value):
+        if not isinstance(value, self.check_class):
+            msg = 'Object is not a %s: %s' % (self.check_class, value)
+            raise ValueError(msg)
+        
+        
+class GenericCall(object):
     def __init__(self, check_function=None):
         self.check_function = check_function
         

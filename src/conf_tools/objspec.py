@@ -13,6 +13,7 @@ from contracts import contract, describe_value
 from pprint import pformat
 import os
 import traceback
+from contracts.interface import describe_type
 
 
 __all__ = ['ObjectSpec']
@@ -25,19 +26,21 @@ class ObjectSpec(IterableUserDict):
         Users access it through ConfigMaster.
     
     """
-    def __init__(self, name, pattern, check, instance_method, master):
+    def __init__(self, name, pattern, check, instance_method, object_check, master):
         """
             Initializes the structure.
             
             :param:name: Decorative name for these objects (e.g. "vehicles")
             :param:pattern: Pattern for filenames ("*.vehicles.yaml")
             :param:check: Function to check the validity of the entries.
+            :param:object_check: Function to check the validity of the values.
             :param:master: References to a Master instance. 
         """
         self.name = name
         self.pattern = pattern
         self.user_check = check
         self.instance_method = instance_method
+        self.object_check = object_check
         
         self.master = master
 
@@ -262,7 +265,7 @@ class ObjectSpec(IterableUserDict):
                     describe_value(id_or_spec))
             raise ValueError(msg)
 
-    @contract(id_or_spec_or_code='str|dict|code_spec', returns='tuple(str|None,*)')
+    @contract(id_or_spec_or_code='str|dict|code_spec|*', returns='tuple(str|None,*)')
     def instance_smarter(self, id_or_spec_or_code):
         """ 
             Most flexible instantiation method. The parameter can be:
@@ -270,6 +273,8 @@ class ObjectSpec(IterableUserDict):
             - a spec (dict with fields: id, desc, and code) => it gets instantiated
             - a code spec (list of string, dict) => it gets called 
               In this case, the id returned is None.
+            - an object, already instantiated. It is passed then through
+                the check function.
                 
         """
         self.make_sure_everything_read()
@@ -277,11 +282,23 @@ class ObjectSpec(IterableUserDict):
         if isinstance(id_or_spec_or_code, (str, dict)):
             id_or_spec = id_or_spec_or_code
             return self.instance_smart(id_or_spec)
-        else:
+        elif isinstance(id_or_spec_or_code, list):
             code_spec = id_or_spec_or_code
             check_valid_code_spec(code_spec) 
             ob = instantiate_spec(code_spec)
             return None, ob
+        else:
+            x = id_or_spec_or_code
+            if self.object_check is None:
+                msg = 'No check specified; cannot decide if valid: %s' % describe_type(x)
+                raise ValueError(msg)
+            else:
+                try: 
+                    self.object_check(x)
+                except ValueError as e:
+                    msg = 'Object %s not valid:\n%s' % (x, e)
+                    raise ValueError(msg)
+            return None, x
 
     def _actually_load(self, directory):
         """ 

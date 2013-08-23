@@ -2,6 +2,7 @@ from .objspec import ObjectSpec
 from .utils import check_is_in
 from conf_tools import logger
 from contracts import contract
+from conf_tools.code_desc import GenericIsinstance
 
 
 __all__ = ['ConfigMaster', 'GlobalConfig', 'ConfigState'] 
@@ -129,16 +130,20 @@ class ConfigMaster(object):
     def __repr__(self):
         return 'ConfigMaster(%s,dirs=%s,specs=%s)' % (self.name, self._dirs, self.specs)
      
-    def add_class(self, name, pattern, check=None, instance=None):
+    def add_class(self, name, pattern, check=None, instance=None, object_check=None):
         '''
         Adds a type of objects.
         
         :param name:    Informative name
         :param pattern: Pattern for filenames.
-        :param check:   spect -> {true, false} unction that checks whether a spec is correct 
+        :param check:   spect -> {true, false} unction that checks whether a spec is correct
         :param instance: spec -> object function
+        :param object_check:  object check function
         '''
-        spec = ObjectSpec(name, pattern, check, instance, self)
+        spec = ObjectSpec(name=name, pattern=pattern, check=check, instance_method=instance,
+                          object_check=object_check,
+                          master=self)
+
         self.specs[name] = spec
         self.__dict__[name] = spec
         
@@ -158,8 +163,10 @@ class ConfigMaster(object):
             logger.warning('suspicious pattern %r' % pattern)
         from .code_desc import GenericInstance
   
-        return self.add_class(name=name, pattern=pattern, check=GenericCodeDescCheck(name),
-                              instance=GenericInstance(object_class))
+        return self.add_class(name=name, pattern=pattern,
+                              check=GenericCodeDescCheck(name),
+                              instance=GenericInstance(object_class),
+                              object_check=GenericIsinstance(object_class))
 
     def get_default_dir(self):
         logger.warning('No default dir given, using current dir.')
