@@ -2,7 +2,6 @@ from conf_tools.master import ConfigMaster
 from pprint import pformat
 from conf_tools.unittests.utils import create_test_environment
 from abc import ABCMeta, abstractmethod
-from geometry.unittests.random_geometry_density_tests import skip
 
 
 class ConfGroup:
