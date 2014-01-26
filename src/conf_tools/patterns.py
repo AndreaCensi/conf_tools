@@ -1,6 +1,9 @@
 import re
+
 from contracts import contract
+
 from .exceptions import SemanticMistake, SyntaxMistake
+
 
 __all__ = ['pattern_matches', 'recursive_subst', 'is_pattern']
 

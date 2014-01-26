@@ -29,5 +29,5 @@ from .code_specs import *
 from .code_desc import *
 from .objspec import *
 from .master import *
-
+from .global_config import *
 

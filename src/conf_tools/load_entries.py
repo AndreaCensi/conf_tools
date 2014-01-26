@@ -1,14 +1,17 @@
+import os
+from pprint import pformat
+
+from contracts import describe_type, contract
+from yaml import YAMLError
+import yaml
+
+from conf_tools import logger
+
 from . import ID_FIELD, check_valid_id_or_pattern, substitute_special
 from .exceptions import ConfToolsException, SyntaxMistake, SemanticMistake
 from .patterns import is_pattern
 from .utils import friendly_path, locate_files
-from conf_tools import logger
-from contracts import describe_type, contract
-from pprint import pformat
-import yaml
-from yaml import YAMLError
-import os
- 
+
 
 def load_entries_from_dir(dirname, pattern):
     """ calls load_entries_from_file for each file in dirname respecting
