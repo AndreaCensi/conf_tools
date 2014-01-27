@@ -306,6 +306,13 @@ class ObjectSpec(IterableUserDict):
                     raise ValueError(msg)
             return None, x
 
+    def force_load(self, directory):
+        """ Will force reloading of directory. """
+        if directory in self.dirs_read:
+            self.dirs_read.remove(directory)
+
+        self.load_config_from_directory(directory)
+
     def _actually_load(self, directory):
         """ 
             Loads all files in the directory, recursively, using 
