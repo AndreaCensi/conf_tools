@@ -1,3 +1,10 @@
+from UserDict import IterableUserDict
+from conf_tools import logger, ID_FIELD
+from contracts import contract, describe_value, describe_type
+import os
+from pprint import pformat
+import traceback
+
 from .code_desc import ConfToolsGlobal
 from .code_specs import check_valid_code_spec, instantiate_spec
 from .exceptions import (SyntaxMistake, ConfToolsException, SemanticMistake,
@@ -7,13 +14,6 @@ from .patterns import is_pattern, pattern_matches, recursive_subst
 from .special_subst import substitute_special
 from .utils import (can_be_pickled, expand_string, indent, expand_environment,
     termcolor_colored, friendly_path)
-from UserDict import IterableUserDict
-from conf_tools import logger, ID_FIELD
-from contracts import contract, describe_value
-from pprint import pformat
-import os
-import traceback
-from contracts.interface import describe_type
 
 
 __all__ = ['ObjectSpec']
@@ -24,6 +24,14 @@ class ObjectSpec(IterableUserDict):
         This is the class that knows how to instance entries. 
         
         Users access it through ConfigMaster.
+
+
+
+        Typical pattern for instantiating objects from names: ..
+        
+            s = ... # ObjectSpec 
+            for id_instance in c.expand_names(['a', 'b', 'c*a']):
+                ob = c.instance(id_instance)
     
     """
     def __init__(self, name, pattern, check, instance_method, object_check, master):
