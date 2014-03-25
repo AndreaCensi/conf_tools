@@ -1,8 +1,11 @@
-from . import logger
 from collections import defaultdict
-from contracts import contract
 import fnmatch
 import os
+
+from contracts import contract
+
+from . import logger
+
 
 __all__ = ['locate_files']
 
