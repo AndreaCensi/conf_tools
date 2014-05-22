@@ -26,7 +26,17 @@ def check_valid_code_spec(x):
         raise BadConfig(x, 'The params must be given as a dictionary.')
 
 new_contract('check_valid_code_spec', check_valid_code_spec)
-new_contract('code_spec', check_valid_code_spec)
+
+
+def code_spec_contract(x):
+    """ Note that the contract must throw ValueError, not any other Exception. """
+    try:
+        check_valid_code_spec(x)
+    except BadConfig as e:
+        raise ValueError(e)
+
+new_contract('code_spec', code_spec_contract)
+
 
 @contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
