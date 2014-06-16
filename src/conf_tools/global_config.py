@@ -1,6 +1,7 @@
 from contracts import contract
 
 from conf_tools import logger
+from conf_tools.utils.expansion import expand_environment
 
 
 __all__ = [ 'GlobalConfig', 'ConfigState']
@@ -52,6 +53,8 @@ class GlobalConfig(object):
     @staticmethod
     @contract(config_dirs='list(str)')
     def global_load_dirs(config_dirs):
+        """ The environments variable will all be expanded 
+            (so that it can be used from other threads. """
         for c in config_dirs:
             GlobalConfig.global_load_dir(c)
 
@@ -61,6 +64,9 @@ class GlobalConfig(object):
             Load the configuration for all the different masters. 
             This could be a list of dirs separated by ":".
         """
+        config_dir0 = config_dir
+        config_dir = expand_environment(config_dir)
+
         masters = GlobalConfig._masters
 
         for name, master in masters.items():  # @UnusedVariable
@@ -68,6 +74,8 @@ class GlobalConfig(object):
             master.load(config_dir)
 
         logger.info('loaded global config dir %r' % config_dir)
+        if config_dir0 != config_dir:
+            logger.info('Expanded from %r' % config_dir0)
         GlobalConfig._dirs.append(config_dir)
 
     @staticmethod
