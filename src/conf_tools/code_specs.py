@@ -7,7 +7,12 @@ from .instantiate_utils import instantiate
 from .utils import indent
 
 
-__all__ = ['check_valid_code_spec', 'instantiate_spec', 'format_code_spec', 'format_yaml']
+__all__ = [
+    'check_valid_code_spec',
+    'instantiate_spec',
+    'format_code_spec',
+    'format_yaml',
+]
 
 
 def check_valid_code_spec(x):
@@ -26,7 +31,16 @@ def check_valid_code_spec(x):
         raise BadConfig(x, 'The params must be given as a dictionary.')
 
 new_contract('check_valid_code_spec', check_valid_code_spec)
-new_contract('code_spec', check_valid_code_spec)
+
+def check_valid_code_spec_contract(x):
+    """ Note that otherwise BadConfig is thrown --- 
+    while it should be ValueError for PyContracts. """
+    try:
+        check_valid_code_spec(x)
+    except BadConfig as e:
+        raise ValueError(e)
+
+new_contract('code_spec', check_valid_code_spec_contract)
 
 @contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
