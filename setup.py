@@ -13,8 +13,8 @@ long_description = read('README.rst')
 
 setup(name='ConfTools',
       author="Andrea Censi",
-      author_email="andrea@cds.caltech.edu",
-      url='http://www.cds.caltech.edu/~andrea/',
+      author_email="censi@mit.edu",
+      url='http://github.com/AndreaCensi/conf_tools/',
       
       description=description,
       long_description=long_description,
