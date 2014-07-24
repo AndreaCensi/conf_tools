@@ -1,4 +1,4 @@
-__version__ = '1.4dev1'
+__version__ = '1.5'
 
 import logging
 logging.basicConfig()
