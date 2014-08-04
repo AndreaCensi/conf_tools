@@ -1,10 +1,12 @@
+from . import logger
+from .utils import expand_environment
 from contracts import contract
+import os
 
-from conf_tools import logger
-from conf_tools.utils.expansion import expand_environment
-
-
-__all__ = [ 'GlobalConfig', 'ConfigState']
+__all__ = [ 
+    'GlobalConfig', 
+    'ConfigState',
+]
 
 
 class GlobalConfig(object):
@@ -59,14 +61,28 @@ class GlobalConfig(object):
             GlobalConfig.global_load_dir(c)
 
     @staticmethod
+    @contract(config_dir='str')
     def global_load_dir(config_dir):
         """ 
             Load the configuration for all the different masters. 
-            This could be a list of dirs separated by ":".
+            
+            The environment variables are expanded.
+            
+            Also, if it looks like a package name,
+            it will be expanded using resource_filename.
         """
         config_dir0 = config_dir
+        
+        if looks_like_package_name(config_dir):
+            config_dir = dir_from_package_name(config_dir)
+        
         config_dir = expand_environment(config_dir)
 
+        if config_dir != 'default':
+            if not os.path.exists(config_dir):
+                msg = 'Config dir does not exist: %s' % config_dir
+                raise ValueError(msg)
+        
         masters = GlobalConfig._masters
 
         for name, master in masters.items():  # @UnusedVariable
@@ -93,7 +109,25 @@ class GlobalConfig(object):
         GlobalConfig._singletons = {}
         GlobalConfig._dirs = []
 
+@contract(d='str')
+def looks_like_package_name(d):
+    tokens = d.split('.')
+    has_dot = len(tokens) == 2
+    return has_dot and not '/' in d
 
+@contract(d='str')
+def dir_from_package_name(d):
+    """ This works for sure for "package.sub" format. """
+    tokens = d.split('.')
+    if len(tokens) < 2:
+        msg = 'Format not supported (yet): %s' % d
+        raise ValueError(msg)
+    package = '.'.join(tokens[:-1])
+    sub = tokens[-1]
+    from pkg_resources import resource_filename  # @UnresolvedImport
+    res = resource_filename(package, sub)
+    return res    
+            
 class ConfigState(object):
 
     def __init__(self):

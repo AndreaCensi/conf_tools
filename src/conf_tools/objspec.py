@@ -1,21 +1,18 @@
-from UserDict import IterableUserDict
-import os
-from pprint import pformat
-import traceback
-
-from contracts import contract, describe_value, describe_type
-
-from conf_tools import logger, ID_FIELD
-
 from .code_desc import ConfToolsGlobal
 from .code_specs import check_valid_code_spec, instantiate_spec
-from .exceptions import (SyntaxMistake, ConfToolsException, SemanticMistake,
-    SemanticMistakeKeyNotFound)
+from .exceptions import (ConfToolsException, SemanticMistake, 
+    SemanticMistakeKeyNotFound, SyntaxMistake)
 from .load_entries import load_entries_from_dir
 from .patterns import is_pattern, pattern_matches, recursive_subst
 from .special_subst import substitute_special
-from .utils import (can_be_pickled, expand_string, indent, expand_environment,
-    termcolor_colored, friendly_path)
+from .utils import (can_be_pickled, expand_environment, expand_string, 
+    friendly_path, indent, termcolor_colored)
+from UserDict import IterableUserDict
+from conf_tools import ID_FIELD, logger
+from contracts import contract, describe_type, describe_value
+from pprint import pformat
+import os
+import traceback
 
 
 __all__ = ['ObjectSpec']
@@ -199,8 +196,9 @@ class ObjectSpec(IterableUserDict):
                    (ID_FIELD, describe_value(spec)))
             raise ValueError(msg)
 
-        if self.user_check is not None:
-            self.user_check(spec)
+        # This actually instances the classes at read config time.
+        # if self.user_check is not None:
+        #     self.user_check(spec)
 
     @contract(id_object='str')
     def instance(self, id_object):
@@ -211,7 +209,7 @@ class ObjectSpec(IterableUserDict):
 
         spec = self[id_object]
         try:
-            return self.instance_spec(spec)
+            value = self.instance_spec(spec)
         except Exception as e:
             msg = 'Could not instance the object %r\n' % id_object
             if id_object in self.entry2file:
@@ -230,6 +228,10 @@ class ObjectSpec(IterableUserDict):
             # msg += '\n the conf is %s' % self
             
             raise ConfToolsException(msg)
+
+        if self.user_check is not None:
+            self.user_check(spec)
+        return value
 
     @contract(spec='dict')
     def instance_spec(self, spec):

@@ -1,7 +1,12 @@
-from pprint import pformat
 
-__all__ = ['BadConfig', 'ConfToolsException',
-           'SyntaxMistake', 'SemanticMistake', 'ResourceNotFound', 'SemanticMistakeKeyNotFound']
+__all__ = [
+    'BadConfig', 
+    'ConfToolsException',
+    'SyntaxMistake', 
+    'SemanticMistake', 
+    'ResourceNotFound', 
+    'SemanticMistakeKeyNotFound',
+]
 
 class BadConfig(Exception):
 
@@ -14,6 +19,7 @@ class BadConfig(Exception):
         self.stack.append(structure)
 
     def __str__(self):
+        from pprint import pformat
         s = '%s\n' % self.complaint
         s += 'Bad configuration snippet:\n%s\n\n' % pformat(self.structure)
         for x in self.stack:
