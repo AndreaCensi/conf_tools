@@ -1,11 +1,11 @@
-from io import StringIO
+from io import BytesIO
 import pickle
 
 
 def can_be_pickled(x):
     """ Returns True if the object can be pickled. """
     try:
-        s = StringIO() 
+        s = BytesIO() 
         pickle.dump(x, s)   
         return True
     except:

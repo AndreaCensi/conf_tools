@@ -34,5 +34,5 @@ def locate_files(directory, pattern, followlinks=True):
             msg += 'I will silently eliminate redundancies.'
             logger.warning(v)
 
-    return real2norm.keys()
+    return list(real2norm.keys())
 
