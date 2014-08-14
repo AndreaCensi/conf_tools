@@ -30,7 +30,10 @@ setup(name='ConfTools',
       
       package_dir={'':'src'},
       packages=find_packages('src'),
-      install_requires=[ 'PyYAML', 'PyContracts>=1.2,<2'],
+      install_requires=[ 
+        'PyYAML', 
+        'PyContracts>=1.2,<2',
+      ],
       tests_require=['nose'],
       entry_points={},
 )
