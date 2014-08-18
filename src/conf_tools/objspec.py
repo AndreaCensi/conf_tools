@@ -326,8 +326,13 @@ class ObjectSpec(dict):
         if directory in self.dirs_read:
             # print('skipping directory %r because already read' % directory)
             return
-        
         self.dirs_read.append(directory)
+        
+        from .global_config import dir_from_package_name, looks_like_package_name
+
+        if looks_like_package_name(directory):
+            directory = dir_from_package_name(directory)
+
         # print('actually loading directory %r for %s' % (directory, self.pattern))
         directory = expand_environment(directory)
 

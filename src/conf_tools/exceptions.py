@@ -52,7 +52,7 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
         things = object_spec.name
         msg = ('The name %r does not match any %s. ' % (name, things))
         msg += '\nI know '
-        found = object_spec.data.keys()
+        found = dict.keys(object_spec)
         if found:
             found = sorted(list(found))
             msg += '%d entries (%s)' % (len(found), ", ".join(found))
