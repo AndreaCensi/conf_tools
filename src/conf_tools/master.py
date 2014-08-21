@@ -1,14 +1,10 @@
-from io import StringIO
-
-from contracts import contract
-
-from conf_tools import logger
-from conf_tools.code_desc import GenericIsinstance
-
+from .code_desc import GenericIsinstance
 from .global_config import GlobalConfig
 from .objspec import ObjectSpec
 from .utils import check_is_in
-
+from conf_tools import logger
+from contracts import contract
+from io import StringIO
 
 __all__ = ['ConfigMaster']
 

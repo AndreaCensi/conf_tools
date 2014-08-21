@@ -1,6 +1,6 @@
 from . import logger
 from .utils import expand_environment
-from contracts import contract
+from contracts import contract, raise_wrapped
 import os
 
 __all__ = [ 
@@ -111,6 +111,8 @@ class GlobalConfig(object):
 
 @contract(d='str')
 def looks_like_package_name(d):
+    if d == '.': 
+        return False
     tokens = d.split('.')
     has_dot = len(tokens) == 2
     return has_dot and not '/' in d
@@ -124,9 +126,13 @@ def dir_from_package_name(d):
         raise ValueError(msg)
     package = '.'.join(tokens[:-1])
     sub = tokens[-1]
-    from pkg_resources import resource_filename  # @UnresolvedImport
-    res = resource_filename(package, sub)
-    return res    
+    try:
+        from pkg_resources import resource_filename  # @UnresolvedImport
+        res = resource_filename(package, sub)
+        return res
+    except BaseException as e:
+        raise_wrapped(ValueError, e, 'Cannot resolve package name', d=d)
+        
             
 class ConfigState(object):
 
