@@ -2,7 +2,10 @@ from .exceptions import SyntaxMistake
 from .patterns import is_pattern
 
 
-__all__ = ['check_valid_id_or_pattern', 'is_valid_id']
+__all__ = [
+    'check_valid_id_or_pattern', 
+    'is_valid_id',
+]
 
 
 def check_valid_id_or_pattern(name):

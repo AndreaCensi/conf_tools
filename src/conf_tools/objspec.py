@@ -15,7 +15,9 @@ import os
 import traceback
 
 
-__all__ = ['ObjectSpec']
+__all__ = [
+    'ObjectSpec',
+]
 
 
 class ObjectSpec(dict):

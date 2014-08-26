@@ -1,7 +1,10 @@
-import os
-from contracts import contract
 from conf_tools import logger
-__all__ = ['expand_environment']
+from contracts import contract
+import os
+
+__all__ = [
+    'expand_environment',
+]
 
 
 @contract(s='str')

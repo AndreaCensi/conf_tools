@@ -4,7 +4,9 @@ from contracts import contract
 import fnmatch
 import os
 
-__all__ = ['locate_files']
+__all__ = [
+    'locate_files',
+]
 
 
 @contract(returns='list(str)', directory='str',

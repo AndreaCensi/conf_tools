@@ -2,6 +2,7 @@ import logging
 logging.basicConfig()
 import platform
 
+__all__ = []
 
 def add_coloring_to_emit_ansi(fn):
     # add methods we need to the class
