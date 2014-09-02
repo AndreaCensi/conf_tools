@@ -6,8 +6,9 @@ from conf_tools import logger
 from contracts import contract
 from io import StringIO
 
-__all__ = ['ConfigMaster']
-
+__all__ = [
+    'ConfigMaster',
+]
         
 
 class ConfigMaster(object):
@@ -29,9 +30,11 @@ class ConfigMaster(object):
         GlobalConfig.register_master(name, self)
         
     def __repr__(self):
-        return 'ConfigMaster(%s,dirs=%s,specs=%s)' % (self.name, self._dirs, self.specs)
+        return ('ConfigMaster(%s,dirs=%s,specs=%s)' % 
+                (self.name, self._dirs, self.specs))
      
-    def add_class(self, name, pattern, check=None, instance=None, object_check=None):
+    def add_class(self, name, pattern, 
+                  check=None, instance=None, object_check=None):
         '''
         Adds a type of objects.
         
@@ -41,7 +44,8 @@ class ConfigMaster(object):
         :param instance: spec -> object function
         :param object_check:  object check function
         '''
-        spec = ObjectSpec(name=name, pattern=pattern, check=check, instance_method=instance,
+        spec = ObjectSpec(name=name, pattern=pattern, check=check, 
+                          instance_method=instance,
                           object_check=object_check,
                           master=self)
 
@@ -131,7 +135,8 @@ class ConfigMaster(object):
     def print_summary(self, stream, instance=False, only_type=None):
         """ Create a summary of all the configuration we have. """
         if only_type is None:
-            ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
+            ordered = [(id_spec, self.specs[id_spec]) 
+                       for id_spec in sorted(self.specs.keys())]
             
             stream.write('Config has %d kinds of objects:\n ' % len(self.specs))
             for id_spec, spec in ordered:

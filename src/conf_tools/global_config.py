@@ -1,11 +1,12 @@
 from . import logger
 from .utils import expand_environment
-from contracts import contract, raise_wrapped
+from contracts import check_isinstance, contract, raise_wrapped
 import os
 
 __all__ = [ 
     'GlobalConfig', 
     'ConfigState',
+    'reset_config',
 ]
 
 
@@ -108,6 +109,32 @@ class GlobalConfig(object):
         GlobalConfig._masters = {}
         GlobalConfig._singletons = {}
         GlobalConfig._dirs = []
+
+
+def reset_config():
+    # Reset all the config
+    setattr(GlobalConfig, '_dirs', [])
+    for _, m in GlobalConfig._masters.items():
+        from conf_tools.master import ConfigMaster
+        check_isinstance(m, ConfigMaster)
+
+        for spec in m.specs.values():
+            spec.clear()
+            spec.clear()
+            # List of files already read        
+            spec.files_read = set()
+            spec.dirs_read = []
+            spec.dirs_to_read = []
+            
+            # ID -> file where it was found
+            spec.entry2file = {}
+            spec.templates = {}
+
+        # all the dirs that were passed to load(), in case we miss any
+        setattr(m, '_dirs', [])
+
+        
+
 
 @contract(d='str')
 def looks_like_package_name(d):

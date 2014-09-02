@@ -7,12 +7,12 @@ from .patterns import is_pattern, pattern_matches, recursive_subst
 from .special_subst import substitute_special
 from .utils import (can_be_pickled, expand_environment, expand_string, 
     friendly_path, indent, termcolor_colored)
-
 from conf_tools import ID_FIELD, logger
 from contracts import contract, describe_type, describe_value
 from pprint import pformat
 import os
 import traceback
+
 
 
 __all__ = [
@@ -360,10 +360,18 @@ class ObjectSpec(dict):
                        % (name, friendly_path(filename),
                           friendly_path(old_filename)))
                 
-                same_entry = (dict.__contains__(self, name)  and
-                              dict.__getitem__(self, name) == x)
-                same_pattern = (name in self.templates and self.templates[name] == x)
-                if not (same_entry or same_pattern):
+                if dict.__contains__(self, name):
+                    old_entry =  dict.__getitem__(self, name)
+                else:
+                    assert name in self.templates
+                    old_entry = self.templates[name]
+                
+                same_entry = (old_entry == x)
+                if not (same_entry):
+                    msg += '\nThey are different. The new one:'
+                    msg += '\n' + indent(pformat(x), 'new |')
+                    msg += '\nThe old one:'
+                    msg += '\n' + indent(pformat(old_entry), 'old |')
                     raise SemanticMistake(msg)
                 else:
                     msg += '\n(Ignoring because same)' 
