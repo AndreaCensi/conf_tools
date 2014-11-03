@@ -11,6 +11,8 @@ reg = '\$\{([^\}]*)\}'
 
 
 def is_pattern(s):
+    if not isinstance(s, str):
+        return False
     isa = len(re.findall(reg, s)) > 0
     return isa
 
