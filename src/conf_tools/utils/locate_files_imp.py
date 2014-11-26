@@ -12,6 +12,7 @@ __all__ = [
 @contract(returns='list(str)', directory='str',
           pattern='str', followlinks='bool')
 def locate_files(directory, pattern, followlinks=True):
+    #print('locate_files %r %r' % (directory, pattern))
     filenames = []
     
     for root, _, files in os.walk(directory, followlinks=followlinks):
