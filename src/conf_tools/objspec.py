@@ -391,6 +391,7 @@ class ObjectSpec(dict):
                         msg = ('While trying to instantiate empty entry %r '
                                'in %s, I could not find any pattern matching.'
                                % (name, friendly_path(filename)))
+                        msg += '\nPatterns: %s' % self.templates
                         raise SemanticMistake(msg)
 
                     try:
