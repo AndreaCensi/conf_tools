@@ -333,7 +333,11 @@ class ObjectSpec(dict):
         from .global_config import dir_from_package_name, looks_like_package_name
 
         if looks_like_package_name(directory):
+            # print('%r looks like a package' % directory)
             directory = dir_from_package_name(directory)
+        else:
+            # print('%r is plain looking' % directory)
+            pass
 
         # print('actually loading directory %r for %s' % (directory, self.pattern))
         directory = expand_environment(directory)

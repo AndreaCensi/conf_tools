@@ -133,8 +133,6 @@ def reset_config():
         # all the dirs that were passed to load(), in case we miss any
         setattr(m, '_dirs', [])
 
-        
-
 
 @contract(d='str')
 def looks_like_package_name(d):
@@ -143,6 +141,7 @@ def looks_like_package_name(d):
     tokens = d.split('.')
     has_dot = len(tokens) == 2
     return has_dot and not '/' in d
+
 
 @contract(d='str')
 def dir_from_package_name(d):
