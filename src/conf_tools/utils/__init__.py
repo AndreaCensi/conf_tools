@@ -13,3 +13,5 @@ from .pickling import *
 from .not_found import *
 
 from .term_color import *
+
+from .resources import *
