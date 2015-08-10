@@ -5,7 +5,7 @@ def aslist(x):
     if isinstance(x, dict):
         x = list(x.keys())
     if x:
-        return ", ".join(sorted(x))
+        return ", ".join([e.__repr__() for e in sorted(x)])
     else:
         return "<empty>"
 
@@ -19,7 +19,7 @@ def x_not_found(what, x, iterable):
     # TODO: add guess in case of typos
     options = aslist(iterable)
     
-    return ('Could not find %s %r. I know %s.' % 
+    return ('Could not find %s %r. I know the elements: %s.' %
             (what, x, options))
 
 
