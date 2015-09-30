@@ -136,11 +136,19 @@ def reset_config():
 
 @contract(d='str')
 def looks_like_package_name(d):
-    if d == '.': 
+
+    try:
+        dir_from_package_name(d)
+        return True
+    except ValueError:
         return False
-    tokens = d.split('.')
-    has_dot = len(tokens) == 2
-    return has_dot and not '/' in d
+#
+#
+#     if d == '.':
+#         return False
+#     tokens = d.split('.')
+#     has_dot = len(tokens) == 2
+#     return has_dot and not '/' in d
 
             
 class ConfigState(object):

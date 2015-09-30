@@ -72,7 +72,8 @@ class GenericCall(object):
 
 def check_type(entry, etype, obtained):
     if not isinstance(obtained, etype):
-        msg = 'Error in instantiating code spec:\n\t%s\n' % entry['code']
+        msg = 'Error in instantiating code spec:\n\t%s' % str(entry['code']).strip()
         msg += '\nI expected: %s\nbut I got %s' % (etype, describe_value(obtained))
-        raise Exception(msg)
+        from conf_tools.exceptions import ConfToolsException
+        raise ConfToolsException(msg)
 

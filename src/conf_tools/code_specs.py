@@ -56,13 +56,14 @@ def instantiate_spec(code_spec):
         return instantiate(function_name, parameters)
     except Exception as e:
         msg = 'Could not instance the spec:\n' 
-        msg += indent(format_code_spec(code_spec), '  ')
+        msg += indent(format_code_spec(code_spec).strip(), '  ').strip()
         msg += '\nbecause of this error:\n'
         if isinstance(e, ConfToolsException):
             st = str(e)
         else:
             st = traceback.format_exc(e) 
         msg += indent(st.strip(), '| ')
+        msg = msg.strip()
         raise ConfToolsException(msg)
 
 def format_code_spec(code_spec):
