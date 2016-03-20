@@ -1,4 +1,4 @@
-__version__ = '1.4dev1'
+__version__ = '1.7'
 
 import logging
 logging.basicConfig()
@@ -13,7 +13,7 @@ new_contract("id_or_spec", "dict|str")
 
 ID_FIELD = 'id'
 
-class ConfToolsGlobal:
+class ConfToolsGlobal():
     log_instance_error = True
 
 from .exceptions import *
@@ -29,5 +29,5 @@ from .code_specs import *
 from .code_desc import *
 from .objspec import *
 from .master import *
-
+from .global_config import *
 

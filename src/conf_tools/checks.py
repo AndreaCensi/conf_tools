@@ -1,6 +1,8 @@
-from .exceptions import BadConfig
-from contracts import contract, describe_type
 from pprint import pformat
+
+from contracts import contract, describe_type
+
+from .exceptions import BadConfig
 
 
 def wrap_check(x, what, function, *arg, **args):

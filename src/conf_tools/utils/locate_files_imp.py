@@ -4,12 +4,15 @@ from contracts import contract
 import fnmatch
 import os
 
-__all__ = ['locate_files']
+__all__ = [
+    'locate_files',
+]
 
 
 @contract(returns='list(str)', directory='str',
           pattern='str', followlinks='bool')
 def locate_files(directory, pattern, followlinks=True):
+    #print('locate_files %r %r' % (directory, pattern))
     filenames = []
     
     for root, _, files in os.walk(directory, followlinks=followlinks):
@@ -34,5 +37,5 @@ def locate_files(directory, pattern, followlinks=True):
             msg += 'I will silently eliminate redundancies.'
             logger.warning(v)
 
-    return real2norm.keys()
+    return list(real2norm.keys())
 

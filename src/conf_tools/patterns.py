@@ -1,6 +1,9 @@
 import re
+
 from contracts import contract
+
 from .exceptions import SemanticMistake, SyntaxMistake
+
 
 __all__ = ['pattern_matches', 'recursive_subst', 'is_pattern']
 
@@ -8,6 +11,8 @@ reg = '\$\{([^\}]*)\}'
 
 
 def is_pattern(s):
+    if not isinstance(s, str):
+        return False
     isa = len(re.findall(reg, s)) > 0
     return isa
 

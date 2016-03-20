@@ -1,25 +1,26 @@
 from .code_desc import ConfToolsGlobal
 from .code_specs import check_valid_code_spec, instantiate_spec
-from .exceptions import (SyntaxMistake, ConfToolsException, SemanticMistake,
-    SemanticMistakeKeyNotFound)
+from .exceptions import (ConfToolsException, SemanticMistake, 
+    SemanticMistakeKeyNotFound, SyntaxMistake)
 from .load_entries import load_entries_from_dir
 from .patterns import is_pattern, pattern_matches, recursive_subst
 from .special_subst import substitute_special
-from .utils import (can_be_pickled, expand_string, indent, expand_environment,
-    termcolor_colored, friendly_path)
-from UserDict import IterableUserDict
-from conf_tools import logger, ID_FIELD
-from contracts import contract, describe_value
+from .utils import (can_be_pickled, expand_environment, expand_string, 
+    friendly_path, indent, termcolor_colored)
+from conf_tools import ID_FIELD, logger
+from contracts import contract, describe_type, describe_value
 from pprint import pformat
 import os
 import traceback
-from contracts.interface import describe_type
 
 
-__all__ = ['ObjectSpec']
+
+__all__ = [
+    'ObjectSpec',
+]
 
 
-class ObjectSpec(IterableUserDict):
+class ObjectSpec(dict):
     """ 
         This is the class that knows how to instance entries. 
         
@@ -36,6 +37,8 @@ class ObjectSpec(IterableUserDict):
             :param:object_check: Function to check the validity of the values.
             :param:master: References to a Master instance. 
         """
+        dict.__init__(self)
+
         self.name = name
         self.pattern = pattern
         self.user_check = check
@@ -54,7 +57,6 @@ class ObjectSpec(IterableUserDict):
 
         self.templates = {}
 
-        IterableUserDict.__init__(self)
 
         if not can_be_pickled(check):
             msg = 'Function %s passed as "check" cannot be pickled. ' % (check)
@@ -90,24 +92,25 @@ class ObjectSpec(IterableUserDict):
              
     def __iter__(self):
         self.make_sure_everything_read()
-        return IterableUserDict.__iter__(self)
+        return dict.__iter__(self)
         
     def keys(self):
         self.make_sure_everything_read()
-        return IterableUserDict.keys(self)
+        return dict.keys(self)
         
     @contract(key='str')
     def __contains__(self, key):
         self.make_sure_everything_read()
-        return key in self.data or self.matches_any_pattern(key)
+        return dict.__contains__(self, key) or self.matches_any_pattern(key)
+
 
     @contract(key='str')
     def __getitem__(self, key):
         self.make_sure_everything_read()
         # Check if it is available literally:
-        if key in self.data:
+        if dict.__contains__(self, key):
             # Note: we copy
-            return self.data[key].copy()
+            return dict.__getitem__(self, key).copy()
         else:
             pattern = self.matches_any_pattern(key)
             if pattern is None:
@@ -197,8 +200,9 @@ class ObjectSpec(IterableUserDict):
                    (ID_FIELD, describe_value(spec)))
             raise ValueError(msg)
 
-        if self.user_check is not None:
-            self.user_check(spec)
+        # This actually instances the classes at read config time.
+        # if self.user_check is not None:
+        #     self.user_check(spec)
 
     @contract(id_object='str')
     def instance(self, id_object):
@@ -209,7 +213,7 @@ class ObjectSpec(IterableUserDict):
 
         spec = self[id_object]
         try:
-            return self.instance_spec(spec)
+            value = self.instance_spec(spec)
         except Exception as e:
             msg = 'Could not instance the object %r\n' % id_object
             if id_object in self.entry2file:
@@ -228,6 +232,10 @@ class ObjectSpec(IterableUserDict):
             # msg += '\n the conf is %s' % self
             
             raise ConfToolsException(msg)
+
+        if self.user_check is not None:
+            self.user_check(spec)
+        return value
 
     @contract(spec='dict')
     def instance_spec(self, spec):
@@ -304,6 +312,13 @@ class ObjectSpec(IterableUserDict):
                     raise ValueError(msg)
             return None, x
 
+    def force_load(self, directory):
+        """ Will force reloading of directory. """
+        if directory in self.dirs_read:
+            self.dirs_read.remove(directory)
+
+        self.load_config_from_directory(directory)
+
     def _actually_load(self, directory):
         """ 
             Loads all files in the directory, recursively, using 
@@ -313,8 +328,17 @@ class ObjectSpec(IterableUserDict):
         if directory in self.dirs_read:
             # print('skipping directory %r because already read' % directory)
             return
-        
         self.dirs_read.append(directory)
+        
+        from .global_config import dir_from_package_name, looks_like_package_name
+
+        if looks_like_package_name(directory):
+            # print('%r looks like a package' % directory)
+            directory = dir_from_package_name(directory)
+        else:
+            # print('%r is plain looking' % directory)
+            pass
+
         # print('actually loading directory %r for %s' % (directory, self.pattern))
         directory = expand_environment(directory)
 
@@ -333,8 +357,6 @@ class ObjectSpec(IterableUserDict):
             files.add(filename)
 
             name = x[ID_FIELD]
-            # logger.debug('Found %s %r (%d concrete, %d patterns)' % 
-            #              (self.name, name, len(self.data), len(self.templates)))
 
             if name in self.entry2file:
                 old_filename = self.entry2file[name]
@@ -342,9 +364,18 @@ class ObjectSpec(IterableUserDict):
                        % (name, friendly_path(filename),
                           friendly_path(old_filename)))
                 
-                same_entry = (name in self.data and self.data[name] == x)
-                same_pattern = (name in self.templates and self.templates[name] == x)
-                if not (same_entry or same_pattern):
+                if dict.__contains__(self, name):
+                    old_entry =  dict.__getitem__(self, name)
+                else:
+                    assert name in self.templates
+                    old_entry = self.templates[name]
+                
+                same_entry = (old_entry == x)
+                if not (same_entry):
+                    msg += '\nThey are different. The new one:'
+                    msg += '\n' + indent(pformat(x), 'new |')
+                    msg += '\nThe old one:'
+                    msg += '\n' + indent(pformat(old_entry), 'old |')
                     raise SemanticMistake(msg)
                 else:
                     msg += '\n(Ignoring because same)' 
@@ -364,6 +395,7 @@ class ObjectSpec(IterableUserDict):
                         msg = ('While trying to instantiate empty entry %r '
                                'in %s, I could not find any pattern matching.'
                                % (name, friendly_path(filename)))
+                        msg += '\nPatterns: %s' % self.templates
                         raise SemanticMistake(msg)
 
                     try:
@@ -386,7 +418,7 @@ class ObjectSpec(IterableUserDict):
                     msg += indent(traceback.format_exc(e), '> ')
                     raise SemanticMistake(msg)
 
-                self.data[name] = x
+                dict.__setitem__(self, name, x)
 
             self.entry2file[name] = filename
 
@@ -522,12 +554,12 @@ class ObjectSpec(IterableUserDict):
             stream.write('* No config file found.\n')    
         
         # if any entry defined...
-        if self.data:
-            stream.write('* Found %d objects: \n' % len(self.data))
+        if len(self):
+            stream.write('* Found %d objects: \n' % len(self))
     #         ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
     #         
-            for id_spec in self.data:
-                desc = self.data[id_spec].get('desc', '')
+            for id_spec in self:
+                desc = dict.__getitem__(id_spec).get('desc', '')
                 
                 # TODO: use first sentence
                 # Get first line

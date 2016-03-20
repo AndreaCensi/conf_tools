@@ -5,9 +5,11 @@ __version__ = '1.0'
 import os
 
 # TODO: cache the results?
-__all__ = ['friendly_path']
+__all__ = [
+    'friendly_path',
+]
 
-from . import logger
+from .. import logger
 
 def friendly_path(path, use_environment=True, debug=False):
     """ 

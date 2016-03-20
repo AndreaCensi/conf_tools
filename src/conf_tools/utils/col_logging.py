@@ -2,6 +2,7 @@ import logging
 logging.basicConfig()
 import platform
 
+__all__ = []
 
 def add_coloring_to_emit_ansi(fn):
     # add methods we need to the class
@@ -25,5 +26,5 @@ def add_coloring_to_emit_ansi(fn):
     return new
 
 if platform.system() != 'Windows':
-    logging.StreamHandler.emit = add_coloring_to_emit_ansi(
-                                                    logging.StreamHandler.emit)
+    emit2 = add_coloring_to_emit_ansi(logging.StreamHandler.emit)
+    logging.StreamHandler.emit = emit2

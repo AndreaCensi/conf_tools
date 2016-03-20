@@ -1,9 +1,11 @@
-from .exceptions import SyntaxMistake
-from .utils import expand_environment
-from conf_tools import logger
-from contracts import contract, describe_type
 import os
 
+from contracts import contract, describe_type
+
+from conf_tools import logger
+
+from .exceptions import SyntaxMistake
+from .utils import expand_environment
 
 
 # TODO: put it somewhere

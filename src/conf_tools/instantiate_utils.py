@@ -1,7 +1,10 @@
+import traceback
+
+from contracts import contract
+
 from .exceptions import SemanticMistake
 from .utils import indent
-from contracts import contract
-import traceback
+
 
 __all__ = ['import_name', 'instantiate']
 

@@ -18,7 +18,8 @@ def expand_string(x, options):
     elif isinstance(x, str):
         x = x.strip()
         if ',' in x:
-            return flatten(expand_string(y, options) for y in x.split(','))
+            splat = [_ for _ in x.split(',') if _]  # remove empty
+            return flatten(expand_string(y, options) for y in splat)
         elif '*' in x:
             xx = expand_wildcard(x, options)
             expanded = list(xx)

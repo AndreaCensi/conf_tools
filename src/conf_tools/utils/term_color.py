@@ -1,6 +1,8 @@
 import sys
 
-__all__ = ['termcolor_colored']
+__all__ = [
+    'termcolor_colored',
+]
 
 try:
     from termcolor import colored as t_colored

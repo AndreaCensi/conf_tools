@@ -1,5 +1,5 @@
-from . import (check_necessary, wrap_check, check_valid_code_spec,
-    instantiate_spec)
+from .checks import check_necessary, wrap_check
+from .code_specs import check_valid_code_spec, instantiate_spec
 from .exceptions import BadConfig
 from conf_tools import ConfToolsGlobal, logger
 from contracts import describe_value
@@ -72,7 +72,8 @@ class GenericCall(object):
 
 def check_type(entry, etype, obtained):
     if not isinstance(obtained, etype):
-        msg = 'Error in instantiating code spec:\n\t%s\n' % entry['code']
+        msg = 'Error in instantiating code spec:\n\t%s' % str(entry['code']).strip()
         msg += '\nI expected: %s\nbut I got %s' % (etype, describe_value(obtained))
-        raise Exception(msg)
+        from conf_tools.exceptions import ConfToolsException
+        raise ConfToolsException(msg)
 

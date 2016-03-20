@@ -1,8 +1,11 @@
-from StringIO import StringIO
-from conf_tools.unittests.utils import create_test_environment
-from conf_tools.master import ConfigMaster
+from io import BytesIO
 import pickle
-from conf_tools.unittests.templating.simple_use_tests import test_cases
+
+from conf_tools import ConfigMaster
+from conf_tools.unittests.utils import create_test_environment
+
+from .templating.simple_use_tests import test_cases
+
 
 def dummy_check(spec):  # @UnusedVariable
     return True
@@ -19,5 +22,5 @@ def test_pickling():
                          check=dummy_check,
                          instance=dummy_instance)
         master.load(dirname)
-        s = StringIO()
+        s = BytesIO()
         pickle.dump(master, s)

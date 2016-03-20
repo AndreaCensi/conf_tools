@@ -1,11 +1,18 @@
+import traceback
+
+from contracts import contract, new_contract
+
 from .exceptions import BadConfig, ConfToolsException
 from .instantiate_utils import instantiate
 from .utils import indent
-from contracts import contract, new_contract
-import traceback
 
 
-__all__ = ['check_valid_code_spec', 'instantiate_spec', 'format_code_spec', 'format_yaml']
+__all__ = [
+    'check_valid_code_spec',
+    'instantiate_spec',
+    'format_code_spec',
+    'format_yaml',
+]
 
 
 def check_valid_code_spec(x):
@@ -24,7 +31,16 @@ def check_valid_code_spec(x):
         raise BadConfig(x, 'The params must be given as a dictionary.')
 
 new_contract('check_valid_code_spec', check_valid_code_spec)
-new_contract('code_spec', check_valid_code_spec)
+
+def check_valid_code_spec_contract(x):
+    """ Note that otherwise BadConfig is thrown --- 
+    while it should be ValueError for PyContracts. """
+    try:
+        check_valid_code_spec(x)
+    except BadConfig as e:
+        raise ValueError(e)
+
+new_contract('code_spec', check_valid_code_spec_contract)
 
 @contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
@@ -40,13 +56,14 @@ def instantiate_spec(code_spec):
         return instantiate(function_name, parameters)
     except Exception as e:
         msg = 'Could not instance the spec:\n' 
-        msg += indent(format_code_spec(code_spec), '  ')
+        msg += indent(format_code_spec(code_spec).strip(), '  ').strip()
         msg += '\nbecause of this error:\n'
         if isinstance(e, ConfToolsException):
             st = str(e)
         else:
             st = traceback.format_exc(e) 
         msg += indent(st.strip(), '| ')
+        msg = msg.strip()
         raise ConfToolsException(msg)
 
 def format_code_spec(code_spec):
