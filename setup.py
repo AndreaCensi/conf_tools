@@ -24,7 +24,7 @@ description = """"""
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
     
-long_description = read('README.rst')
+long_description = read('README.md')
     
 
 setup(name='ConfTools',
