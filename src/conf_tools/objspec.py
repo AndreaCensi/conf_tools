@@ -277,7 +277,8 @@ class ObjectSpec(dict):
                     describe_value(id_or_spec))
             raise ValueError(msg)
 
-    @contract(id_or_spec_or_code='str|dict|code_spec|*', returns='tuple(str|None,*)')
+    @contract(# id_or_spec_or_code='str|dict|code_spec|*',
+              returns='tuple(str|None,*)')
     def instance_smarter(self, id_or_spec_or_code):
         """ 
             Most flexible instantiation method. The parameter can be:
