@@ -11,15 +11,25 @@ __all__ = [
 
 @contract(returns='list(str)', directory='str',
           pattern='str', followlinks='bool')
-def locate_files(directory, pattern, followlinks=True):
+def locate_files(directory, pattern, followlinks=True,
+                 include_directories=False,
+                 include_files=True):
     #print('locate_files %r %r' % (directory, pattern))
     filenames = []
     
-    for root, _, files in os.walk(directory, followlinks=followlinks):
-        for f in files:
-            if fnmatch.fnmatch(f, pattern):
-                filename = os.path.join(root, f)
-                filenames.append(filename)
+    for root, dirnames, files in os.walk(directory, followlinks=followlinks):
+        if include_files:
+            for f in files:
+                if fnmatch.fnmatch(f, pattern):
+                    filename = os.path.join(root, f)
+                    filenames.append(filename)
+
+        if include_directories:
+            for d in dirnames:
+                if fnmatch.fnmatch(d, pattern):
+                    filename = os.path.join(root, d)
+                    filenames.append(filename)
+
 
     real2norm = defaultdict(lambda: [])
     for norm in filenames:
