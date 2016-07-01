@@ -105,7 +105,7 @@ class GlobalConfig(object):
 
     @staticmethod
     def clear_for_tests():
-        """ Resets the state by unregistering everything; useful for tests. """
+        """ Resets the state by unregistering everything; useful for mcdp_lang_tests. """
         GlobalConfig._masters = {}
         GlobalConfig._singletons = {}
         GlobalConfig._dirs = []

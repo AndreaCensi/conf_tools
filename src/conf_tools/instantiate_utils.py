@@ -4,6 +4,8 @@ from contracts import contract
 
 from .exceptions import SemanticMistake
 from .utils import indent
+from contracts.utils import raise_desc
+import sys
 
 
 __all__ = ['import_name', 'instantiate']
@@ -86,5 +88,5 @@ def import_name(name):
         else:
             msg = 'Cannot import name %r.' % (name)
             msg += '\n' + indent(traceback.format_exc(e), '> ')
-            raise ValueError(msg)
+            raise_desc(ValueError, msg, sys_path=sys.path)
 

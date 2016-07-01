@@ -21,7 +21,7 @@ def add_coloring_to_emit_ansi(fn):
         else:
             color = '\x1b[0m'  # normal
 
-        args[1].msg = color + str(args[1].msg) + '\x1b[0m'  # normal
+        args[1].msg = '%s%s\x1b[0m' % (color , args[1].msg)
         return fn(*args)
     return new
 
