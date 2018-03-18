@@ -1,12 +1,11 @@
+import sys
 import traceback
 
 from contracts import contract
+from contracts.utils import raise_desc
 
 from .exceptions import SemanticMistake
 from .utils import indent
-from contracts.utils import raise_desc
-import sys
-
 
 __all__ = ['import_name', 'instantiate']
 
@@ -24,7 +23,7 @@ def instantiate(function_name, parameters):
         return function(**parameters)
     except TypeError as e:
         params = ', '.join(['%s=%r' % (k, v) for (k, v) in parameters.items()])
-        msg = ('instantiate(): Could not call function %r\n with params %s:' % 
+        msg = ('instantiate(): Could not call function %r\n with params %s:' %
                (function_name, params))
         msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
         raise SemanticMistake(msg)
@@ -32,9 +31,9 @@ def instantiate(function_name, parameters):
 
 @contract(name='str')
 def import_name(name):
-    ''' 
-        Loads the python object with the given name. 
-    
+    '''
+        Loads the python object with the given name.
+
         Note that "name" might be "module.module.name" as well.
     '''
     try:
@@ -50,43 +49,43 @@ def import_name(name):
                 try:
                     module = __import__(module_name, fromlist=['dummy'])
                 except ImportError as e:
-                    msg = ('Cannot load %r (tried also with %r):\n' % 
-                           (name, module_name))        
+                    msg = ('Cannot load %r (tried also with %r):\n' %
+                           (name, module_name))
                     msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
                     raise ValueError(msg)
-     
+
                 if not field in module.__dict__:
                     msg = 'No field  %r\n' % (field)
                     msg += ' found in %r.' % (module)
                     raise ValueError(msg)
-     
+
                 return module.__dict__[field]
             else:
-                # other method, don't assume that in "M.x", "M" is a module. 
+                # other method, don't assume that in "M.x", "M" is a module.
                 # It could be a class as well, and "x" be a staticmethod.
                 try:
                     module = import_name(module_name)
                 except ImportError as e:
-                    msg = ('Cannot load %r (tried also with %r):\n' % 
-                           (name, module_name))        
+                    msg = ('Cannot load %r (tried also with %r):\n' %
+                           (name, module_name))
                     msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
                     raise ValueError(msg)
-     
+
                 if not field in module.__dict__:
                     msg = 'No field  %r\n' % (field)
                     msg += ' found in %r.' % (module)
                     raise ValueError(msg)
-     
+
                 f = module.__dict__[field]
-                
+
                 # "staticmethod" are not functions but descriptors, we need extra magic
-                if isinstance(f, staticmethod): 
+                if isinstance(f, staticmethod):
                     return f.__get__(module, None)
                 else:
                     return f
-                
+
         else:
             msg = 'Cannot import name %r.' % (name)
-            msg += '\n' + indent(traceback.format_exc(e), '> ')
+            msg += '\n' + indent(traceback.format_exc(e), '  > ')
             raise_desc(ValueError, msg, sys_path=sys.path)
 
