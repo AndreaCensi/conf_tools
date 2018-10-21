@@ -23,7 +23,7 @@ jobs:
           name: Run tests
           command: |
             pip install --user nose
-            PATH=~/.local/bin:$PATH ~/.local/bin/nosetests conftools
+            PATH=~/.local/bin:$PATH ~/.local/bin/nosetests conf_tools
 
   test-3.5:
     <<: *test-template
