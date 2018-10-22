@@ -1,2 +1,2 @@
--e git+https://github.com/AndreaCensi/contracts.git@env_fault#egg=PyContracts
+PyContracts==1.8.5
 PyYaml

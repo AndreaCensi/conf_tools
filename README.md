@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/AndreaCensi/conf_tools.svg?style=shield)](https://circleci.com/gh/AndreaCensi/conf_tools)
+
+
 ``ConfTools``: configuration made easy, for when it cannot be trivial
 ======================================================================
 
