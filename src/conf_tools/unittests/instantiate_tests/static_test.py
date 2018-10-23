@@ -25,3 +25,13 @@ def test_not_existing():
     else:
         msg = 'Expected ValueError'
         raise Exception(msg)
+
+
+def test_second():
+    try:
+        import_name('conf_tools.a')
+    except ValueError:
+        pass
+    else:
+        msg = 'Expected ValueError'
+        raise Exception(msg)
