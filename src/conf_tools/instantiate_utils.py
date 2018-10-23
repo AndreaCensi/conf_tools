@@ -25,7 +25,7 @@ def instantiate(function_name, parameters):
         params = ', '.join(['%s=%r' % (k, v) for (k, v) in parameters.items()])
         msg = ('instantiate(): Could not call function %r\n with params %s:' %
                (function_name, params))
-        msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
+        msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc()), '> ')
         raise SemanticMistake(msg)
 
 
@@ -37,8 +37,6 @@ def import_name(name):
         Note that "name" might be "module.module.name" as well.
     '''
     expected = (ImportError,)
-    if six.PY3:
-        expected = (ImportError, ModuleNotFoundError)
     try:
         return __import__(name, fromlist=['dummy'])
     except expected as e:
@@ -54,7 +52,7 @@ def import_name(name):
                 except ImportError as e:
                     msg = ('Cannot load %r (tried also with %r):\n' %
                            (name, module_name))
-                    msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
+                    msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc()), '> ')
                     raise ValueError(msg)
 
                 if not field in module.__dict__:
@@ -71,7 +69,7 @@ def import_name(name):
                 except ImportError as e:
                     msg = ('Cannot load %r (tried also with %r):\n' %
                            (name, module_name))
-                    msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc(e)), '> ')
+                    msg += '\n' + indent('%s\n%s' % (e, traceback.format_exc()), '> ')
                     raise ValueError(msg)
 
                 if not field in module.__dict__:
@@ -89,6 +87,6 @@ def import_name(name):
 
         else:
             msg = 'Cannot import name %r.' % (name)
-            msg += '\n' + indent(traceback.format_exc(e), '  > ')
+            msg += '\n' + indent(traceback.format_exc(), '  > ')
             raise_desc(ValueError, msg, sys_path=sys.path)
 

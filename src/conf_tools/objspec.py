@@ -224,7 +224,7 @@ class ObjectSpec(dict):
             if isinstance(e, ConfToolsException):
                 st = str(e)
             else:  
-                st = traceback.format_exc(e)
+                st = traceback.format_exc()
             msg += indent(st.strip(), '| ')
 
             # from conf_tools.master import GlobalConfig
@@ -415,7 +415,7 @@ class ObjectSpec(dict):
                            (name, e))
                     msg += '\nEntry:\n' + indent(pformat(x), '  ')
                     msg += '\nException:\n' 
-                    msg += indent(traceback.format_exc(e), '> ')
+                    msg += indent(traceback.format_exc(), '> ')
                     raise SemanticMistake(msg)
 
                 dict.__setitem__(self, name, x)

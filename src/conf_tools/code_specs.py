@@ -61,7 +61,7 @@ def instantiate_spec(code_spec):
         if isinstance(e, ConfToolsException):
             st = str(e)
         else:
-            st = traceback.format_exc(e) 
+            st = traceback.format_exc()
         msg += indent(st.strip(), '| ')
         msg = msg.strip()
         raise ConfToolsException(msg)
