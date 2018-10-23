@@ -1,20 +1,25 @@
 __version__ = '1.9.7'
 
 import logging
+
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+logging.info('conf_tools %s' % __version__)
+
 from . import utils
 
 from contracts import (new_contract)
-                    
+
 new_contract("id_or_spec", "dict|str")
 
 ID_FIELD = 'id'
 
-class ConfToolsGlobal():
+
+class ConfToolsGlobal(object):
     log_instance_error = True
+
 
 from .exceptions import *
 from .patterns import *
@@ -30,4 +35,3 @@ from .code_desc import *
 from .objspec import *
 from .master import *
 from .global_config import *
-
