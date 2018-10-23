@@ -51,6 +51,7 @@ setup(name='ConfTools',
       install_requires=[
           'PyYAML',
           'PyContracts>=1.2,<2',
+          'six',
       ],
       tests_require=['nose'],
       entry_points={},

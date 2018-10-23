@@ -1,6 +1,6 @@
 import sys
 import traceback
-
+import six
 from contracts import contract
 from contracts.utils import raise_desc
 
@@ -36,9 +36,12 @@ def import_name(name):
 
         Note that "name" might be "module.module.name" as well.
     '''
+    expected = (ImportError,)
+    if six.PY3:
+        expected = (ImportError, ModuleNotFoundError)
     try:
         return __import__(name, fromlist=['dummy'])
-    except ImportError as e:
+    except expected as e:
         # split in (module, name) if we can
         if '.' in name:
             tokens = name.split('.')
