@@ -1,3 +1,5 @@
+pytz
+beautifulsoup4
 PyContracts==1.8.5
 PyYaml
 six

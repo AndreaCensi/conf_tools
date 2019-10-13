@@ -1,3 +1,5 @@
+import six
+
 from contracts import contract
 import re
 
@@ -11,11 +13,11 @@ def flatten(seq):
     return res
 
 
-@contract(x='str|list(str)', options='list(str)', returns='list(str)')
+@contract(x='str|unicode|list(str|unicode)', options='list(str|unicode)', returns='list(str|unicode)')
 def expand_string(x, options):
     if isinstance(x, list):
         return flatten(expand_string(y, options) for y in x)
-    elif isinstance(x, str):
+    elif isinstance(x, six.string_types):
         x = x.strip()
         if ',' in x:
             splat = [_ for _ in x.split(',') if _]  # remove empty
@@ -38,7 +40,7 @@ def wildcard_to_regexp(arg):
 def has_wildcard(s):
     return s.find('*') > -1
     
-@contract(wildcard='str', universe='list(str)')
+@contract(wildcard='str|unicode', universe='list(str|unicode)')
 def expand_wildcard(wildcard, universe):
     ''' 
         Expands a wildcard expression against the given list.

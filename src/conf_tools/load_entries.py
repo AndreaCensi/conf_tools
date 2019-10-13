@@ -1,12 +1,11 @@
 import os
 from pprint import pformat
 
-from contracts import describe_type, contract
-from yaml import YAMLError
 import yaml
+from yaml import YAMLError
 
 from conf_tools import logger
-
+from contracts import describe_type, contract
 from . import ID_FIELD, check_valid_id_or_pattern, substitute_special
 from .exceptions import ConfToolsException, SyntaxMistake, SemanticMistake
 from .patterns import is_pattern
@@ -67,14 +66,13 @@ def load_entries_from_file(filename):
 
             # Warn about this?
 
-                
             check_valid_id_or_pattern(name)
 
             if name in name2where and name2where[name] != where:
-                msg = ('Entry %r already know from:\n %s (entry #%d)' % 
-                        (name,
-                         friendly_path(name2where[name][0]),
-                         name2where[name][1]))
+                msg = ('Entry %r already know from:\n %s (entry #%d)' %
+                       (name,
+                        friendly_path(name2where[name][0]),
+                        name2where[name][1]))
                 raise SemanticMistake(msg)
 
             name2where[name] = where
@@ -83,7 +81,7 @@ def load_entries_from_file(filename):
 
         except ConfToolsException as e:
             msg = ('Error while loading entry #%d '
-                   ' from file\n   %r\n%s\nError: %s' % 
+                   ' from file\n   %r\n%s\nError: %s' %
                    (where[1] + 1, friendly_path(where[0]), pformat(x), e))
             logger.error(msg)  # XXX
             raise
@@ -103,13 +101,13 @@ def enumerate_entries_from_file(filename):
         else:
             if not isinstance(parsed, list):
                 msg = ('Expect the file %r to contain a list of dicts,'
-                        ' found %s.' % (friendly_path(filename),
-                                         describe_type(parsed)))
+                       ' found %s.' % (friendly_path(filename),
+                                       describe_type(parsed)))
                 raise SyntaxMistake(msg)
-                 
-            if  not all([isinstance(x, dict) for x in parsed]):
-                msg = ('Expect the file %r to contain a list of dicts.' % 
-                        filename)
+
+            if not all([isinstance(x, dict) for x in parsed]):
+                msg = ('Expect the file %r to contain a list of dicts.' %
+                       filename)
                 raise SyntaxMistake(msg)
 
             if not parsed:
@@ -117,6 +115,7 @@ def enumerate_entries_from_file(filename):
 
             for num_entry, entry in enumerate(parsed):
                 yield (filename, num_entry), entry
+
 
 @contract(entries='list(dict)')
 def write_entries(entries, filename_yaml):
