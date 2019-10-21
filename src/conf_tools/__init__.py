@@ -6,7 +6,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-logging.info('conf_tools %s' % __version__)
+logger.info('conf_tools %s' % __version__)
 
 from . import utils
 
