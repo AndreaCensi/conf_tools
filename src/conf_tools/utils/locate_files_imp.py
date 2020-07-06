@@ -1,22 +1,26 @@
+from typing import List
+
 from . import logger
 from collections import defaultdict
-from contracts import contract
+
 import fnmatch
 import os
 
 __all__ = [
-    'locate_files',
+    "locate_files",
 ]
 
 
-@contract(returns='list(str)', directory='str',
-          pattern='str', followlinks='bool')
-def locate_files(directory, pattern, followlinks=True,
-                 include_directories=False,
-                 include_files=True):
-    #print('locate_files %r %r' % (directory, pattern))
+def locate_files(
+    directory: str,
+    pattern: str,
+    followlinks: bool = True,
+    include_directories: bool = False,
+    include_files: bool = True,
+) -> List[str]:
+    # print('locate_files %r %r' % (directory, pattern))
     filenames = []
-    
+
     for root, dirnames, files in os.walk(directory, followlinks=followlinks):
         if include_files:
             for f in files:
@@ -30,7 +34,6 @@ def locate_files(directory, pattern, followlinks=True,
                     filename = os.path.join(root, d)
                     filenames.append(filename)
 
-
     real2norm = defaultdict(lambda: [])
     for norm in filenames:
         real = os.path.realpath(norm)
@@ -39,13 +42,12 @@ def locate_files(directory, pattern, followlinks=True,
 
     for k, v in real2norm.items():
         if len(v) > 1:
-            msg = 'In directory:\n\t%s\n' % directory
-            msg += 'I found %d paths that refer to the same file:\n'
+            msg = "In directory:\n\t%s\n" % directory
+            msg += "I found %d paths that refer to the same file:\n"
             for n in v:
-                msg += '\t%s\n' % n
-            msg += 'refer to the same file:\n\t%s\n' % k
-            msg += 'I will silently eliminate redundancies.'
+                msg += "\t%s\n" % n
+            msg += "refer to the same file:\n\t%s\n" % k
+            msg += "I will silently eliminate redundancies."
             logger.warning(v)
 
     return list(real2norm.keys())
-

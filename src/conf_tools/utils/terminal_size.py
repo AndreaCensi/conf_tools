@@ -1,7 +1,8 @@
 __all__ = [
-    'get_screen_columns',
-    'getTerminalSize',          
+    "get_screen_columns",
+    "getTerminalSize",
 ]
+
 
 def get_screen_columns():
     max_x, max_y = getTerminalSize()  # @UnusedVariable
@@ -9,9 +10,9 @@ def get_screen_columns():
 
 
 def getTerminalSize():
-    '''
+    """
     max_x, max_y = getTerminalSize()
-    '''
+    """
     import os
 
     def ioctl_GWINSZ(fd):
@@ -19,11 +20,12 @@ def getTerminalSize():
             import fcntl
             import termios
             import struct
-            cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
-                                                 '1234'))
+
+            cr = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
         except:
             return None
         return cr
+
     cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
     if not cr:
         try:
@@ -35,9 +37,7 @@ def getTerminalSize():
     if not cr:
         try:
             env = os.environ
-            cr = (env['LINES'], env['COLUMNS'])
+            cr = (env["LINES"], env["COLUMNS"])
         except:
             cr = (25, 80)
     return int(cr[1]), int(cr[0])
-
-

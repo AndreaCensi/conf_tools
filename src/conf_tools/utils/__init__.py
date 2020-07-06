@@ -1,17 +1,14 @@
 from .. import logger
 
+_ = logger
 from .col_logging import *
-from .friendly_paths import *
-from .locate_files_imp import *
-from .terminal_size import *
-
-from .indent_string import *
-
 from .expansion import *
-from .wildcards import *
-from .pickling import *
+from .friendly_paths import *
+from .indent_string import *
+from .locate_files_imp import *
 from .not_found import *
-
-from .term_color import *
-
+from .pickling import *
 from .resources import *
+from .term_color import *
+from .terminal_size import *
+from .wildcards import *

@@ -1,15 +1,16 @@
-'''
+"""
     Utilities for writing compact file paths.
-'''
-__version__ = '1.0'
+"""
+__version__ = "1.0"
 import os
 
 # TODO: cache the results?
 __all__ = [
-    'friendly_path',
+    "friendly_path",
 ]
 
 from .. import logger
+
 
 def friendly_path(path, use_environment=True, debug=False):
     """ 
@@ -18,28 +19,28 @@ def friendly_path(path, use_environment=True, debug=False):
         (if use_environment = True).
     """
     # TODO: send extra rules
-    
+
     original = path
     options = []
 
     options.append(os.path.relpath(path, os.getcwd()))
 
     rules = []
-    rules.append(('~', os.path.expanduser('~')))
-    rules.append(('.', os.getcwd()))
-    rules.append(('.', os.path.realpath(os.getcwd())))
+    rules.append(("~", os.path.expanduser("~")))
+    rules.append((".", os.getcwd()))
+    rules.append((".", os.path.realpath(os.getcwd())))
 
     if use_environment:
         envs = dict(os.environ)
-        # remove unwanted 
+        # remove unwanted
         for e in list(envs.keys()):
-            if 'PWD' in e:
+            if "PWD" in e:
                 del envs[e]
 
         for k, v in envs.items():
             if v:
-                if v[0] == '/':
-                    rules.append(('$%s' % k, v))
+                if v[0] == "/":
+                    rules.append(("$%s" % k, v))
 
     # apply longest first
     rules.sort(key=lambda x: (-len(x[1])))
@@ -51,19 +52,19 @@ def friendly_path(path, use_environment=True, debug=False):
 
     def score(s):
         # penalize '..' a lot
-        s = s.replace('..', '*' * weight_doubledot)
+        s = s.replace("..", "*" * weight_doubledot)
         return len(s)
 
     options.sort(key=score)
 
     if debug:
-        logger.debug('Rules:')
+        logger.debug("Rules:")
         for k, v in rules:
-            logger.debug('- %10s = %s' % (k, v))
+            logger.debug("- %10s = %s" % (k, v))
 
-        logger.debug('Options for %s' % original)
+        logger.debug("Options for %s" % original)
         for o in options:
-            logger.debug('- %4d %s' % (score(o), o))
+            logger.debug("- %4d %s" % (score(o), o))
 
     result = options[0]
 
@@ -71,11 +72,10 @@ def friendly_path(path, use_environment=True, debug=False):
 
     return result
 
+
 def replace_variables(path, rules):
     for k, v in rules:
         if path.startswith(v):
             # print("  applied %s => %s" % (v, k))
             path = path.replace(v, k)
     return path
-
-

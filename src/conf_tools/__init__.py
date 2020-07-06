@@ -1,4 +1,4 @@
-__version__ = '1.9.9'
+__version__ = "1.9.9"
 
 import logging
 
@@ -6,15 +6,16 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-logger.info('conf_tools %s' % __version__)
+logger.info("conf_tools %s" % __version__)
 
 from . import utils
 
-from contracts import (new_contract)
+#
+# from contracts import (new_contract)
+#
+# new_contract("id_or_spec", "dict|str")
 
-new_contract("id_or_spec", "dict|str")
-
-ID_FIELD = 'id'
+ID_FIELD = "id"
 
 
 class ConfToolsGlobal(object):
