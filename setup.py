@@ -27,7 +27,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-long_description = read('README.md')
+long_description = "" #read('README.md')
 line = 'z6'
 setup(name=f'ConfTools-{line}',
       author="Andrea Censi",
