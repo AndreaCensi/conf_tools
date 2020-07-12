@@ -28,10 +28,10 @@ def read(fname):
 
 
 long_description = read('README.md')
-
-setup(name='ConfTools',
+line = 'z6'
+setup(name=f'ConfTools-{line}',
       author="Andrea Censi",
-      author_email="censi@mit.edu",
+      author_email="",
       url='http://github.com/AndreaCensi/conf_tools/',
 
       description=description,
@@ -50,7 +50,7 @@ setup(name='ConfTools',
       packages=find_packages('src'),
       install_requires=[
           'PyYAML',
-          'PyContracts>=1.2,<2',
+          'PyContracts3',
           'six',
       ],
       tests_require=['nose'],
