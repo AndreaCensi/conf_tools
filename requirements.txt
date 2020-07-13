@@ -1,5 +1,5 @@
 pytz
 beautifulsoup4
-PyContracts3
+PyContracts3==3.0.2
 PyYaml
 six

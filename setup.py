@@ -1,6 +1,6 @@
 import os
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 def get_version(filename):
@@ -27,8 +27,13 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-long_description = "" #read('README.md')
+long_description = ""  # read('README.md')
 line = 'z6'
+install_requires = [
+    'PyYAML',
+    'PyContracts3',
+    'six',
+]
 setup(name=f'ConfTools-{line}',
       author="Andrea Censi",
       author_email="",
@@ -48,11 +53,7 @@ setup(name=f'ConfTools-{line}',
 
       package_dir={'': 'src'},
       packages=find_packages('src'),
-      install_requires=[
-          'PyYAML',
-          'PyContracts3',
-          'six',
-      ],
+      install_requires=install_requires,
       tests_require=['nose'],
       entry_points={},
       )
