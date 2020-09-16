@@ -5,6 +5,7 @@ workflows:
     jobs:
       - test-3.6
       - test-3.7
+      - test-3.8
 jobs:
   test-3.6: &test-template
     docker:
@@ -24,8 +25,12 @@ jobs:
             pip install --user nose
             PATH=~/.local/bin:$PATH ~/.local/bin/nosetests conf_tools
 
- 
+
   test-3.7:
     <<: *test-template
     docker:
       - image: python:3.7
+  test-3.8:
+    <<: *test-template
+    docker:
+      - image: python:3.8
