@@ -1,4 +1,4 @@
-pytz
+pytz>=2020.4
 beautifulsoup4
 PyContracts3>=3.0.2
 PyYaml

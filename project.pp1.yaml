@@ -1,0 +1,34 @@
+package_name: ConfTools-z7
+srcdir: src
+version_file: "1"
+modules:
+  - conf_tools
+
+install_requires: []
+
+install_conflicts: [ 'ConfTools-*' , 'ConfTools']
+tests_require: [ ]
+
+console_scripts:
+  zt-demo: zuper_utils_asyncio:zt_demo
+nose:
+  modules:
+    - MODULENAME_tests
+  python_versions:
+    - '3.7'
+    - '3.8'
+
+pypi:
+  upload: [ ]
+
+circleci:
+  active: true
+  test_python_versions: [ '3.7', '3.8' ]
+
+python_syntax_version: '3.7'
+
+url: http://github.com/AndreaCensi/conf_tools
+author: ''
+author_email: 'info@zupermind.com'
+short_description: ''
+full_description: ''
