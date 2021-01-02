@@ -1,9 +1,9 @@
 import logging
 
-logging.basicConfig()
-import platform
 
 __all__ = []
+
+import platform
 
 
 def add_coloring_to_emit_ansi(fn):

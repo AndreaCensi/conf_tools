@@ -4,13 +4,17 @@ version_file: "1"
 modules:
   - conf_tools
 
-install_requires: []
+install_requires:
+  - zuper-commons-z7
+  - PyYAML
+  - nose
+  - setuptools
+  - termcolor
+  - six
 
 install_conflicts: [ 'ConfTools-*' , 'ConfTools']
 tests_require: [ ]
-
-console_scripts:
-  zt-demo: zuper_utils_asyncio:zt_demo
+console_scripts: {}
 nose:
   modules:
     - "*_tests"

@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pip install --user nose
+            pip install -q --user nose
             PATH=~/.local/bin:$PATH ~/.local/bin/nosetests conf_tools
 
 
