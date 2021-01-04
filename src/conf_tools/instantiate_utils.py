@@ -1,10 +1,6 @@
 import sys
 import traceback
 
-# import six
-# from contracts import contract
-# from contracts.utils import raise_desc
-
 from .exceptions import SemanticMistake
 from .utils import indent
 
@@ -15,18 +11,15 @@ def instantiate(function_name, parameters):
     try:
         function = import_name(function_name)
     except ValueError as e:
-        msg = "instantiate(): Cannot find function or constructor %r:\n" % (
-            function_name
-        )
-        msg += indent("%s" % (e), "> ")
-        raise SemanticMistake(msg)
+        msg = f"conf_tools.instantiate(): Cannot find the function or constructor {function_name!r}."
+        raise SemanticMistake(msg) from e
 
     try:
         # XXX TypeError is too broad, we should bind the params explicitly
         return function(**parameters)
     except TypeError as e:
         params = ", ".join(["%s=%r" % (k, v) for (k, v) in parameters.items()])
-        msg = "instantiate(): Could not call function %r\n with params %s:" % (
+        msg = "mcdp_lang.instantiate(): Could not call function %r\n with params %s:" % (
             function_name,
             params,
         )
