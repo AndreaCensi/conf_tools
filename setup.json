@@ -1,0 +1,30 @@
+{
+  "install_requires": [
+    "PyYAML",
+    "nose",
+    "setuptools",
+    "six",
+    "termcolor",
+    "zuper-commons-z7"
+  ],
+  "tests_require": [],
+  "srcdir": "src",
+  "package_name": "ConfTools-z7",
+  "entry_points": {
+    "console_scripts": []
+  },
+  "zip_safe": false,
+  "include_package_data": false,
+  "modules": [
+    "conf_tools",
+    "conf_tools.unittests",
+    "conf_tools.unittests.groups",
+    "conf_tools.unittests.instantiate_tests",
+    "conf_tools.unittests.templating",
+    "conf_tools.utils"
+  ],
+  "version": "7.1.2101052340",
+  "author": "",
+  "author_email": "info@zupermind.com",
+  "url": "http://github.com/AndreaCensi/conf_tools"
+}
