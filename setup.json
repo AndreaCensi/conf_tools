@@ -23,8 +23,8 @@
     "conf_tools.unittests.templating",
     "conf_tools.utils"
   ],
-  "version": "7.1.2103262007",
+  "version": "7.1.2104181347",
   "author": "",
   "author_email": "info@zupermind.com",
-  "url": "http://github.com/AndreaCensi/conf_tools"
+  "url": "https://github.com/AndreaCensi/conf_tools"
 }
