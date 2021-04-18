@@ -2,9 +2,8 @@ jobs:
   test-3.8-production:
     docker:
     - {image: python:3.8}
-    environment: {COLUMNS: '160', COVER_PACKAGES: 'conf_tools,conf_tools_tests,conf_tools.utils.terminal_size,conf_tools.utils.term_color,conf_tools.special_subst,conf_tools.utils.resources,conf_tools.unittests.utils,conf_tools.utils.locate_files_imp,conf_tools.unittests.groups,conf_tools.utils.wildcards,conf_tools.unittests.groups.groups_test,conf_tools.checks,conf_tools.utils.friendly_paths,conf_tools.utils.not_found,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.unittests.templating.other_tests,conf_tools.utils.pickling,conf_tools.unittests.instantiate_tests,conf_tools.utils.indent_string,conf_tools.objspec,conf_tools.unittests.templating,conf_tools.utils.expansion,conf_tools.load_entries,conf_tools.unittests.templating.simple_use_tests,conf_tools.code_specs,conf_tools.unittests,conf_tools.instantiate_utils,conf_tools.patterns,conf_tools.global_config,conf_tools.master,conf_tools.unittests.instantiate_tests.static_test,conf_tools.exceptions,conf_tools.valid,conf_tools.unittests.pickling_test,conf_tools.code_desc,conf_tools,conf_tools.unittests.wildcards_test',
-      PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin,
-      TEST_PACKAGES: conf_tools conf_tools_tests}
+    environment: {COLUMNS: '160', COVER_PACKAGES: 'conf_tools,conf_tools_tests', PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin,
+      TEST_PACKAGES: conf_tools_tests conf_tools}
     steps:
     - checkout
     - run: {command: "mkdir -p  build-stats\nenv | tee  build-stats/env.txt\n", name: Build
@@ -45,9 +44,8 @@ jobs:
   test-3.8-staging:
     docker:
     - {image: python:3.8}
-    environment: {COLUMNS: '160', COVER_PACKAGES: 'conf_tools,conf_tools_tests,conf_tools.utils.terminal_size,conf_tools.utils.term_color,conf_tools.special_subst,conf_tools.utils.resources,conf_tools.unittests.utils,conf_tools.utils.locate_files_imp,conf_tools.unittests.groups,conf_tools.utils.wildcards,conf_tools.unittests.groups.groups_test,conf_tools.checks,conf_tools.utils.friendly_paths,conf_tools.utils.not_found,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.unittests.templating.other_tests,conf_tools.utils.pickling,conf_tools.unittests.instantiate_tests,conf_tools.utils.indent_string,conf_tools.objspec,conf_tools.unittests.templating,conf_tools.utils.expansion,conf_tools.load_entries,conf_tools.unittests.templating.simple_use_tests,conf_tools.code_specs,conf_tools.unittests,conf_tools.instantiate_utils,conf_tools.patterns,conf_tools.global_config,conf_tools.master,conf_tools.unittests.instantiate_tests.static_test,conf_tools.exceptions,conf_tools.valid,conf_tools.unittests.pickling_test,conf_tools.code_desc,conf_tools,conf_tools.unittests.wildcards_test',
-      PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin,
-      TEST_PACKAGES: conf_tools conf_tools_tests}
+    environment: {COLUMNS: '160', COVER_PACKAGES: 'conf_tools,conf_tools_tests', PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin,
+      TEST_PACKAGES: conf_tools_tests conf_tools}
     steps:
     - checkout
     - run: {command: "mkdir -p  build-stats\nenv | tee  build-stats/env.txt\n", name: Build
@@ -99,4 +97,4 @@ workflows:
           branches: {ignore: /z7-stage.*/}
   version: 2
 
-# sigil f6f04f999e460f6270a73589763a9d0c
+# sigil d1e507cd7f730d8cb60728d98321fa6b
