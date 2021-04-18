@@ -65,9 +65,7 @@ class GenericCall(object):
             return instance
         except:
             if ConfToolsGlobal.log_instance_error:
-                logger.error(
-                    "Error while trying to instantiate entry:\n%s" % (pformat(entry))
-                )
+                logger.error("Error while trying to instantiate entry:\n%s" % (pformat(entry)))
             raise
 
 

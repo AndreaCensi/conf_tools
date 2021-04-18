@@ -14,8 +14,8 @@ from .utils import friendly_path, locate_files
 
 
 def load_entries_from_dir(dirname, pattern):
-    """ calls load_entries_from_file for each file in dirname respecting
-        the pattern. Environment is not expanded. """
+    """calls load_entries_from_file for each file in dirname respecting
+    the pattern. Environment is not expanded."""
     # logger.debug('Loading %r from %r' % (dirname, pattern))
     try:
         filenames = list(locate_files(dirname, pattern))
@@ -29,24 +29,24 @@ def load_entries_from_dir(dirname, pattern):
 
 def load_entries_from_file(filename):
     """
-        It is assumed that the file contains a list of dictionaries.
+    It is assumed that the file contains a list of dictionaries.
 
-        Each dictionary MUST have the field 'id' and it must be unique.
+    Each dictionary MUST have the field 'id' and it must be unique.
 
-        yields (filename, counter), entry
+    yields (filename, counter), entry
 
-        *Special fields*
+    *Special fields*
 
-        If a field name starts with 'file:', it is processed to resolve
-        the relative filename.
+    If a field name starts with 'file:', it is processed to resolve
+    the relative filename.
 
-        For example, if we find: ..
+    For example, if we find: ..
 
-            {'file:data': 'data.pickle'},
+        {'file:data': 'data.pickle'},
 
-        we add: ..
+    we add: ..
 
-            {'data': '/path/data.pickle'}
+        {'data': '/path/data.pickle'}
     """
     if not os.path.exists(filename):
         msg = "File %r does not exist." % friendly_path(filename)
@@ -82,10 +82,11 @@ def load_entries_from_file(filename):
             yield where, x
 
         except ConfToolsException as e:
-            msg = (
-                "Error while loading entry #%d "
-                " from file\n   %r\n%s\nError: %s"
-                % (where[1] + 1, friendly_path(where[0]), pformat(x), e)
+            msg = "Error while loading entry #%d " " from file\n   %r\n%s\nError: %s" % (
+                where[1] + 1,
+                friendly_path(where[0]),
+                pformat(x),
+                e,
             )
             logger.error(msg)  # XXX
             raise

@@ -34,21 +34,21 @@ __all__ = [
 
 class ObjectSpec(dict):
     """
-        This is the class that knows how to instance entries.
+    This is the class that knows how to instance entries.
 
-        Users access it through ConfigMaster.
+    Users access it through ConfigMaster.
 
     """
 
     def __init__(self, name, pattern, check, instance_method, object_check, master):
         """
-            Initializes the structure.
+        Initializes the structure.
 
-            :param:name: Decorative name for these objects (e.g. "vehicles")
-            :param:pattern: Pattern for filenames ("*.vehicles.yaml")
-            :param:check: Function to check the validity of the entries.
-            :param:object_check: Function to check the validity of the values.
-            :param:master: References to a Master instance.
+        :param:name: Decorative name for these objects (e.g. "vehicles")
+        :param:pattern: Pattern for filenames ("*.vehicles.yaml")
+        :param:check: Function to check the validity of the entries.
+        :param:object_check: Function to check the validity of the values.
+        :param:master: References to a Master instance.
         """
         dict.__init__(self)
 
@@ -78,10 +78,7 @@ class ObjectSpec(dict):
             logger.warning(msg)
 
         if not can_be_pickled(instance_method):
-            msg = (
-                'Function %s passed as "instance_method" cannot be pickled. '
-                % instance_method
-            )
+            msg = 'Function %s passed as "instance_method" cannot be pickled. ' % instance_method
             msg += "This might create problems later but it is OK to continue."
             msg += " Happened for %s/%s" % (master, self)
             # TODO: add where (2 levels up)
@@ -103,8 +100,8 @@ class ObjectSpec(dict):
 
     def load_config_from_directory(self, directory):
         """
-            Puts the directory in the list of directories to read.
-            It will be read only later, when triggered by make_sure_everything_read().
+        Puts the directory in the list of directories to read.
+        It will be read only later, when triggered by make_sure_everything_read().
         """
         self.dirs_to_read.append(directory)
 
@@ -207,9 +204,9 @@ class ObjectSpec(dict):
 
     def check(self, spec):
         """
-            Checks that a spec is well formed, raises a ValueError if not.
-            In addition to the user-defined check, it checks that there is
-            a "id" field.
+        Checks that a spec is well formed, raises a ValueError if not.
+        In addition to the user-defined check, it checks that there is
+        a "id" field.
         """
         if not isinstance(spec, dict):
             msg = f"I expect the spec to be a dict, not {spec}"
@@ -273,17 +270,17 @@ class ObjectSpec(dict):
     # @contract(id_or_spec='str|dict', returns='tuple(str|None,*)')
     def instance_smart(self, id_or_spec):
         """
-            Flexible instantiation method. The parameter can be either a
-            string or a dictionary. If it is a string, it must be the ID.
-            If it is a dictionary, it must be a valid spec. The method
-            returns a tuple (id, object).
+        Flexible instantiation method. The parameter can be either a
+        string or a dictionary. If it is a string, it must be the ID.
+        If it is a dictionary, it must be a valid spec. The method
+        returns a tuple (id, object).
 
-            Example usage: ..
+        Example usage: ..
 
-                id_dog, dog = config.specs['dogs'].instance_smart('puppy')
+            id_dog, dog = config.specs['dogs'].instance_smart('puppy')
 
-                spec = dict(id='puppy', class='Puppy')
-                id_dog, dog = config.specs['dogs'].instance_smart(spec)
+            spec = dict(id='puppy', class='Puppy')
+            id_dog, dog = config.specs['dogs'].instance_smart(spec)
 
         """
         self.make_sure_everything_read()
@@ -302,13 +299,13 @@ class ObjectSpec(dict):
     # @contract(id_or_spec_or_code='str|dict|code_spec|*', returns='tuple(str|None,*)')
     def instance_smarter(self, id_or_spec_or_code):
         """
-            Most flexible instantiation method. The parameter can be:
-            - a string => id of spec
-            - a spec (dict with fields: id, desc, and code) => it gets instantiated
-            - a code spec (list of string, dict) => it gets called
-              In this case, the id returned is None.
-            - an object, already instantiated. It is passed then through
-                the check function.
+        Most flexible instantiation method. The parameter can be:
+        - a string => id of spec
+        - a spec (dict with fields: id, desc, and code) => it gets instantiated
+        - a code spec (list of string, dict) => it gets called
+          In this case, the id returned is None.
+        - an object, already instantiated. It is passed then through
+            the check function.
 
         """
         self.make_sure_everything_read()
@@ -343,9 +340,9 @@ class ObjectSpec(dict):
 
     def _actually_load(self, directory):
         """
-            Loads all files in the directory, recursively, using
-            the pattern specified in the constructor.
-            Returns the number of new entries found.
+        Loads all files in the directory, recursively, using
+        the pattern specified in the constructor.
+        Returns the number of new entries found.
         """
         if directory in self.dirs_read:
             # print('skipping directory %r because already read' % directory)
@@ -418,8 +415,7 @@ class ObjectSpec(dict):
                     if not self.matches_any_pattern(name):
                         msg = (
                             "While trying to instantiate empty entry %r "
-                            "in %s, I could not find any pattern matching."
-                            % (name, friendly_path(filename))
+                            "in %s, I could not find any pattern matching." % (name, friendly_path(filename))
                         )
                         msg += "\nPatterns: %s" % self.templates
                         raise SemanticMistake(msg)
@@ -454,8 +450,8 @@ class ObjectSpec(dict):
         return nfound
 
     def summary_string_id_desc(self):
-        """ Assuming that the entries are dictionaries
-            with fields 'id' and 'desc', returns a summary string.
+        """Assuming that the entries are dictionaries
+        with fields 'id' and 'desc', returns a summary string.
         """
         self.make_sure_everything_read()
 
@@ -472,8 +468,8 @@ class ObjectSpec(dict):
         return s
 
     def summary_string_id_desc_patterns(self):
-        """ Assuming that the entries are dictionaries
-            with fields 'id' and 'desc', returns a summary string.
+        """Assuming that the entries are dictionaries
+        with fields 'id' and 'desc', returns a summary string.
         """
         self.make_sure_everything_read()
 
@@ -520,13 +516,13 @@ class ObjectSpec(dict):
     # @contract(names='str|list(str)', returns='list(str)')
     def expand_names(self, names):
         """
-            The most flexible expansion routine on the planet.
+        The most flexible expansion routine on the planet.
 
-            Examples: ..
+        Examples: ..
 
-                config.widgets.expand_names('*')
-                config.widgets.expand_names('a,b*')
-                config.widgets.expand_names(['a','b*'])
+            config.widgets.expand_names('*')
+            config.widgets.expand_names('a,b*')
+            config.widgets.expand_names(['a','b*'])
 
         """
         self.make_sure_everything_read()
@@ -566,9 +562,7 @@ class ObjectSpec(dict):
     def print_summary(self, stream, instance=False, raise_instance_error=False):
         self.make_sure_everything_read()
 
-        ConfToolsGlobal.log_instance_error = (
-            False  # XXX: find more elegant way # XXX: preserve
-        )
+        ConfToolsGlobal.log_instance_error = False  # XXX: find more elegant way # XXX: preserve
 
         stream.write("Spec %s:\n" % self.name)
 

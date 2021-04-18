@@ -14,14 +14,7 @@ def check_valid_id_or_pattern(name):
         raise SyntaxMistake('ID must be string, got "%s".' % name)
     if (not is_valid_id(name)) and (not is_pattern(name)):
         msg = "The name %r is not a valid ID or pattern." % name
-        if (
-            ("$" in name)
-            or ("(" in name)
-            or (")" in name)
-            or ("[" in name)
-            or ("{" in name)
-            or ("}" in name)
-        ):
+        if ("$" in name) or ("(" in name) or (")" in name) or ("[" in name) or ("{" in name) or ("}" in name):
             msg += " Remember that patterns are written with curly braces "
             msg += '(e.g., "rsim-${VEHICLE}").'
 

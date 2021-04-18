@@ -10,14 +10,12 @@ from .utils import expand_environment
 
 # TODO: put it somewhere
 def recursive_subst_keys(struct, function):
-    """ Recursive substitution in a structure
-        for key/value pairs in dictionaries.
-        function: (key, value) -> (key, value)  """
+    """Recursive substitution in a structure
+    for key/value pairs in dictionaries.
+    function: (key, value) -> (key, value)"""
     if isinstance(struct, dict):
         # TODO: check no overwriting?
-        return dict(
-            [function(k, recursive_subst_keys(v, function)) for k, v in struct.items()]
-        )
+        return dict([function(k, recursive_subst_keys(v, function)) for k, v in struct.items()])
     elif isinstance(struct, list):
         return [recursive_subst_keys(x, function) for x in struct]
     else:

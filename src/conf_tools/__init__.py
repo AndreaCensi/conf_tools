@@ -5,9 +5,7 @@ from zuper_commons import ZLogger
 
 logger = ZLogger(__name__)
 
-logger.hello_module(
-    name=__name__, filename=__file__, version=__version__, date=__date__
-)
+logger.hello_module(name=__name__, filename=__file__, version=__version__, date=__date__)
 
 
 from . import utils

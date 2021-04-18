@@ -19,22 +19,22 @@ def is_pattern(s):
 
 def pattern_matches(pattern, string):
     """
-        Returns a dict with the substitutions.
+    Returns a dict with the substitutions.
 
-        For example,
+    For example,
 
-            pattern_matches('r-${robot}', 'r-ciao')
-            # -> {'robot': 'ciao'}
+        pattern_matches('r-${robot}', 'r-ciao')
+        # -> {'robot': 'ciao'}
 
-            pattern_matches('r2-${robot}', 'r-ciao')
-            # -> None
+        pattern_matches('r2-${robot}', 'r-ciao')
+        # -> None
 
-        If the key contains 'id', it only matches [a-zA-Z]+\d*.
+    If the key contains 'id', it only matches [a-zA-Z]+\d*.
 
-        For example:
+    For example:
 
-            pattern_matches('Y${id_nuisance}${robot}', 'Yrp1R1')
-            # -> {'id_nuisance': 'rp1', ... }
+        pattern_matches('Y${id_nuisance}${robot}', 'Yrp1R1')
+        # -> {'id_nuisance': 'rp1', ... }
 
     """
     # reg = '\$\{([^\}]*)\}'
@@ -86,8 +86,8 @@ def recursive_subst(template, **matches):
 # @contract(template='str', matches='dict(str:str)', returns='str')
 def substitute_strings(template, matches):
     """
-        Raises SemanticMistake if key not found.
-        SyntaxMistake if invalid format.
+    Raises SemanticMistake if key not found.
+    SyntaxMistake if invalid format.
     """
 
     def sub(x):
@@ -142,9 +142,9 @@ def trynum(x):
 # @contract(expr='str', returns='dict')
 def parse_options(expr):
     """
-        Parses a colon-separated list of a=b pair: ..
+    Parses a colon-separated list of a=b pair: ..
 
-            a=1;b=2;c=3
+        a=1;b=2;c=3
 
     """
 

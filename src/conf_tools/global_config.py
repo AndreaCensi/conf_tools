@@ -15,13 +15,13 @@ __all__ = [
 class GlobalConfig(object):
     """
 
-        To correctly restore configuration with compmake: ::
+    To correctly restore configuration with compmake: ::
 
 
-            comp(f, GlobalConfig.get_state(), param=2)
+        comp(f, GlobalConfig.get_state(), param=2)
 
-            def f(config_state, param):
-                config_state.restore()
+        def f(config_state, param):
+            config_state.restore()
 
 
     """
@@ -39,8 +39,8 @@ class GlobalConfig(object):
     @staticmethod
     def register_master(name, master):
         """
-            Register a master so that we can keep track of them,
-            and load configuration in all of them at the same time.
+        Register a master so that we can keep track of them,
+        and load configuration in all of them at the same time.
         """
         if not isinstance(name, str):
             raise ValueError("Required a string, got %s." % name.__repr__())
@@ -59,8 +59,8 @@ class GlobalConfig(object):
     @staticmethod
     # @contract(config_dirs='list(str)')
     def global_load_dirs(config_dirs: List[str]):
-        """ The environments variable will all be expanded
-            (so that it can be used from other threads. """
+        """The environments variable will all be expanded
+        (so that it can be used from other threads."""
         for c in config_dirs:
             GlobalConfig.global_load_dir(c)
 
@@ -68,12 +68,12 @@ class GlobalConfig(object):
     # @contract(config_dir='str')
     def global_load_dir(config_dir: str):
         """
-            Load the configuration for all the different masters.
+        Load the configuration for all the different masters.
 
-            The environment variables are expanded.
+        The environment variables are expanded.
 
-            Also, if it looks like a package name,
-            it will be expanded using resource_filename.
+        Also, if it looks like a package name,
+        it will be expanded using resource_filename.
         """
         config_dir0 = config_dir
 

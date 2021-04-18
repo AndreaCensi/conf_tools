@@ -13,10 +13,10 @@ from .. import logger
 
 
 def friendly_path(path, use_environment=True, debug=False):
-    """ 
-        Gets a friendly representation of the given path,
-        using relative paths or environment variables
-        (if use_environment = True).
+    """
+    Gets a friendly representation of the given path,
+    using relative paths or environment variables
+    (if use_environment = True).
     """
     # TODO: send extra rules
 

@@ -29,9 +29,9 @@ def instantiate(function_name, parameters):
 
 def import_name(name: str):
     """
-        Loads the python object with the given name.
+    Loads the python object with the given name.
 
-        Note that "name" might be "module.module.name" as well.
+    Note that "name" might be "module.module.name" as well.
     """
     expected = (ImportError,)
     try:

@@ -32,8 +32,8 @@ def check_valid_code_spec(x):
 
 
 def check_valid_code_spec_contract(x):
-    """ Note that otherwise BadConfig is thrown ---
-    while it should be ValueError for PyContracts. """
+    """Note that otherwise BadConfig is thrown ---
+    while it should be ValueError for PyContracts."""
     try:
         check_valid_code_spec(x)
     except BadConfig as e:
@@ -44,9 +44,9 @@ def check_valid_code_spec_contract(x):
 
 # @contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
-    """ code_spec must be a sequence  [string, dictionary], giving
-        the python function (or class) to instantiate, along
-        with its parameters. """
+    """code_spec must be a sequence  [string, dictionary], giving
+    the python function (or class) to instantiate, along
+    with its parameters."""
     try:
         function_name = code_spec[0]
         parameters = code_spec[1]

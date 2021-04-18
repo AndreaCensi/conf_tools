@@ -18,7 +18,7 @@ class ConfigMaster:
     def __init__(self, name: str):
         """
 
-            :param:name: Name to use for logging messages.
+        :param:name: Name to use for logging messages.
         """
         self.loaded = False
         self.specs = {}
@@ -84,8 +84,8 @@ class ConfigMaster:
 
     def make_sure_loaded(self):
         """
-            If the configuration is not been loaded yet, load the
-            default one.
+        If the configuration is not been loaded yet, load the
+        default one.
         """
         if not self.loaded:
             self.load(None)
@@ -140,9 +140,7 @@ class ConfigMaster:
     def print_summary(self, stream, instance=False, only_type=None):
         """ Create a summary of all the configuration we have. """
         if only_type is None:
-            ordered = [
-                (id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())
-            ]
+            ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
 
             stream.write("Config has %d kinds of objects:\n " % len(self.specs))
             for id_spec, spec in ordered:

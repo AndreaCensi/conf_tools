@@ -8,14 +8,10 @@ class MyStatic:
 
 
 def test_static_method_1():
-    the_class = import_name(
-        "conf_tools.unittests.instantiate_tests.static_test.MyStatic"
-    )
+    the_class = import_name("conf_tools.unittests.instantiate_tests.static_test.MyStatic")
     print(the_class.__dict__)
     print(the_class)
-    the_static = import_name(
-        "conf_tools.unittests.instantiate_tests.static_test.MyStatic.f"
-    )
+    the_static = import_name("conf_tools.unittests.instantiate_tests.static_test.MyStatic.f")
 
     assert the_static(2) == 3
 
