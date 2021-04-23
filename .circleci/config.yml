@@ -20,7 +20,7 @@ jobs:
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       COVER_PACKAGES: conf_tools,conf_tools_tests
-      TEST_PACKAGES: conf_tools_tests conf_tools
+      TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
       auth:
@@ -142,7 +142,7 @@ jobs:
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       COVER_PACKAGES: conf_tools,conf_tools_tests
-      TEST_PACKAGES: conf_tools_tests conf_tools
+      TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
       auth:
@@ -259,4 +259,4 @@ jobs:
         command: |
           bash <(curl -s https://codecov.io/bash)
 
-# sigil 91b16aec64be386854406f4d08cb11dd
+# sigil d46f930be345f05296af650ada4606af
