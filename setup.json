@@ -13,8 +13,8 @@
   "entry_points": {
     "console_scripts": []
   },
-  "zip_safe": false,
-  "include_package_data": false,
+  "zip_safe": true,
+  "include_package_data": true,
   "modules": [
     "conf_tools",
     "conf_tools.unittests",
@@ -26,5 +26,6 @@
   "version": "7.1.2104231703",
   "author": "",
   "author_email": "info@zupermind.com",
-  "url": "https://github.com/AndreaCensi/conf_tools"
+  "url": "https://github.com/AndreaCensi/conf_tools",
+  "hey": 2
 }
