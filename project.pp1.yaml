@@ -13,7 +13,7 @@ install_requires:
 - termcolor
 - six
 
-install_conflicts: [ConfTools-*, ConfTools]
+
 tests_require: []
 console_scripts: {}
 nose:
