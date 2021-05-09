@@ -3,29 +3,29 @@ package_name: ConfTools-z7
 srcdir: src
 version_file: '1'
 modules:
-    - conf_tools
+- conf_tools
 
 install_requires:
-    - zuper-commons-z7
-    - PyYAML
-    - nose
-    - setuptools
-    - termcolor
-    - six
+- zuper-commons-z7
+- PyYAML
+- nose
+- setuptools
+- termcolor
+- six
 
 install_conflicts: [ConfTools-*, ConfTools]
 tests_require: []
 console_scripts: {}
 nose:
-    modules:
-        - '*_tests'
+  modules:
+  - '*_tests'
 
 pypi:
-    upload: []
+  upload: []
 
 circleci:
-    active: true
-    test_python_versions: ['3.8']
+  active: true
+  test_python_versions: ['3.8']
 
 python_syntax_version: '3.8'
 
