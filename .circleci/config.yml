@@ -20,7 +20,7 @@ jobs:
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       COVER_PACKAGES: conf_tools,conf_tools_tests
-      TEST_PACKAGES: conf_tools_tests conf_tools
+      TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
       auth:
@@ -98,19 +98,6 @@ jobs:
 
 
     - run:
-        name: conf_tools_tests
-        command: |-
-          set -euxo pipefail
-          mkdir -p out/test-results
-          xunit_output=$PWD/out/test-results/nose-${CIRCLE_NODE_INDEX}-conf_tools_tests-xunit.xml
-          nosetests \
-              --rednose --immediate \
-              --cover-tests --with-coverage \
-              --with-xunit --xunit-file=${xunit_output} \
-              --cover-package=${COVER_PACKAGES} \
-              conf_tools_tests
-        when: always
-    - run:
         name: conf_tools
         command: |-
           set -euxo pipefail
@@ -122,6 +109,19 @@ jobs:
               --with-xunit --xunit-file=${xunit_output} \
               --cover-package=${COVER_PACKAGES} \
               conf_tools
+        when: always
+    - run:
+        name: conf_tools_tests
+        command: |-
+          set -euxo pipefail
+          mkdir -p out/test-results
+          xunit_output=$PWD/out/test-results/nose-${CIRCLE_NODE_INDEX}-conf_tools_tests-xunit.xml
+          nosetests \
+              --rednose --immediate \
+              --cover-tests --with-coverage \
+              --with-xunit --xunit-file=${xunit_output} \
+              --cover-package=${COVER_PACKAGES} \
+              conf_tools_tests
         when: always
     - run:
         name: post-circle-tests
@@ -168,7 +168,7 @@ jobs:
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       COVER_PACKAGES: conf_tools,conf_tools_tests
-      TEST_PACKAGES: conf_tools_tests conf_tools
+      TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
       auth:
@@ -246,19 +246,6 @@ jobs:
 
 
     - run:
-        name: conf_tools_tests
-        command: |-
-          set -euxo pipefail
-          mkdir -p out/test-results
-          xunit_output=$PWD/out/test-results/nose-${CIRCLE_NODE_INDEX}-conf_tools_tests-xunit.xml
-          nosetests \
-              --rednose --immediate \
-              --cover-tests --with-coverage \
-              --with-xunit --xunit-file=${xunit_output} \
-              --cover-package=${COVER_PACKAGES} \
-              conf_tools_tests
-        when: always
-    - run:
         name: conf_tools
         command: |-
           set -euxo pipefail
@@ -270,6 +257,19 @@ jobs:
               --with-xunit --xunit-file=${xunit_output} \
               --cover-package=${COVER_PACKAGES} \
               conf_tools
+        when: always
+    - run:
+        name: conf_tools_tests
+        command: |-
+          set -euxo pipefail
+          mkdir -p out/test-results
+          xunit_output=$PWD/out/test-results/nose-${CIRCLE_NODE_INDEX}-conf_tools_tests-xunit.xml
+          nosetests \
+              --rednose --immediate \
+              --cover-tests --with-coverage \
+              --with-xunit --xunit-file=${xunit_output} \
+              --cover-package=${COVER_PACKAGES} \
+              conf_tools_tests
         when: always
     - run:
         name: post-circle-tests
@@ -311,4 +311,4 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
     resource_class: medium+
 
-# sigil f4522391fdaa00d8ac96800da1075805
+# sigil 7f648dc30c269d2ae612bf3b38bd6e45
