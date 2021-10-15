@@ -7,8 +7,8 @@ from yaml import YAMLError
 from conf_tools import logger
 
 # from contracts import describe_type, contract
-from . import ID_FIELD, check_valid_id_or_pattern, substitute_special
-from .exceptions import ConfToolsException, SyntaxMistake, SemanticMistake
+from . import check_valid_id_or_pattern, ID_FIELD, substitute_special
+from .exceptions import ConfToolsException, SemanticMistake, SyntaxMistake
 from .patterns import is_pattern
 from .utils import friendly_path, locate_files
 
@@ -96,7 +96,7 @@ def enumerate_entries_from_file(filename):
     """ Yields (filename, num_entry), entry """
     with open(filename) as f:
         try:
-            parsed = yaml.load(f)
+            parsed = yaml.load(f, Loader=yaml.Loader)
         except YAMLError as e:
             msg = "Cannot parse YAML file %s:\n%s" % (friendly_path(filename), e)
             raise SyntaxMistake(msg)  # TODO: make UserError
