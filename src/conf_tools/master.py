@@ -61,7 +61,7 @@ class ConfigMaster:
         return spec
 
     def get_classes(self):
-        """ Returns a list of strings of the known classes of objects. """
+        """Returns a list of strings of the known classes of objects."""
         # TODO: keep order
         return list(self.specs.keys())
 
@@ -131,14 +131,14 @@ class ConfigMaster:
 
     # @contract(returns=str)
     def get_summary(self, instance=False, only_type=None):
-        """ Create a summary of all the configuration we have. """
+        """Create a summary of all the configuration we have."""
         s = StringIO()
         self.print_summary(stream=s, instance=instance, only_type=only_type)
         return s.getvalue()
 
     # @contract(returns='None')
     def print_summary(self, stream, instance=False, only_type=None):
-        """ Create a summary of all the configuration we have. """
+        """Create a summary of all the configuration we have."""
         if only_type is None:
             ordered = [(id_spec, self.specs[id_spec]) for id_spec in sorted(self.specs.keys())]
 

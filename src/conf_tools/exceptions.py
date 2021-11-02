@@ -28,25 +28,25 @@ class BadConfig(Exception):
 
 
 class ConfToolsException(Exception):
-    """ Error in the configuration (either syntax or semantics) """
+    """Error in the configuration (either syntax or semantics)"""
 
     pass
 
 
 class SyntaxMistake(ConfToolsException):
-    """ For example, YAML mistakes, or file not containing dicts. """
+    """For example, YAML mistakes, or file not containing dicts."""
 
     pass
 
 
 class SemanticMistake(ConfToolsException):
-    """ For example, repeated entries, or missing files/directories. """
+    """For example, repeated entries, or missing files/directories."""
 
     pass
 
 
 class SemanticMistakeKeyNotFound(SemanticMistake):
-    """ A spec has not been found. """
+    """A spec has not been found."""
 
     def __init__(self, name, object_spec):
         # TODO: abbreviate
@@ -81,6 +81,6 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
 
 
 class ResourceNotFound(SemanticMistake):
-    """ For example,  missing files/directories. """
+    """For example,  missing files/directories."""
 
     pass

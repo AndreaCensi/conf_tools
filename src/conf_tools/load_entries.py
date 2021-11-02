@@ -93,7 +93,7 @@ def load_entries_from_file(filename):
 
 
 def enumerate_entries_from_file(filename):
-    """ Yields (filename, num_entry), entry """
+    """Yields (filename, num_entry), entry"""
     with open(filename) as f:
         try:
             parsed = yaml.load(f, Loader=yaml.Loader)

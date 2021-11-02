@@ -16,5 +16,5 @@ except:
     sys.stderr.write('compmake can make use of the package "termcolor".' " Please install it.\n")
 
     def termcolor_colored(x, color=None, on_color=None, attrs=None):  # @UnusedVariable
-        """ emulation of the termcolor interface """
+        """emulation of the termcolor interface"""
         return x

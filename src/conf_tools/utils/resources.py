@@ -6,7 +6,7 @@ __all__ = [
 
 
 def dir_from_package_name(d: str):
-    """ This works for "package.sub" format. """
+    """This works for "package.sub" format."""
     tokens = d.split(".")
     if len(tokens) == 1:
         package = d

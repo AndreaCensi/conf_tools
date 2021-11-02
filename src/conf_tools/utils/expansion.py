@@ -8,7 +8,7 @@ __all__ = [
 
 
 def expand_environment(s: str) -> str:
-    """ Expands ~ and ${ENV} in the string. """
+    """Expands ~ and ${ENV} in the string."""
     s = os.path.expandvars(s)
     s = os.path.expanduser(s)
     if "$" in s:

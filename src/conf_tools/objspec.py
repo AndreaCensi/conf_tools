@@ -93,7 +93,7 @@ class ObjectSpec(dict):
         )
 
     def make_sure_everything_read(self):
-        """ Reads the rest of the directories that we need to read. """
+        """Reads the rest of the directories that we need to read."""
         while self.dirs_to_read:
             d = self.dirs_to_read.pop(0)
             self._actually_load(d)
@@ -226,7 +226,7 @@ class ObjectSpec(dict):
 
     # @contract(id_object='str')
     def instance(self, id_object: str):
-        """ Instances the entry with the given ID. """
+        """Instances the entry with the given ID."""
         if not isinstance(id_object, str):
             raise ValueError("Expected string; got %r" % id_object)
         self.make_sure_everything_read()
@@ -259,7 +259,7 @@ class ObjectSpec(dict):
 
     # @contract(spec='dict')
     def instance_spec(self, spec):
-        """ Instances the given spec using the "instance_method" function. """
+        """Instances the given spec using the "instance_method" function."""
         self.make_sure_everything_read()
 
         if self.instance_method is None:
@@ -332,7 +332,7 @@ class ObjectSpec(dict):
             return None, x
 
     def force_load(self, directory):
-        """ Will force reloading of directory. """
+        """Will force reloading of directory."""
         if directory in self.dirs_read:
             self.dirs_read.remove(directory)
 
@@ -551,7 +551,7 @@ class ObjectSpec(dict):
 
     # @contract(id_spec='str', desc='str', code='code_spec')
     def add_spec(self, id_spec, desc, code):
-        """ Adds manually one spec. """
+        """Adds manually one spec."""
         self.make_sure_everything_read()
 
         spec = dict(id=id_spec, desc=desc, code=code)

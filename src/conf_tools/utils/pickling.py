@@ -7,7 +7,7 @@ __all__ = [
 
 
 def can_be_pickled(x):
-    """ Returns True if the object can be pickled. """
+    """Returns True if the object can be pickled."""
     try:
         s = BytesIO()
         pickle.dump(x, s)

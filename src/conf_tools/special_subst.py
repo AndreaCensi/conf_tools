@@ -24,7 +24,7 @@ def recursive_subst_keys(struct, function):
 
 # @contract(entry='dict(str:*)', returns='dict(str:*)')
 def substitute_special(entry, dirname):
-    """ Special stuff for "file:" and "file*" entries. """
+    """Special stuff for "file:" and "file*" entries."""
     function = lambda k, v: substitute_special_keys(k, v, dirname)
     newentry = recursive_subst_keys(entry, function)
     # logger.warn('from:\n%s\nto\n%s' % (pformat(entry), pformat(newentry)))

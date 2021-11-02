@@ -14,7 +14,7 @@ def raise_x_not_found(what, x, iterable, exception=ValueError):
 
 
 def x_not_found(what, x, iterable):
-    """ Shortcut for creating pretty error messages. """
+    """Shortcut for creating pretty error messages."""
     # TODO: add guess in case of typos
     options = aslist(iterable)
 

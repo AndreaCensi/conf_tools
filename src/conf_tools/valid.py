@@ -9,7 +9,7 @@ __all__ = [
 
 
 def check_valid_id_or_pattern(name):
-    """ Check that name is either a valid ID or a valid pattern. """
+    """Check that name is either a valid ID or a valid pattern."""
     if not isinstance(name, str):
         raise SyntaxMistake('ID must be string, got "%s".' % name)
     if (not is_valid_id(name)) and (not is_pattern(name)):

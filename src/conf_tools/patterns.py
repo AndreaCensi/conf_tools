@@ -68,7 +68,7 @@ def pattern_matches(pattern, string):
 
 
 def recursive_subst(template, **matches):
-    """ Recursive substitution """
+    """Recursive substitution"""
     if isinstance(template, str):
         #        return Template(template).substitute(**matches)
         # special case: "${x}" can be interpreted as a number
@@ -123,7 +123,7 @@ def substitute_strings(template, matches):
 
 
 def trynum(x):
-    """ Try to interpret x as a number """
+    """Try to interpret x as a number"""
     try:
         return int(x)
     except:
