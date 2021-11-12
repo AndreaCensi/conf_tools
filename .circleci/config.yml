@@ -66,6 +66,7 @@ jobs:
 
     - run:
         name: Python stats
+        when: always
         command: |
           pipdeptree | tee  build-stats/pipdeptree.txt
           python3 -m pip  list   | sort | tee  build-stats/pip-list.txt
@@ -165,7 +166,6 @@ jobs:
           coverage combine || true
           coverage html -d out/coverage/${CIRCLE_NODE_INDEX}
           coverage xml
-
 
     - store_artifacts:
         path: out/coverage
@@ -221,6 +221,7 @@ jobs:
 
     - run:
         name: Python stats
+        when: always
         command: |
           pipdeptree | tee  build-stats/pipdeptree.txt
           python3 -m pip  list   | sort | tee  build-stats/pip-list.txt
@@ -320,7 +321,6 @@ jobs:
           coverage combine || true
           coverage html -d out/coverage/${CIRCLE_NODE_INDEX}
           coverage xml
-
 
     - store_artifacts:
         path: out/coverage
@@ -376,6 +376,7 @@ jobs:
 
     - run:
         name: Python stats
+        when: always
         command: |
           pipdeptree | tee  build-stats/pipdeptree.txt
           python3 -m pip  list   | sort | tee  build-stats/pip-list.txt
@@ -475,7 +476,6 @@ jobs:
           coverage combine || true
           coverage html -d out/coverage/${CIRCLE_NODE_INDEX}
           coverage xml
-
 
     - store_artifacts:
         path: out/coverage
@@ -531,6 +531,7 @@ jobs:
 
     - run:
         name: Python stats
+        when: always
         command: |
           pipdeptree | tee  build-stats/pipdeptree.txt
           python3 -m pip  list   | sort | tee  build-stats/pip-list.txt
@@ -631,7 +632,6 @@ jobs:
           coverage html -d out/coverage/${CIRCLE_NODE_INDEX}
           coverage xml
 
-
     - store_artifacts:
         path: out/coverage
         destination: coverage
@@ -647,4 +647,4 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
     resource_class: medium
 
-# sigil 78610bf0b20af2bd8af7be977d339c30
+# sigil 705d1ef301f28a8e52a054e05661f8cc
