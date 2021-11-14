@@ -1,7 +1,7 @@
 from io import StringIO
 from typing import List
 
-from conf_tools import logger
+from . import logger
 from .code_desc import GenericIsinstance
 from .global_config import GlobalConfig
 from .objspec import ObjectSpec

@@ -1,5 +1,11 @@
+import os
+import traceback
+
+# from contracts import contract, describe_type, describe_value
+from pprint import pformat
 from typing import Optional
 
+from . import ID_FIELD, logger
 from .code_desc import ConfToolsGlobal
 from .code_specs import check_valid_code_spec, instantiate_spec
 from .exceptions import (
@@ -19,13 +25,6 @@ from .utils import (
     indent,
     termcolor_colored,
 )
-from conf_tools import ID_FIELD, logger
-
-# from contracts import contract, describe_type, describe_value
-from pprint import pformat
-import os
-import traceback
-
 
 __all__ = [
     "ObjectSpec",

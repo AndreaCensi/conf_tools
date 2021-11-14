@@ -118,7 +118,7 @@ def reset_config():
     # Reset all the config
     setattr(GlobalConfig, "_dirs", [])
     for _, m in GlobalConfig._masters.items():
-        from conf_tools.master import ConfigMaster
+        from .master import ConfigMaster
 
         assert isinstance(m, ConfigMaster)
 

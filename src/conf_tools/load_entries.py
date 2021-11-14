@@ -4,10 +4,8 @@ from pprint import pformat
 import yaml
 from yaml import YAMLError
 
-from conf_tools import logger
-
 # from contracts import describe_type, contract
-from . import check_valid_id_or_pattern, ID_FIELD, substitute_special
+from . import check_valid_id_or_pattern, ID_FIELD, logger, substitute_special
 from .exceptions import ConfToolsException, SemanticMistake, SyntaxMistake
 from .patterns import is_pattern
 from .utils import friendly_path, locate_files

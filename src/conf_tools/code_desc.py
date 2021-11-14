@@ -1,10 +1,10 @@
+# from contracts import describe_value
+from pprint import pformat
+
+from . import ConfToolsGlobal, logger
 from .checks import check_necessary, wrap_check
 from .code_specs import check_valid_code_spec, instantiate_spec
 from .exceptions import BadConfig
-from conf_tools import ConfToolsGlobal, logger
-
-# from contracts import describe_value
-from pprint import pformat
 
 
 def check_generic_code_desc(x, what=""):

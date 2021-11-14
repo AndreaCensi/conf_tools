@@ -1,6 +1,6 @@
 import os
 
-from conf_tools import logger
+from . import logger
 
 __all__ = [
     "expand_environment",
