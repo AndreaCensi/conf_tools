@@ -73,6 +73,6 @@ def check_type(entry, etype, obtained):
     if not isinstance(obtained, etype):
         msg = "Error in instantiating code spec:\n\t%s" % str(entry["code"]).strip()
         msg += "\nI expected: %s\nbut I got %s" % (etype, type(obtained))
-        from conf_tools.exceptions import ConfToolsException
+        from .exceptions import ConfToolsException
 
         raise ConfToolsException(msg)

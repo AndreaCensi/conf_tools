@@ -174,6 +174,6 @@ class GenericCodeDescCheck:
         self.name = name
 
     def __call__(self, x):
-        from conf_tools.code_desc import check_generic_code_desc
+        from .code_desc import check_generic_code_desc
 
         return check_generic_code_desc(x, self.name)
