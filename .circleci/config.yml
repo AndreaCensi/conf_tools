@@ -31,7 +31,7 @@ jobs:
       COLUMNS: '160'
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      COVER_PACKAGES: conf_tools,conf_tools.checks,conf_tools.code_desc,conf_tools.code_specs,conf_tools.exceptions,conf_tools.global_config,conf_tools.instantiate_utils,conf_tools.load_entries,conf_tools.master,conf_tools.objspec,conf_tools.patterns,conf_tools.special_subst,conf_tools.unittests,conf_tools.unittests.groups,conf_tools.unittests.groups.groups_test,conf_tools.unittests.instantiate_tests,conf_tools.unittests.instantiate_tests.static_test,conf_tools.unittests.pickling_test,conf_tools.unittests.templating,conf_tools.unittests.templating.other_tests,conf_tools.unittests.templating.simple_use_tests,conf_tools.unittests.utils,conf_tools.unittests.wildcards_test,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.utils.expansion,conf_tools.utils.friendly_paths,conf_tools.utils.indent_string,conf_tools.utils.locate_files_imp,conf_tools.utils.not_found,conf_tools.utils.pickling,conf_tools.utils.resources,conf_tools.utils.term_color,conf_tools.utils.terminal_size,conf_tools.utils.wildcards,conf_tools.valid,conf_tools_tests
+      COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
@@ -184,7 +184,7 @@ jobs:
       COLUMNS: '160'
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      COVER_PACKAGES: conf_tools,conf_tools.checks,conf_tools.code_desc,conf_tools.code_specs,conf_tools.exceptions,conf_tools.global_config,conf_tools.instantiate_utils,conf_tools.load_entries,conf_tools.master,conf_tools.objspec,conf_tools.patterns,conf_tools.special_subst,conf_tools.unittests,conf_tools.unittests.groups,conf_tools.unittests.groups.groups_test,conf_tools.unittests.instantiate_tests,conf_tools.unittests.instantiate_tests.static_test,conf_tools.unittests.pickling_test,conf_tools.unittests.templating,conf_tools.unittests.templating.other_tests,conf_tools.unittests.templating.simple_use_tests,conf_tools.unittests.utils,conf_tools.unittests.wildcards_test,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.utils.expansion,conf_tools.utils.friendly_paths,conf_tools.utils.indent_string,conf_tools.utils.locate_files_imp,conf_tools.utils.not_found,conf_tools.utils.pickling,conf_tools.utils.resources,conf_tools.utils.term_color,conf_tools.utils.terminal_size,conf_tools.utils.wildcards,conf_tools.valid,conf_tools_tests
+      COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.8:z7
@@ -337,7 +337,7 @@ jobs:
       COLUMNS: '160'
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      COVER_PACKAGES: conf_tools,conf_tools.checks,conf_tools.code_desc,conf_tools.code_specs,conf_tools.exceptions,conf_tools.global_config,conf_tools.instantiate_utils,conf_tools.load_entries,conf_tools.master,conf_tools.objspec,conf_tools.patterns,conf_tools.special_subst,conf_tools.unittests,conf_tools.unittests.groups,conf_tools.unittests.groups.groups_test,conf_tools.unittests.instantiate_tests,conf_tools.unittests.instantiate_tests.static_test,conf_tools.unittests.pickling_test,conf_tools.unittests.templating,conf_tools.unittests.templating.other_tests,conf_tools.unittests.templating.simple_use_tests,conf_tools.unittests.utils,conf_tools.unittests.wildcards_test,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.utils.expansion,conf_tools.utils.friendly_paths,conf_tools.utils.indent_string,conf_tools.utils.locate_files_imp,conf_tools.utils.not_found,conf_tools.utils.pickling,conf_tools.utils.resources,conf_tools.utils.term_color,conf_tools.utils.terminal_size,conf_tools.utils.wildcards,conf_tools.valid,conf_tools_tests
+      COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.9:z7
@@ -490,7 +490,7 @@ jobs:
       COLUMNS: '160'
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       PATH: /root/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      COVER_PACKAGES: conf_tools,conf_tools.checks,conf_tools.code_desc,conf_tools.code_specs,conf_tools.exceptions,conf_tools.global_config,conf_tools.instantiate_utils,conf_tools.load_entries,conf_tools.master,conf_tools.objspec,conf_tools.patterns,conf_tools.special_subst,conf_tools.unittests,conf_tools.unittests.groups,conf_tools.unittests.groups.groups_test,conf_tools.unittests.instantiate_tests,conf_tools.unittests.instantiate_tests.static_test,conf_tools.unittests.pickling_test,conf_tools.unittests.templating,conf_tools.unittests.templating.other_tests,conf_tools.unittests.templating.simple_use_tests,conf_tools.unittests.utils,conf_tools.unittests.wildcards_test,conf_tools.utils,conf_tools.utils.col_logging,conf_tools.utils.expansion,conf_tools.utils.friendly_paths,conf_tools.utils.indent_string,conf_tools.utils.locate_files_imp,conf_tools.utils.not_found,conf_tools.utils.pickling,conf_tools.utils.resources,conf_tools.utils.term_color,conf_tools.utils.terminal_size,conf_tools.utils.wildcards,conf_tools.valid,conf_tools_tests
+      COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools conf_tools_tests
     docker:
     - image: ${DOCKER_REGISTRY}/zupermind/zuper-ci-3.9:z7
@@ -639,4 +639,4 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
     resource_class: medium
 
-# sigil cd34071abf5a00010b565ee11030b8bf
+# sigil 844f539fa71ef5ff4e0f39c065ef54ce
