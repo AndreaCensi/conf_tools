@@ -1,9 +1,9 @@
 import pickle
 from io import BytesIO
 
-from .templating.simple_use_tests import test_cases
+from conf_tools import ConfigMaster
+from .simple_use_tests import test_cases
 from .utils import create_test_environment
-from ..master import ConfigMaster
 
 
 def dummy_check(spec):  # @UnusedVariable

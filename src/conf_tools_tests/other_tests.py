@@ -1,7 +1,8 @@
-from conf_tools.master import ConfigMaster
-from conf_tools.unittests.utils import create_test_environment
-from conf_tools.exceptions import ConfToolsException
 from pprint import pformat
+
+from conf_tools.exceptions import ConfToolsException
+from conf_tools.master import ConfigMaster
+from .utils import create_test_environment
 
 other_tests = [
     {

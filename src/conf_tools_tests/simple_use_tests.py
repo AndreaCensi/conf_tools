@@ -1,7 +1,7 @@
 from conf_tools.master import ConfigMaster
 from pprint import pformat
 from conf_tools.patterns import pattern_matches
-from conf_tools.unittests.utils import create_test_environment
+from .utils import create_test_environment
 
 test_cases = [
     {
@@ -82,14 +82,14 @@ def test_basic_templating():
     assert result == dict(robot="ciao"), result
 
     result = pattern_matches("r2-${robot}", "r-ciao")
-    assert result == None, result
+    assert result is None, result
 
 
 def test_ignoring_partial1():
     result = pattern_matches("${robot}-nuisance", "myrobot-nuisance-other")
-    assert result == None, result
+    assert result is None, result
 
 
 def test_ignoring_partial2():
     result = pattern_matches("nuisance-${robot}", "other-nuisance-myrobot")
-    assert result == None, result
+    assert result is None, result
