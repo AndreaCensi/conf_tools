@@ -8,13 +8,13 @@ modules:
 install_requires:
 - zuper-commons-z7
 - PyYAML
-- nose
 - setuptools
 - termcolor
 - six
 
 
-tests_require: []
+tests_require:
+- nose
 console_scripts: {}
 nose:
   modules:
