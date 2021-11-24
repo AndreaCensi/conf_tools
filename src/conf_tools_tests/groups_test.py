@@ -1,12 +1,10 @@
 from conf_tools.master import ConfigMaster
 from pprint import pformat
 from .utils import create_test_environment
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class ConfGroup:
-    __abc__ = ABCMeta
-
+class ConfGroup(ABC):
     @abstractmethod
     def evaluate(self, objspec):
         pass
