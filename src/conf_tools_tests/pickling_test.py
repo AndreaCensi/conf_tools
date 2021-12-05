@@ -14,7 +14,7 @@ def dummy_instance(spec):  # @UnusedVariable
     return True
 
 
-def test_pickling():
+def test_pickling() -> None:
     # Create files
     with create_test_environment(test_cases[0]["config"]) as dirname:
         # Load configuration

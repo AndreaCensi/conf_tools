@@ -60,7 +60,7 @@ test_cases = [
 
 if False:
 
-    def test_groups1():
+    def test_groups1() -> None:
         for tc in test_cases:
             config = tc["config"]
             query = tc["query"]

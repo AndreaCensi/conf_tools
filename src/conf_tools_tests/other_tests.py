@@ -46,7 +46,7 @@ other_tests = [
 ]
 
 
-def test_templating2_good():
+def test_templating2_good() -> None:
     for tc in other_tests:
         if not tc["good"]:
             continue
@@ -54,7 +54,7 @@ def test_templating2_good():
         check_can_be_loaded(tc)
 
 
-def test_templating2_bad():
+def test_templating2_bad() -> None:
     for tc in other_tests:
         if tc["good"]:
             continue

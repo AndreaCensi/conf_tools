@@ -53,7 +53,7 @@ test_cases.append(
 )
 
 
-def test_templating1():
+def test_templating1() -> None:
     for tc in test_cases:
         config = tc["config"]
         query = tc["query"]
@@ -76,7 +76,7 @@ def check_case(config, query, result):
             raise Exception("Wrong result")
 
 
-def test_basic_templating():
+def test_basic_templating() -> None:
 
     result = pattern_matches("r-${robot}", "r-ciao")
     assert result == dict(robot="ciao"), result
@@ -85,11 +85,11 @@ def test_basic_templating():
     assert result is None, result
 
 
-def test_ignoring_partial1():
+def test_ignoring_partial1() -> None:
     result = pattern_matches("${robot}-nuisance", "myrobot-nuisance-other")
     assert result is None, result
 
 
-def test_ignoring_partial2():
+def test_ignoring_partial2() -> None:
     result = pattern_matches("nuisance-${robot}", "other-nuisance-myrobot")
     assert result is None, result

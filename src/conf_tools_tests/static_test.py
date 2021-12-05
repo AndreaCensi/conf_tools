@@ -7,7 +7,7 @@ class MyStatic:
         return a + 1
 
 
-def test_static_method_1():
+def test_static_method_1() -> None:
     the_class = import_name("conf_tools_tests.static_test.MyStatic")
     print(the_class.__dict__)
     print(the_class)
@@ -16,7 +16,7 @@ def test_static_method_1():
     assert the_static(2) == 3
 
 
-def test_not_existing():
+def test_not_existing() -> None:
     try:
         import_name("not_existing.a")
     except ValueError:
@@ -26,7 +26,7 @@ def test_not_existing():
         raise Exception(msg)
 
 
-def test_second():
+def test_second() -> None:
     try:
         import_name("conf_tools.a")
     except ValueError:
