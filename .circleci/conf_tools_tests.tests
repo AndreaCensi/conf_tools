@@ -1,0 +1,6 @@
+conf_tools_tests.groups_test
+conf_tools_tests.other_tests
+conf_tools_tests.pickling_test
+conf_tools_tests.simple_use_tests
+conf_tools_tests.static_test
+conf_tools_tests.wildcards_test
