@@ -21,7 +21,7 @@ jobs:
       COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools_tests
     docker:
-    - image: ${DOCKER_REGISTRY}/zupermind/z7-stage-zuper-ci-3.10:z7
+    - image: ${DOCKER_REGISTRY}/${DOCKER_TARGET_ORG}/${DOCKER_REPO_PREFIX}zuper-ci-3.10:${Z_DISTRO}
       auth:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
@@ -164,4 +164,4 @@ jobs:
           ./codecov -t ${CODECOV_TOKEN}
     resource_class: small
 
-# sigil a1f006e6840ec4a12ac0913f7932cee2
+# sigil 1919952c26b85bce2bcfec9684b21ea2
