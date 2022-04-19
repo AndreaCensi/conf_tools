@@ -582,7 +582,7 @@ class ObjectSpec(dict):
 
                 # TODO: use first sentence
                 # Get first line
-                desc = desc.strip().split("\n")[0]
+                desc = desc.strip().splitlines()[0]
 
                 if desc == "":
                     desc = termcolor_colored("(no desc available)", color="grey")

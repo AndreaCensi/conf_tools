@@ -4,11 +4,13 @@ __all__ = [
     "termcolor_colored",
 ]
 
+from zuper_commons.text import joinlines
+
 try:
     from termcolor import colored as t_colored
 
     def termcolor_colored(s, color=None, on_color=None, attrs=None):
-        return "\n".join(t_colored(x, color, on_color, attrs) for x in s.split("\n"))
+        return joinlines(t_colored(x, color, on_color, attrs) for x in s.splitlines())
 
 except:
     # TODO: logger
