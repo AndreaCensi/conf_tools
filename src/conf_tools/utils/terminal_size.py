@@ -1,6 +1,6 @@
 __all__ = [
-    "get_screen_columns",
     "getTerminalSize",
+    "get_screen_columns",
 ]
 
 

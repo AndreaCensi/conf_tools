@@ -6,8 +6,8 @@ from . import logger
 from .utils import dir_from_package_name, expand_environment
 
 __all__ = [
-    "GlobalConfig",
     "ConfigState",
+    "GlobalConfig",
     "reset_config",
 ]
 

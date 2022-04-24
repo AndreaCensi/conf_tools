@@ -6,9 +6,9 @@ from .utils import indent
 
 __all__ = [
     "check_valid_code_spec",
-    "instantiate_spec",
     "format_code_spec",
     "format_yaml",
+    "instantiate_spec",
 ]
 
 

@@ -5,7 +5,7 @@ import re
 from .exceptions import SemanticMistake, SyntaxMistake
 
 
-__all__ = ["pattern_matches", "recursive_subst", "is_pattern"]
+__all__ = ["is_pattern", "pattern_matches", "recursive_subst"]
 
 reg = "\$\{([^\}]*)\}"
 

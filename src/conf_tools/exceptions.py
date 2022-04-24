@@ -1,10 +1,10 @@
 __all__ = [
     "BadConfig",
     "ConfToolsException",
-    "SyntaxMistake",
-    "SemanticMistake",
     "ResourceNotFound",
+    "SemanticMistake",
     "SemanticMistakeKeyNotFound",
+    "SyntaxMistake",
 ]
 
 
