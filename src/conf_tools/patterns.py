@@ -4,8 +4,11 @@ import re
 
 from .exceptions import SemanticMistake, SyntaxMistake
 
-
-__all__ = ["is_pattern", "pattern_matches", "recursive_subst"]
+__all__ = [
+    "is_pattern",
+    "pattern_matches",
+    "recursive_subst",
+]
 
 reg = "\$\{([^\}]*)\}"
 

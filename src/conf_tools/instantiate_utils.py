@@ -4,7 +4,10 @@ import traceback
 from .exceptions import SemanticMistake
 from .utils import indent
 
-__all__ = ["import_name", "instantiate"]
+__all__ = [
+    "import_name",
+    "instantiate",
+]
 
 
 def instantiate(function_name, parameters):

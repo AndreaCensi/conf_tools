@@ -2,7 +2,10 @@ import six
 
 import re
 
-__all__ = ["expand_string", "get_wildcard_matches"]
+__all__ = [
+    "expand_string",
+    "get_wildcard_matches",
+]
 
 
 def flatten(seq):
