@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-class GlobalConfig(object):
+class GlobalConfig:
     """
 
     To correctly restore configuration with compmake: ::
@@ -117,6 +117,7 @@ class GlobalConfig(object):
 def reset_config():
     # Reset all the config
     setattr(GlobalConfig, "_dirs", [])
+    # noinspection PyProtectedMember
     for _, m in GlobalConfig._masters.items():
         from .master import ConfigMaster
 
@@ -140,7 +141,6 @@ def reset_config():
 
 # @contract(d='str')
 def looks_like_package_name(d: str) -> bool:
-
     try:
         dir_from_package_name(d)
         return True

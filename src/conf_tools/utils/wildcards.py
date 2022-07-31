@@ -1,5 +1,3 @@
-import six
-
 import re
 
 __all__ = [
@@ -19,7 +17,7 @@ def flatten(seq):
 def expand_string(x, options):
     if isinstance(x, list):
         return flatten(expand_string(y, options) for y in x)
-    elif isinstance(x, six.string_types):
+    elif isinstance(x, str):
         x = x.strip()
         if "," in x:
             splat = [_ for _ in x.split(",") if _]  # remove empty
