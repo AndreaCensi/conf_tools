@@ -10,7 +10,6 @@ install_requires:
 - PyYAML
 - setuptools
 - termcolor
-- six
 
 
 tests_require:
