@@ -34,7 +34,7 @@ def locate_files(
                     filename = os.path.join(root, d)
                     filenames.append(filename)
 
-    real2norm = defaultdict(lambda: [])
+    real2norm = defaultdict(list)
     for norm in filenames:
         real = os.path.realpath(norm)
         real2norm[real].append(norm)

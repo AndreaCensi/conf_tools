@@ -1,9 +1,6 @@
 import logging
 
-
-from typing import List
-
-__all__: List[str] = []
+__all__ = ["add_coloring_to_emit_ansi"]
 
 import platform
 
