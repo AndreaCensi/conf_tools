@@ -1,10 +1,9 @@
+import fnmatch
+import os
+from collections import defaultdict
 from typing import List
 
 from . import logger
-from collections import defaultdict
-
-import fnmatch
-import os
 
 __all__ = [
     "locate_files",
