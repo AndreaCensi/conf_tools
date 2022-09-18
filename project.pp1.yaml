@@ -9,7 +9,6 @@ install_requires:
 - zuper-commons-z7
 - PyYAML
 - setuptools
-- termcolor
 
 
 tests_require:
