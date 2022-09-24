@@ -535,8 +535,8 @@ class ObjectSpec(dict):
             names = [names]
         assert isinstance(names, list)
 
+        options = self.keys()
         try:
-            options = self.keys()
             expanded = expand_string(names, options)
         except ValueError:
             expanded = []
