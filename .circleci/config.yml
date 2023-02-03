@@ -121,7 +121,7 @@ jobs:
           fi
           mkdir -p out/test-results
           xunit_output=$PWD/out/test-results/nose-${CIRCLE_NODE_INDEX}-conf_tools_tests-xunit.xml
-          nose2 --with-coverage \
+          timeout 30m nose2 --with-coverage \
               --plugin nose2.plugins.junitxml \
               --junit-xml \
               --junit-xml-path ${xunit_output} \
@@ -165,4 +165,4 @@ jobs:
           ./codecov  
     resource_class: small
 
-# sigil 804a1b5469c42353e747007817c652cc
+# sigil 414df54f184ca2d991f9346009691a0c
