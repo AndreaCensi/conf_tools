@@ -14,7 +14,11 @@
   },
   "zip_safe": true,
   "include_package_data": true,
-  "modules": [
+  "packages": [
+    "conf_tools",
+    "conf_tools.utils"
+  ],
+  "py_modules": [
     "conf_tools",
     "conf_tools.checks",
     "conf_tools.code_desc",
