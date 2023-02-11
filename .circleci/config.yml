@@ -23,6 +23,7 @@ jobs:
       DEPS_INSTALL_TIMEOUT: 10m
       COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools_tests
+      PIP_INDEX_URL: ${PIP_INDEX_URL_SRC}
     docker:
     - image: ${DOCKER_REGISTRY}/${DOCKER_TARGET_ORG}/${DOCKER_REPO_PREFIX}zuper-ci-3.10:${Z_DISTRO}
       auth:
@@ -177,6 +178,7 @@ jobs:
       DEPS_INSTALL_TIMEOUT: 10m
       COVER_PACKAGES: conf_tools,conf_tools_tests
       TEST_PACKAGES: conf_tools_tests
+      PIP_INDEX_URL: ${PIP_INDEX_URL_SRC}
     docker:
     - image: ${DOCKER_REGISTRY}/${DOCKER_TARGET_ORG}/${DOCKER_REPO_PREFIX}zuper-ci-3.11:${Z_DISTRO}
       auth:
@@ -321,4 +323,4 @@ jobs:
           ./codecov  
     resource_class: small
 
-# sigil a0ba4b067d6cebbeff246bbb8bbb1a88
+# sigil 3f04ca19d291d31437a909c72bd5bd4c

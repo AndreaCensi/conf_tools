@@ -14,7 +14,7 @@
   },
   "zip_safe": true,
   "include_package_data": true,
-  "packages": [
+  "modules": [
     "conf_tools",
     "conf_tools.utils"
   ],
