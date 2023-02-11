@@ -2,9 +2,11 @@
 name = "ConfTools-z7"
 version = "7.2"
 authors = [{name = "Andrea Censi", email = "info@zupermind.com"}]
-dependencies = ["zuper-commons-z7", "PyYAML", "setuptools"]
-
-[project.scripts]
+dependencies = [
+    "PyYAML",
+    "setuptools",
+    "zuper-commons-z7",
+    ]
 
 [tool]
 [tool.poetry]
@@ -12,8 +14,14 @@ name = "ConfTools-z7"
 version = "7.2"
 description = ""
 authors = ["Andrea Censi <info@zupermind.com>"]
-packages = [{include = "conf_tools", from = "src"}, {include = "conf_tools/utils", from = "src"}]
+packages = [
+    {from = "src", include = "conf_tools"},
+    {from = "src", include = "conf_tools/utils"},
+    ]
 
 [tool.setuptools]
-packages = ["conf_tools", "conf_tools.utils"]
+packages = [
+    "conf_tools",
+    "conf_tools.utils",
+    ]
 package-dir = {"" = "src"}
