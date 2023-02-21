@@ -29,7 +29,7 @@ def expand_string(x, options):
         else:
             return [x]
     else:
-        assert False
+        raise AssertionError
 
 
 def wildcard_to_regexp(arg):
