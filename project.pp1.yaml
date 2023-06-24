@@ -11,8 +11,8 @@ install_requires:
 - setuptools
 
 
-tests_require:
-- nose
+tests_require: []
+
 console_scripts: {}
 nose:
   modules:

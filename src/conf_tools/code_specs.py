@@ -42,6 +42,7 @@ def check_valid_code_spec_contract(x):
 
 # new_contract('code_spec', check_valid_code_spec_contract)
 
+
 # @contract(code_spec='code_spec')
 def instantiate_spec(code_spec):
     """code_spec must be a sequence  [string, dictionary], giving

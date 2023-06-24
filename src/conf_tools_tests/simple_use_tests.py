@@ -77,7 +77,6 @@ def check_case(config, query, result):
 
 
 def test_basic_templating() -> None:
-
     result = pattern_matches("r-${robot}", "r-ciao")
     assert result == dict(robot="ciao"), result
 

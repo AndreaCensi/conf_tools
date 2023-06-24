@@ -4,9 +4,7 @@
     "setuptools",
     "zuper-commons-z7"
   ],
-  "tests_require": [
-    "nose"
-  ],
+  "tests_require": [],
   "srcdir": "src",
   "package_name": "ConfTools-z7",
   "entry_points": {

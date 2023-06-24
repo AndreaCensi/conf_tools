@@ -1,6 +1,6 @@
 from conf_tools.master import GlobalConfig
 from contextlib import contextmanager
-from nose.tools import nottest
+from zuper_commons.test_utils import nottest
 import os
 import tempfile
 
