@@ -1,6 +1,8 @@
 import logging
 
-__all__ = ["add_coloring_to_emit_ansi"]
+__all__ = [
+    "add_coloring_to_emit_ansi",
+]
 
 import platform
 
