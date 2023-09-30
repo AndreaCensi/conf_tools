@@ -13,7 +13,6 @@ __all__ = [
 
 
 class ConfigMaster:
-
     # @contract(name='str')
     def __init__(self, name: str):
         """

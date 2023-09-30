@@ -8,11 +8,6 @@ dependencies = [
     "zuper-commons-z7",
     ]
 
-[project.optional-dependencies]
-test = [
-    "nose",
-    ]
-
 [tool]
 [tool.poetry]
 name = "ConfTools-z7"
