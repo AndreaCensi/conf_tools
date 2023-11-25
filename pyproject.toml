@@ -2,13 +2,7 @@
 name = "ConfTools-z7"
 version = "7.2"
 authors = [{name = "Andrea Censi", email = "AndreaCensi@users.noreply.github.com"}]
-dependencies = [
-    "PyYAML",
-    "setuptools",
-    "zuper-commons-z7",
-    ]
 
-[tool]
 [tool.poetry]
 name = "ConfTools-z7"
 version = "7.2"
@@ -19,9 +13,14 @@ packages = [
     {from = "src", include = "conf_tools/utils"},
     ]
 
-[tool.setuptools]
-packages = [
-    "conf_tools",
-    "conf_tools.utils",
-    ]
-package-dir = {"" = "src"}
+[tool.poetry.dependencies]
+PyYAML = "*"
+setuptools = "*"
+zuper-commons-z7 = "*"
+
+[tool.poetry.group.test.dependencies]
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
