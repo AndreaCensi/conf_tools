@@ -412,9 +412,9 @@ class ObjectSpec(dict):
 
                 if only_id or only_id_and_desc:
                     if not self.matches_any_pattern(name):
-                        msg = (
-                            "While trying to instantiate empty entry %r "
-                            "in %s, I could not find any pattern matching." % (name, friendly_path(filename))
+                        msg = "While trying to instantiate empty entry %r " "in %s, I could not find any pattern matching." % (
+                            name,
+                            friendly_path(filename),
                         )
                         msg += "\nPatterns: %s" % self.templates
                         raise SemanticMistake(msg)
