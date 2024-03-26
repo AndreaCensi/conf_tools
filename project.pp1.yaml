@@ -23,9 +23,9 @@ pypi:
 
 circleci:
   active: true
-  test_python_versions: ['3.10', '3.11']
+  test_python_versions: ['3.11']
 
-python_syntax_version: '3.10'
+python_syntax_version: '3.11'
 
 url: https://github.com/AndreaCensi/conf_tools
 author: Andrea Censi
