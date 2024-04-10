@@ -22,7 +22,7 @@ def getTerminalSize():
             import struct
 
             cr = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
-        except:
+        except:  # OK
             return None
         return cr
 
@@ -32,12 +32,12 @@ def getTerminalSize():
             fd = os.open(os.ctermid(), os.O_RDONLY)
             cr = ioctl_GWINSZ(fd)
             os.close(fd)
-        except:
+        except:  # OK
             pass
     if not cr:
         try:
             env = os.environ
             cr = (env["LINES"], env["COLUMNS"])
-        except:
+        except:  # OK
             cr = (25, 80)
     return int(cr[1]), int(cr[0])
