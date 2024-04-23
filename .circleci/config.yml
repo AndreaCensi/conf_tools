@@ -206,8 +206,8 @@ jobs:
         name: CodeCov
         # when: always
         command: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
+          timeout 1m curl -O https://uploader.codecov.io/latest/linux/codecov || true
+          chmod +x codecov || true
           timeout 1m ./codecov || true
     resource_class: small
   test-311-bin:
@@ -397,9 +397,9 @@ jobs:
         name: CodeCov
         # when: always
         command: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
+          timeout 1m curl -O https://uploader.codecov.io/latest/linux/codecov || true
+          chmod +x codecov || true
           timeout 1m ./codecov || true
     resource_class: small
 
-# sigil dc4c9acaeaaf13aca23b00af5a0ed168
+# sigil 370c2957f18dafaef4ff831a77204f4c
