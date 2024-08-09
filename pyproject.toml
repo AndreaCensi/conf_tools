@@ -2,6 +2,10 @@
 name = "ConfTools-z7"
 version = "7.2"
 authors = [{name = "Andrea Censi", email = "AndreaCensi@users.noreply.github.com"}]
+dependencies = [
+    "PyYAML",
+    "setuptools",
+    "zuper-commons-z7",]
 
 [tool.poetry]
 name = "ConfTools-z7"
@@ -19,6 +23,7 @@ setuptools = "*"
 zuper-commons-z7 = "*"
 
 [tool.poetry.group.test.dependencies]
+python = "^3.12"
 
 [build-system]
 requires = [
