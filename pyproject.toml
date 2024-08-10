@@ -7,6 +7,10 @@ dependencies = [
     "setuptools",
     "zuper-commons-z7",]
 
+[project.optional-dependencies]
+test = [
+    ]
+
 [tool.poetry]
 name = "ConfTools-z7"
 version = "7.2"
@@ -23,7 +27,7 @@ setuptools = "*"
 zuper-commons-z7 = "*"
 
 [tool.poetry.group.test.dependencies]
-python = "^3.12"
+python = ">=3.12"
 
 [build-system]
 requires = [
