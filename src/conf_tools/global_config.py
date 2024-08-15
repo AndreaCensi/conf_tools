@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 # from contracts import check_isinstance
 from . import logger
@@ -58,7 +57,7 @@ class GlobalConfig:
 
     @staticmethod
     # @contract(config_dirs='list(str)')
-    def global_load_dirs(config_dirs: List[str]):
+    def global_load_dirs(config_dirs: list[str]):
         """The environments variable will all be expanded
         (so that it can be used from other threads."""
         for c in config_dirs:

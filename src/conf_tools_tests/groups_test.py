@@ -1,7 +1,8 @@
-from conf_tools.master import ConfigMaster
-from pprint import pformat
-from .utils import create_test_environment
 from abc import ABC, abstractmethod
+from pprint import pformat
+
+from conf_tools.master import ConfigMaster
+from .utils import create_test_environment
 
 
 class ConfGroup(ABC):
@@ -56,7 +57,6 @@ test_cases = [
         "expected": ["entry1", "entry2"],
     }
 ]
-
 
 if False:
 

@@ -1,5 +1,4 @@
 from io import StringIO
-from typing import List
 
 from . import logger
 from .code_desc import GenericIsinstance
@@ -90,7 +89,7 @@ class ConfigMaster:
             self.load(None)
 
     # @contract(dirs='list(str)')
-    def load_dirs(self, dirs: List[str]):
+    def load_dirs(self, dirs: list[str]):
         for dirname in dirs:
             self.load(dirname)
 

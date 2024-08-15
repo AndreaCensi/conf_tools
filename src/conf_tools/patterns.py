@@ -1,8 +1,8 @@
 import re
 
-# from contracts import contract
-
 from .exceptions import SemanticMistake, SyntaxMistake
+
+# from contracts import contract
 
 __all__ = [
     "is_pattern",

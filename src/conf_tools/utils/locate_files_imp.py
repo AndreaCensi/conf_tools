@@ -1,7 +1,6 @@
 import fnmatch
 import os
 from collections import defaultdict
-from typing import List
 
 from . import logger
 
@@ -16,7 +15,7 @@ def locate_files(
     followlinks: bool = True,
     include_directories: bool = False,
     include_files: bool = True,
-) -> List[str]:
+) -> list[str]:
     # print('locate_files %r %r' % (directory, pattern))
     filenames = []
 
