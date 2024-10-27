@@ -10,7 +10,7 @@ __all__ = [
     "recursive_subst",
 ]
 
-reg = "\$\{([^\}]*)\}"
+reg = r"\$\{([^\}]*)\}"
 
 
 def is_pattern(s):
@@ -21,7 +21,7 @@ def is_pattern(s):
 
 
 def pattern_matches(pattern, string):
-    """
+    r"""
     Returns a dict with the substitutions.
 
     For example,
@@ -41,7 +41,7 @@ def pattern_matches(pattern, string):
 
     """
     # reg = '\$\{([^\}]*)\}'
-    reg = "\$\{([a-zA-Z_]\w*)\}"
+    reg = r"\$\{([a-zA-Z_]\w*)\}"
     keys = re.findall(reg, pattern)
 
     if not keys:
@@ -52,11 +52,11 @@ def pattern_matches(pattern, string):
         key = match.group(1)
         if "id" in key:
             # TODO: document this
-            return "([a-zA-Z]+\d*)"
+            return r"([a-zA-Z]+\d*)"
         else:
             return "(.+?)"
 
-    pmatch = "\A" + re.sub(reg, make_pattern, pattern) + "\Z"
+    pmatch = r"\A" + re.sub(reg, make_pattern, pattern) + r"\Z"
 
     m = re.match(pmatch, string)
     if m is None:
@@ -81,7 +81,7 @@ def recursive_subst(template, **matches):
     elif isinstance(template, list):
         return [recursive_subst(x, **matches) for x in template]
     elif isinstance(template, dict):
-        return dict([k, recursive_subst(v, **matches)] for k, v in template.items())
+        return {k: recursive_subst(v, **matches) for k, v in template.items()}
     else:
         return template
 
@@ -98,7 +98,7 @@ def substitute_strings(template, matches):
         if not "|" in s:
             key = s
             if not key in matches:
-                msg = "Key %r not found (know %s)" % (key, matches.keys())
+                msg = "Key {!r} not found (know {})".format(key, matches.keys())
                 raise SemanticMistake(msg)
             return matches[key]
         else:
@@ -106,13 +106,13 @@ def substitute_strings(template, matches):
             key = s[:first]
             expr = s[first + 1 :]
             if not key in matches:
-                msg = "Key %r not found (know %s)" % (key, matches.keys())
+                msg = "Key {!r} not found (know {})".format(key, matches.keys())
                 raise SemanticMistake(msg)
 
             value = trynum(matches[key])
             options = parse_options(expr)
             if not value in options:
-                msg = "Could not find value %r in options %s given for %r" % (
+                msg = "Could not find value {!r} in options {} given for {!r}".format(
                     value,
                     options.keys(),
                     key,

@@ -65,7 +65,7 @@ def make_relative(val, dirname):
 
 def check_exists(key, filename):
     if not os.path.exists(filename):
-        msg = "I resolved the key %r to the path\n\t%r\nbut it does not exist." % (
+        msg = "I resolved the key {!r} to the path\n\t{!r}\nbut it does not exist.".format(
             key,
             filename,
         )

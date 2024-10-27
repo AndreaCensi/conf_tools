@@ -35,7 +35,7 @@ def instance_generic_code_desc(entry, expected_class=None):
     return instance
 
 
-class GenericInstance(object):
+class GenericInstance:
     def __init__(self, check_class):
         self.check_class = check_class
 
@@ -43,17 +43,17 @@ class GenericInstance(object):
         return instance_generic_code_desc(entry, self.check_class)
 
 
-class GenericIsinstance(object):
+class GenericIsinstance:
     def __init__(self, check_class):
         self.check_class = check_class
 
     def __call__(self, value):
         if not isinstance(value, self.check_class):
-            msg = "Object is not a %s: %s" % (self.check_class, value)
+            msg = "Object is not a {}: {}".format(self.check_class, value)
             raise ValueError(msg)
 
 
-class GenericCall(object):
+class GenericCall:
     def __init__(self, check_function=None):
         self.check_function = check_function
 
@@ -72,7 +72,7 @@ class GenericCall(object):
 def check_type(entry, etype, obtained):
     if not isinstance(obtained, etype):
         msg = "Error in instantiating code spec:\n\t%s" % str(entry["code"]).strip()
-        msg += "\nI expected: %s\nbut I got %s" % (etype, type(obtained))
+        msg += "\nI expected: {}\nbut I got {}".format(etype, type(obtained))
         from .exceptions import ConfToolsException
 
         raise ConfToolsException(msg)

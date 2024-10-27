@@ -29,7 +29,7 @@ class ConfigMaster:
         GlobalConfig.register_master(name, self)
 
     def __repr__(self):
-        return "ConfigMaster(%s,dirs=%s,specs=%s)" % (self.name, self._dirs, self.specs)
+        return "ConfigMaster({},dirs={},specs={})".format(self.name, self._dirs, self.specs)
 
     def add_class(self, name, pattern, check=None, instance=None, object_check=None):
         """
@@ -125,7 +125,7 @@ class ConfigMaster:
         # self.debug(msg)
 
     def debug(self, s):
-        logger.debug("%s%s" % (self.prefix, s))
+        logger.debug("{}{}".format(self.prefix, s))
 
     # @contract(returns=str)
     def get_summary(self, instance=False, only_type=None):

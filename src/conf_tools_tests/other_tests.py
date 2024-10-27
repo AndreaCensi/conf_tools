@@ -85,5 +85,5 @@ def check_can_be_loaded(tc):
         if should_have is not None:
             found = set(master.specs["things"].keys())
             if set(should_have) != found:
-                msg = "Expected %r, obtained %r." % (should_have, found)
+                msg = "Expected {!r}, obtained {!r}.".format(should_have, found)
                 raise Exception(msg)

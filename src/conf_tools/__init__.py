@@ -9,7 +9,7 @@ logger.hello_module(name=__name__, filename=__file__, version=__version__, date=
 ID_FIELD = "id"
 
 
-class ConfToolsGlobal(object):
+class ConfToolsGlobal:
     log_instance_error = True
 
 

@@ -10,7 +10,7 @@ def wrap_check(x, what, function, *arg, **args):
     try:
         function(*arg, **args)
     except BadConfig as e:
-        e.context("- While %s for structure:\n%s" % (what, pformat(x)))
+        e.context("- While {} for structure:\n{}".format(what, pformat(x)))
         raise e
 
 
@@ -20,7 +20,7 @@ def check_necessary(x, necessary):
         if not f in x:
             raise BadConfig(x, "Field %r missing." % f)
         if not isinstance(x[f], types):
-            msg = "Field %r must be one of %s, instead of %s." % (f, types, (x[f]))
+            msg = "Field {!r} must be one of {}, instead of {}.".format(f, types, (x[f]))
             raise BadConfig(x, msg)
 
 
@@ -30,7 +30,7 @@ def check_has_exactly_one(x, alternatives):
         if f in x:
             found.append(f)
             if not isinstance(x[f], types):
-                msg = "Field %r must be one of %s, instead of %s." % (f, types, (x[f]))
+                msg = "Field {!r} must be one of {}, instead of {}.".format(f, types, (x[f]))
                 raise BadConfig(x, msg)
 
     if not found:

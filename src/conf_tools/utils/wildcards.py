@@ -34,7 +34,7 @@ def expand_string(x, options):
 
 def wildcard_to_regexp(arg):
     """Returns a regular expression from a shell wildcard expression."""
-    return re.compile("\A" + arg.replace("*", ".*") + "\Z")
+    return re.compile(r"\A" + arg.replace("*", ".*") + r"\Z")
 
 
 def has_wildcard(s):
@@ -57,7 +57,7 @@ def expand_wildcard(wildcard, universe):
     matches = list(get_wildcard_matches(wildcard, universe))
 
     if not matches:
-        msg = "Could not find matches for pattern %r in %s." % (wildcard, universe)
+        msg = "Could not find matches for pattern {!r} in {}.".format(wildcard, universe)
         raise ValueError(msg)
 
     return matches

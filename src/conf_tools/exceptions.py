@@ -55,7 +55,7 @@ class SemanticMistakeKeyNotFound(SemanticMistake):
 
         assert isinstance(object_spec, ObjectSpec)
         things = object_spec.name
-        msg = "The name %r does not match any %s. " % (name, things)
+        msg = "The name {!r} does not match any {}. ".format(name, things)
         msg += "\nI know "
         found = dict.keys(object_spec)
         if found:

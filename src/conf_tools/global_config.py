@@ -156,7 +156,7 @@ def looks_like_package_name(d: str) -> bool:
 #     return has_dot and not '/' in d
 
 
-class ConfigState(object):
+class ConfigState:
     def __init__(self):
         self.masters = GlobalConfig._masters
         self.singletons = GlobalConfig._singletons

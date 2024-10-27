@@ -18,7 +18,7 @@ def x_not_found(what, x, iterable):
     # TODO: add guess in case of typos
     options = aslist(iterable)
 
-    return "Could not find %s %r. I know the elements: %s." % (what, x, options)
+    return "Could not find {} {!r}. I know the elements: {}.".format(what, x, options)
 
 
 def check_is_in(what, x, iterable, exception=ValueError):

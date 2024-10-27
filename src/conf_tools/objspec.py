@@ -3,7 +3,6 @@ import traceback
 
 # from contracts import contract, describe_type, describe_value
 from pprint import pformat
-from typing import Optional
 
 from . import ID_FIELD, logger
 from .code_desc import ConfToolsGlobal
@@ -72,19 +71,19 @@ class ObjectSpec(dict):
         if not can_be_pickled(check):
             msg = 'Function %s passed as "check" cannot be pickled. ' % (check)
             msg += "This might create problems later but it is OK to continue."
-            msg += " Happened for %s/%s" % (master, self)
+            msg += " Happened for {}/{}".format(master, self)
             # TODO: add where (2 levels up)
             logger.warning(msg)
 
         if not can_be_pickled(instance_method):
             msg = 'Function %s passed as "instance_method" cannot be pickled. ' % instance_method
             msg += "This might create problems later but it is OK to continue."
-            msg += " Happened for %s/%s" % (master, self)
+            msg += " Happened for {}/{}".format(master, self)
             # TODO: add where (2 levels up)
             logger.warning(msg)
 
     def __repr__(self):
-        return "ObjectSpec(%s;fread:%s;dread:%s;dtoread:%s)" % (
+        return "ObjectSpec({};fread:{};dread:{};dtoread:{})".format(
             self.name,
             self.files_read,
             self.dirs_read,
@@ -153,7 +152,7 @@ class ObjectSpec(dict):
                 raise ConfToolsException(msg)
 
     # @contract(key='str', returns='None|str')
-    def matches_any_pattern(self, key: str) -> Optional[str]:
+    def matches_any_pattern(self, key: str) -> str | None:
         self.make_sure_everything_read()
 
         possibilities = []
@@ -180,7 +179,7 @@ class ObjectSpec(dict):
         ties = [p[1] for p in possibilities if p[0] == best]
 
         if len(ties) >= 2:
-            msg = "Detected a tie. Key %r matches with same score: %r" % (key, ties)
+            msg = "Detected a tie. Key {!r} matches with same score: {!r}".format(key, ties)
             raise ValueError(msg)
 
         #        if len(possibilities) >= 2:
@@ -213,7 +212,7 @@ class ObjectSpec(dict):
             raise ValueError(msg)
 
         if not ID_FIELD in spec:
-            msg = 'I expect the spec to contain a field "%r; found %s' % (
+            msg = 'I expect the spec to contain a field "{!r}; found {}'.format(
                 ID_FIELD,
                 (spec),
             )
@@ -326,7 +325,7 @@ class ObjectSpec(dict):
                 try:
                     self.object_check(x)
                 except ValueError as e:
-                    msg = "Object %s not valid:\n%s" % (x, e)
+                    msg = "Object {} not valid:\n{}".format(x, e)
                     raise ValueError(msg)
             return None, x
 
@@ -378,7 +377,7 @@ class ObjectSpec(dict):
 
             if name in self.entry2file:
                 old_filename = self.entry2file[name]
-                msg = "Entry %r in\n  %s\n already found in\n  %s." % (
+                msg = "Entry {!r} in\n  {}\n already found in\n  {}.".format(
                     name,
                     friendly_path(filename),
                     friendly_path(old_filename),
@@ -408,7 +407,7 @@ class ObjectSpec(dict):
                 # If it only contains the "id" field, then we try
                 # to instantiate it
                 only_id = len(x.keys()) == 1
-                only_id_and_desc = set(x.keys()) == set([ID_FIELD, DESC_FIELD])
+                only_id_and_desc = set(x.keys()) == {ID_FIELD, DESC_FIELD}
 
                 if only_id or only_id_and_desc:
                     if not self.matches_any_pattern(name):
@@ -432,7 +431,7 @@ class ObjectSpec(dict):
                 try:
                     self.check(x)
                 except Exception as e:
-                    msg = "Error while checking the entry %r: %s" % (name, e)
+                    msg = "Error while checking the entry {!r}: {}".format(name, e)
                     msg += "\nEntry:\n" + indent(pformat(x), "  ")
                     msg += "\nException:\n"
                     msg += indent(traceback.format_exc(), "> ")
@@ -463,7 +462,7 @@ class ObjectSpec(dict):
             spec = self[x]
             if isinstance(spec, dict) and ("id" in spec) and ("desc" in spec):
                 desc = spec["desc"].strip().replace("\n", " ")
-                s += "- %s: %s\n" % (x.rjust(maxlen), desc)
+                s += "- {}: {}\n".format(x.rjust(maxlen), desc)
         return s
 
     def summary_string_id_desc_patterns(self):
@@ -477,7 +476,7 @@ class ObjectSpec(dict):
         for x, spec in self.templates.items():
             if isinstance(spec, dict) and ("id" in spec) and ("desc" in spec):
                 desc = spec["desc"].strip().replace("\n", " ")
-                s += "- %s: %s\n" % (x.rjust(maxlen), desc)
+                s += "- {}: {}\n".format(x.rjust(maxlen), desc)
         return s
 
     def _formatted_list_of_directories(self):
@@ -527,7 +526,7 @@ class ObjectSpec(dict):
         self.make_sure_everything_read()
 
         if len(self) == 0 and len(self.templates) == 0:
-            msg = "No %s defined, cannot match names %s." % (self.name, names)
+            msg = "No {} defined, cannot match names {}.".format(self.name, names)
             msg += self._formatted_list_of_directories()
             raise SemanticMistake(msg)
 
@@ -542,8 +541,8 @@ class ObjectSpec(dict):
             expanded = []
 
         if not expanded:
-            msg = "Specified set %r of %s not found." % (names, self.name)
-            msg += " Available %s: %s" % (self.name, options)
+            msg = "Specified set {!r} of {} not found.".format(names, self.name)
+            msg += " Available {}: {}".format(self.name, options)
             raise SemanticMistake(msg)
 
         return expanded

@@ -21,12 +21,12 @@ def instantiate(function_name, parameters):
         # XXX TypeError is too broad, we should bind the params explicitly
         return function(**parameters)
     except TypeError as e:
-        params = ", ".join(["%s=%r" % (k, v) for (k, v) in parameters.items()])
-        msg = "mcdp_lang.instantiate(): Could not call function %r\n with params %s:" % (
+        params = ", ".join(["{}={!r}".format(k, v) for (k, v) in parameters.items()])
+        msg = "mcdp_lang.instantiate(): Could not call function {!r}\n with params {}:".format(
             function_name,
             params,
         )
-        msg += "\n" + indent("%s\n%s" % (e, traceback.format_exc()), "> ")
+        msg += "\n" + indent("{}\n{}".format(e, traceback.format_exc()), "> ")
         raise SemanticMistake(msg)
 
 
@@ -50,8 +50,8 @@ def import_name(name: str):
                 try:
                     module = __import__(module_name, fromlist=["dummy"])
                 except ImportError as e:
-                    msg = "Cannot load %r (tried also with %r):\n" % (name, module_name)
-                    msg += "\n" + indent("%s\n%s" % (e, traceback.format_exc()), "> ")
+                    msg = "Cannot load {!r} (tried also with {!r}):\n".format(name, module_name)
+                    msg += "\n" + indent("{}\n{}".format(e, traceback.format_exc()), "> ")
                     raise ValueError(msg)
 
                 if not field in module.__dict__:
@@ -66,8 +66,8 @@ def import_name(name: str):
                 try:
                     module = import_name(module_name)
                 except ImportError as e:
-                    msg = "Cannot load %r (tried also with %r):\n" % (name, module_name)
-                    msg += "\n" + indent("%s\n%s" % (e, traceback.format_exc()), "> ")
+                    msg = "Cannot load {!r} (tried also with {!r}):\n".format(name, module_name)
+                    msg += "\n" + indent("{}\n{}".format(e, traceback.format_exc()), "> ")
                     raise ValueError(msg)
 
                 if not field in module.__dict__:

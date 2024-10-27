@@ -18,8 +18,7 @@ def load_entries_from_dir(dirname, pattern):
     try:
         filenames = list(locate_files(dirname, pattern))
         for filename in filenames:
-            for x in load_entries_from_file(filename):
-                yield x
+            yield from load_entries_from_file(filename)
     except:
         logger.error("Error while loading dir %r" % friendly_path(dirname))
         raise
@@ -96,7 +95,7 @@ def enumerate_entries_from_file(filename):
         try:
             parsed = yaml.load(f, Loader=yaml.Loader)
         except YAMLError as e:
-            msg = "Cannot parse YAML file %s:\n%s" % (friendly_path(filename), e)
+            msg = "Cannot parse YAML file {}:\n{}".format(friendly_path(filename), e)
             raise SyntaxMistake(msg)  # TODO: make UserError
 
         if parsed is None:
