@@ -138,16 +138,11 @@ class ObjectSpec(dict):
                 return x
             except (SyntaxMistake, SemanticMistake) as e:
                 prefix = "    | "
-                msg = (
-                    "%s\nError obtained while instantiating %r.\n"
-                    "Pattern:\n%s"
-                    "\nMatches:\n%s"
-                    % (
-                        e,
-                        pattern,
-                        indent(pformat(spec_template), prefix),
-                        indent(pformat(matches), prefix),
-                    )
+                msg = "%s\nError obtained while instantiating %r.\n" "Pattern:\n%s" "\nMatches:\n%s" % (
+                    e,
+                    pattern,
+                    indent(pformat(spec_template), prefix),
+                    indent(pformat(matches), prefix),
                 )
                 raise ConfToolsException(msg)
 
