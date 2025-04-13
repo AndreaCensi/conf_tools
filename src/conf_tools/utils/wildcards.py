@@ -34,7 +34,7 @@ def expand_string(x, options):
 
 def wildcard_to_regexp(arg):
     """ Returns a regular expression from a shell wildcard expression. """
-    return re.compile('\A' + arg.replace('*', '.*') + '\Z')
+    return re.compile(r'\A' + arg.replace('*', r'.*') + r'\Z')
 
 
 def has_wildcard(s):

@@ -1,8 +1,23 @@
 from conf_tools.master import GlobalConfig
 from contextlib import contextmanager
-from nose.tools import nottest
 import os
 import tempfile
+import sys
+
+# Try to import from nose, but provide a fallback for pytest compatibility
+try:
+    from nose.tools import nottest
+except ImportError:
+    # If nose is not available, create a compatible decorator
+    def nottest(func):
+        """Mark a function or method as not a test"""
+        func.__test__ = False
+        return func
+        
+    # Add a warning
+    import warnings
+    warnings.warn("nose is not installed; using compatible test utilities", 
+                 ImportWarning)
 
 
 @contextmanager

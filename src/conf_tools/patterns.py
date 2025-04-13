@@ -7,7 +7,7 @@ from .exceptions import SemanticMistake, SyntaxMistake
 
 __all__ = ['pattern_matches', 'recursive_subst', 'is_pattern']
 
-reg = '\$\{([^\}]*)\}'
+reg = r'\$\{([^\}]*)\}'
 
 
 def is_pattern(s):
@@ -29,7 +29,7 @@ def pattern_matches(pattern, string):
             pattern_matches('r2-${robot}', 'r-ciao')
             # -> None
             
-        If the key contains 'id', it only matches [a-zA-Z]+\d*.
+        If the key contains 'id', it only matches [a-zA-Z]+\\d*.
         
         For example:
         
@@ -38,7 +38,7 @@ def pattern_matches(pattern, string):
 
     """
     # reg = '\$\{([^\}]*)\}'
-    reg = '\$\{([a-zA-Z_]\w*)\}'
+    reg = r'\$\{([a-zA-Z_]\w*)\}'
     keys = re.findall(reg, pattern)
 
     if not keys:
@@ -49,11 +49,11 @@ def pattern_matches(pattern, string):
         key = match.group(1)
         if 'id' in key:
             # TODO: document this
-            return '([a-zA-Z]+\d*)'
+            return r'([a-zA-Z]+\d*)'
         else:
-            return '(.+?)'
+            return r'(.+?)'
         
-    pmatch = '\A' + re.sub(reg, make_pattern, pattern) + '\Z'
+    pmatch = r'\A' + re.sub(reg, make_pattern, pattern) + r'\Z'
     
     m = re.match(pmatch, string)
     if m is None:
