@@ -2,8 +2,9 @@ import os
 import tempfile
 from contextlib import contextmanager
 
-from conf_tools.master import GlobalConfig
 from zuper_commons.test_utils import nottest
+
+from conf_tools.master import GlobalConfig
 
 
 @contextmanager

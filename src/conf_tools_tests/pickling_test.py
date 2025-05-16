@@ -2,6 +2,7 @@ import pickle
 from io import BytesIO
 
 from conf_tools import ConfigMaster
+
 from .simple_use_tests import test_cases
 from .utils import create_test_environment
 

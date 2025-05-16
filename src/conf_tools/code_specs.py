@@ -1,6 +1,7 @@
 import traceback
 
-from .exceptions import BadConfig, ConfToolsException
+from .exceptions import BadConfig
+from .exceptions import ConfToolsException
 from .instantiate_utils import instantiate
 from .utils import indent
 

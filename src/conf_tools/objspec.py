@@ -4,26 +4,26 @@ import traceback
 # from contracts import contract, describe_type, describe_value
 from pprint import pformat
 
-from . import ID_FIELD, logger
+from . import ID_FIELD
+from . import logger
 from .code_desc import ConfToolsGlobal
-from .code_specs import check_valid_code_spec, instantiate_spec
-from .exceptions import (
-    ConfToolsException,
-    SemanticMistake,
-    SemanticMistakeKeyNotFound,
-    SyntaxMistake,
-)
+from .code_specs import check_valid_code_spec
+from .code_specs import instantiate_spec
+from .exceptions import ConfToolsException
+from .exceptions import SemanticMistake
+from .exceptions import SemanticMistakeKeyNotFound
+from .exceptions import SyntaxMistake
 from .load_entries import load_entries_from_dir
-from .patterns import is_pattern, pattern_matches, recursive_subst
+from .patterns import is_pattern
+from .patterns import pattern_matches
+from .patterns import recursive_subst
 from .special_subst import substitute_special
-from .utils import (
-    can_be_pickled,
-    expand_environment,
-    expand_string,
-    friendly_path,
-    indent,
-    termcolor_colored,
-)
+from .utils import can_be_pickled
+from .utils import expand_environment
+from .utils import expand_string
+from .utils import friendly_path
+from .utils import indent
+from .utils import termcolor_colored
 
 __all__ = [
     "ObjectSpec",
@@ -138,7 +138,7 @@ class ObjectSpec(dict):
                 return x
             except (SyntaxMistake, SemanticMistake) as e:
                 prefix = "    | "
-                msg = "%s\nError obtained while instantiating %r.\n" "Pattern:\n%s" "\nMatches:\n%s" % (
+                msg = "%s\nError obtained while instantiating %r.\nPattern:\n%s\nMatches:\n%s" % (
                     e,
                     pattern,
                     indent(pformat(spec_template), prefix),
@@ -342,7 +342,8 @@ class ObjectSpec(dict):
             return
         self.dirs_read.append(directory)
 
-        from .global_config import dir_from_package_name, looks_like_package_name
+        from .global_config import dir_from_package_name
+        from .global_config import looks_like_package_name
 
         if looks_like_package_name(directory):
             # print('%r looks like a package' % directory)
@@ -406,7 +407,7 @@ class ObjectSpec(dict):
 
                 if only_id or only_id_and_desc:
                     if not self.matches_any_pattern(name):
-                        msg = "While trying to instantiate empty entry %r " "in %s, I could not find any pattern matching." % (
+                        msg = "While trying to instantiate empty entry %r in %s, I could not find any pattern matching." % (
                             name,
                             friendly_path(filename),
                         )

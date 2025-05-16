@@ -1,9 +1,12 @@
 # from contracts import describe_value
 from pprint import pformat
 
-from . import ConfToolsGlobal, logger
-from .checks import check_necessary, wrap_check
-from .code_specs import check_valid_code_spec, instantiate_spec
+from . import ConfToolsGlobal
+from . import logger
+from .checks import check_necessary
+from .checks import wrap_check
+from .code_specs import check_valid_code_spec
+from .code_specs import instantiate_spec
 from .exceptions import BadConfig
 
 

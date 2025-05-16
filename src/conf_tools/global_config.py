@@ -2,7 +2,8 @@ import os
 
 # from contracts import check_isinstance
 from . import logger
-from .utils import dir_from_package_name, expand_environment
+from .utils import dir_from_package_name
+from .utils import expand_environment
 
 __all__ = [
     "ConfigState",

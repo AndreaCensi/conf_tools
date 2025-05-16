@@ -2,7 +2,6 @@ from pprint import pformat
 
 from .exceptions import BadConfig
 
-
 # from contracts import contract, describe_type
 
 

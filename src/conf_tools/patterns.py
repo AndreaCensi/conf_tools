@@ -1,6 +1,7 @@
 import re
 
-from .exceptions import SemanticMistake, SyntaxMistake
+from .exceptions import SemanticMistake
+from .exceptions import SyntaxMistake
 
 # from contracts import contract
 

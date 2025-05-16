@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from pprint import pformat
 
 from conf_tools.master import ConfigMaster
+
 from .utils import create_test_environment
 
 

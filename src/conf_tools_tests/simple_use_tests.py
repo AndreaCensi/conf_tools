@@ -2,6 +2,7 @@ from pprint import pformat
 
 from conf_tools.master import ConfigMaster
 from conf_tools.patterns import pattern_matches
+
 from .utils import create_test_environment
 
 test_cases = [
