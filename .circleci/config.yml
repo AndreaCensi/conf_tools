@@ -7,7 +7,6 @@ parameters:
 workflows:
   version: 2
   test:
-    max_auto_reruns: 0
     jobs:
     - test-313-src:
         context: <<pipeline.parameters.context_name>>
@@ -202,4 +201,4 @@ jobs:
           timeout 1m ./codecov || true
     resource_class: small
 
-# sigil 9cd8d749f559397932b106eee0bce3a4
+# sigil 0bc57dfefc8d305d9f6b5634f9dddea3
