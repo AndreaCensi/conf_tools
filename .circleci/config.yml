@@ -7,6 +7,7 @@ parameters:
 workflows:
   version: 2
   test:
+    max_auto_reruns: 0
     jobs:
     - test-313-src:
         context: <<pipeline.parameters.context_name>>
@@ -15,7 +16,6 @@ workflows:
             ignore: /.*/
 jobs:
   test-313-src:
-    max_auto_reruns: 0
     environment:
       COLUMNS: '160'
       # default is /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -202,4 +202,4 @@ jobs:
           timeout 1m ./codecov || true
     resource_class: small
 
-# sigil 7eaa8075f09c068e1a76d28b62c29922
+# sigil 9cd8d749f559397932b106eee0bce3a4
