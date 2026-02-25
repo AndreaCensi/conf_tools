@@ -15,9 +15,9 @@ def dir_from_package_name(d: str):
         package = ".".join(tokens[:-1])
         sub = tokens[-1]
     try:
-        from pkg_resources import resource_filename  # @UnresolvedImport
+        from importlib.resources import files as resource_files
 
-        res = resource_filename(package, sub)
+        res = str(resource_files(package).joinpath(sub))
 
         if len(tokens) == 1:
             res = os.path.dirname(res)
