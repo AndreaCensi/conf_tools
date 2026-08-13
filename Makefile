@@ -1,18 +1,50 @@
-package=conf_tools
+all:
+	@echo
 
-include pypackage.mk
+out=out
+
+
+template:
+	zuper-cli template
 
 bump:
-	# bumpversion patch
-	# python3 setup.py sdist upload
-	bumpversion patch
-	git push --tags
-	git push --all
+	zuper-cli bump
 
 upload:
-	rm -f dist/*
-	rm -rf src/*.egg-info
-	python3 setup.py sdist
-	devpi use $(TWINE_REPOSITORY_URL)
-	devpi login $(TWINE_USERNAME) --password $(TWINE_PASSWORD)
-	devpi upload --verbose dist/*
+	zuper-cli upload
+
+black:
+	black -l 110 --target-version py312 src
+
+install-deps:
+	pip3 install --user shyaml
+	shyaml get-values install_requires < project.pp1.yaml > .requirements.txt
+	pip3 install --user --upgrade -r .requirements.txt
+	rm .requirements.txt
+
+install-testing-deps:
+	pip3 install --user shyaml
+	shyaml get-values tests_require < project.pp1.yaml > .requirements_tests.txt
+	pip3 install --user --upgrade -r .requirements_tests.txt
+	rm .requirements_tests.txt
+
+	pip install \
+		pipdeptree\
+		bumpversion\
+		nose2\
+		nose2-html-report\
+		pre-commit\
+		coverage\
+		codecov\
+		sphinx\
+		sphinx-rtd-theme
+
+coverage-combine:
+	coverage combine
+
+docs:
+	sphinx-build src $(out)/docs
+
+-include extra.mk
+
+# sigil e48f93a5c1a91fb3259bb57500a37877
