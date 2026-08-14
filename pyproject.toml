@@ -3,15 +3,11 @@ name = "ConfTools-z7"
 version = "7.2"
 readme = ""
 description = ""
-authors = [{name = "Andrea Censi", email = "AndreaCensi@users.noreply.github.com"}]
-dependencies = [
-    "PyYAML",
-    "setuptools",
-    "zuper-commons-z7",]
+authors = [{ name = "Andrea Censi", email = "AndreaCensi@users.noreply.github.com" }]
+dependencies = ["PyYAML", "setuptools", "zuper-commons-z7"]
 
 [project.optional-dependencies]
-test = [
-    ]
+test = []
 
 [tool.poetry]
 name = "ConfTools-z7"
@@ -19,9 +15,9 @@ version = "7.2"
 description = ""
 authors = ["Andrea Censi <AndreaCensi@users.noreply.github.com>"]
 packages = [
-    {from = "src", include = "conf_tools"},
-    {from = "src", include = "conf_tools/utils"},
-    ]
+    { from = "src", include = "conf_tools" },
+    { from = "src", include = "conf_tools/utils" },
+]
 
 [tool.poetry.dependencies]
 PyYAML = "*"
@@ -32,6 +28,5 @@ zuper-commons-z7 = "*"
 python = ">=3.12"
 
 [build-system]
-requires = [
-    "poetry-core>=1.0.0",]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
